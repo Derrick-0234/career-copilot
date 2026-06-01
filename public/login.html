@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign In — Career Copilot</title>
+  <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body class="auth-page">
+
+  <div class="auth-orb" style="width:400px;height:400px;background:rgba(139,92,246,0.08);top:-100px;left:-100px;"></div>
+  <div class="auth-orb" style="width:300px;height:300px;background:rgba(79,142,247,0.08);bottom:-80px;right:-80px;"></div>
+
+  <div class="auth-card animate-slide-up">
+    <a href="/" class="auth-logo">
+      <div class="auth-logo-icon">🎯</div>
+      <span class="auth-logo-text">Career Copilot</span>
+    </a>
+
+    <h1 class="auth-title">Welcome back</h1>
+    <p class="auth-sub">Continue your career quest. Your progress is waiting.</p>
+
+    <form class="auth-form" id="login-form" novalidate>
+      <div class="form-group">
+        <label class="form-label" for="email">Email</label>
+        <input class="form-input" type="email" id="email" placeholder="alex@example.com" autocomplete="email" required>
+        <div class="form-error" id="email-error"></div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="password">Password</label>
+        <input class="form-input" type="password" id="password" placeholder="Your password" autocomplete="current-password" required>
+        <div class="form-error" id="password-error"></div>
+      </div>
+
+      <div id="form-error" style="display:none;background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.2);border-radius:var(--radius-sm);padding:10px 14px;font-size:0.875rem;color:#FCA5A5;"></div>
+
+      <button type="submit" class="btn btn-primary" style="width:100%;padding:13px" id="submit-btn">
+        Sign In →
+      </button>
+    </form>
+
+    <div class="auth-footer">
+      Don't have an account? <a href="/signup.html">Get started free</a>
+    </div>
+  </div>
+
+  <script src="/js/app.js"></script>
+  <script>
+    if (CC.getCurrentUserId()) window.location.href = '/dashboard.html';
+
+    document.getElementById('login-form').addEventListener('submit', (e) => {
+      e.preventDefault();
+
+      const email = document.getElementById('email').value.trim().toLowerCase();
+      const password = document.getElementById('password').value;
+      const btn = document.getElementById('submit-btn');
+      const formErr = document.getElementById('form-error');
+
+      // Clear errors
+      ['email', 'password'].forEach(f => {
+        document.getElementById(`${f}-error`).textContent = '';
+      });
+      formErr.style.display = 'none';
+
+      // Validate
+      let valid = true;
+      if (!email) { document.getElementById('email-error').textContent = 'Enter your email'; valid = false; }
+      if (!password) { document.getElementById('password-error').textContent = 'Enter your password'; valid = false; }
+      if (!valid) return;
+
+      // Find user
+      const users = CC.getUsers();
+      const user = users.find(u => u.email === email && u.password === password);
+
+      if (!user) {
+        formErr.textContent = 'Incorrect email or password. Please try again.';
+        formErr.style.display = 'block';
+        return;
+      }
+
+      btn.disabled = true;
+      btn.textContent = 'Signing in...';
+      localStorage.setItem(CC.KEYS.CURRENT, user.id);
+
+      // Route to onboarding if they haven't done it yet
+      const progress = CC.getProgress(user.id);
+      if (!progress || !progress.onboardingComplete) {
+        window.location.href = '/onboarding.html';
+      } else {
+        window.location.href = '/dashboard.html';
+      }
+    });
+  </script>
+</body>
+</html>

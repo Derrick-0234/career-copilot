@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Set Up Your Roadmap — Career Copilot</title>
+  <link rel="stylesheet" href="/css/styles.css">
+  <style>
+    body { min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 24px; background: var(--bg); overflow-x: hidden; }
+
+    .ob-wrap { max-width: 600px; width: 100%; animation: slideUp 0.5s ease; }
+
+    .ob-header { text-align: center; margin-bottom: 40px; }
+    .ob-logo { display: flex; align-items: center; justify-content: center; gap: 10px; font-size: 1.125rem; font-weight: 700; margin-bottom: 32px; }
+    .ob-logo-icon { width: 34px; height: 34px; background: var(--grad); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 16px; }
+
+    /* Progress steps */
+    .ob-steps {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0;
+      margin-bottom: 40px;
+    }
+    .ob-step {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+    }
+    .ob-step-circle {
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      border: 2px solid var(--border-md);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.875rem;
+      font-weight: 700;
+      color: var(--text-3);
+      background: var(--bg-1);
+      transition: all 0.3s ease;
+      position: relative;
+      z-index: 1;
+    }
+    .ob-step-circle.active {
+      border-color: var(--blue);
+      color: var(--blue);
+      box-shadow: 0 0 0 4px rgba(79,142,247,0.12);
+    }
+    .ob-step-circle.done {
+      background: var(--green);
+      border-color: var(--green);
+      color: #fff;
+    }
+    .ob-step-label { font-size: 0.75rem; color: var(--text-3); font-weight: 500; white-space: nowrap; }
+    .ob-step-label.active { color: var(--text-2); }
+    .ob-connector {
+      width: 80px;
+      height: 2px;
+      background: var(--border-md);
+      margin: 0 8px;
+      margin-bottom: 22px;
+      transition: background 0.3s ease;
+    }
+    .ob-connector.done { background: var(--green); }
+
+    /* Card */
+    .ob-card {
+      background: var(--bg-1);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-xl);
+      padding: 40px;
+    }
+    .ob-step-title { font-size: 1.5rem; font-weight: 800; margin-bottom: 8px; letter-spacing: -0.02em; }
+    .ob-step-sub { color: var(--text-2); font-size: 0.9375rem; margin-bottom: 28px; }
+
+    /* Goal input */
+    .goal-input {
+      width: 100%;
+      padding: 14px 16px;
+      background: var(--bg-2);
+      border: 1.5px solid var(--border-md);
+      border-radius: var(--radius);
+      color: var(--text);
+      font-size: 1rem;
+      font-weight: 500;
+      outline: none;
+      transition: var(--t);
+    }
+    .goal-input:focus { border-color: var(--blue); box-shadow: 0 0 0 3px rgba(79,142,247,0.12); }
+    .goal-input::placeholder { color: var(--text-3); font-weight: 400; }
+
+    /* Suggestions */
+    .suggestions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
+    .suggestion {
+      padding: 6px 14px;
+      background: var(--bg-2);
+      border: 1px solid var(--border-md);
+      border-radius: 99px;
+      font-size: 0.8125rem;
+      font-weight: 500;
+      color: var(--text-2);
+      cursor: pointer;
+      transition: var(--t);
+    }
+    .suggestion:hover { border-color: var(--blue); color: var(--blue); background: rgba(79,142,247,0.05); }
+    .suggestion.selected { background: rgba(79,142,247,0.1); border-color: var(--blue); color: var(--blue); }
+
+    /* Radio options */
+    .radio-group { display: flex; flex-direction: column; gap: 10px; }
+    .radio-option {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 14px 18px;
+      background: var(--bg-2);
+      border: 1.5px solid var(--border-md);
+      border-radius: var(--radius);
+      cursor: pointer;
+      transition: var(--t);
+      position: relative;
+    }
+    .radio-option:hover { border-color: var(--border-hi); }
+    .radio-option.selected { border-color: var(--blue); background: rgba(79,142,247,0.05); }
+    .radio-option.selected .radio-dot { background: var(--blue); box-shadow: 0 0 0 3px rgba(79,142,247,0.2); }
+    .radio-dot {
+      width: 18px; height: 18px;
+      border-radius: 50%;
+      border: 2px solid var(--border-hi);
+      flex-shrink: 0;
+      transition: var(--t);
+    }
+    .radio-label { font-weight: 600; font-size: 0.9375rem; }
+    .radio-desc { font-size: 0.8125rem; color: var(--text-2); margin-top: 2px; }
+    .radio-badge { margin-left: auto; }
+
+    /* Navigation */
+    .ob-nav { display: flex; align-items: center; justify-content: space-between; margin-top: 28px; gap: 12px; }
+    .ob-next { flex: 1; }
+
+    /* Loading screen */
+    .ob-loading {
+      display: none;
+      text-align: center;
+      padding: 20px 0;
+    }
+    .loading-orb {
+      width: 80px; height: 80px;
+      border-radius: 50%;
+      background: var(--grad);
+      margin: 0 auto 28px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 2rem;
+      animation: loadPulse 2s ease infinite;
+    }
+    .loading-title { font-size: 1.375rem; font-weight: 700; margin-bottom: 8px; }
+    .loading-sub { color: var(--text-2); font-size: 0.9375rem; margin-bottom: 32px; }
+    .loading-steps { display: flex; flex-direction: column; gap: 10px; text-align: left; max-width: 320px; margin: 0 auto; }
+    .loading-step {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 0.875rem;
+      color: var(--text-3);
+      transition: color 0.3s ease;
+    }
+    .loading-step.active { color: var(--text); }
+    .loading-step.done { color: var(--green); }
+    .loading-step-icon { width: 20px; text-align: center; flex-shrink: 0; }
+    @keyframes loadPulse {
+      0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(79,142,247,0.3); }
+      50% { transform: scale(1.05); box-shadow: 0 0 0 16px rgba(79,142,247,0); }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="ob-wrap">
+    <!-- Logo -->
+    <a href="/" class="ob-logo">
+      <div class="ob-logo-icon">🎯</div>
+      Career Copilot
+    </a>
+
+    <!-- Step indicator -->
+    <div class="ob-steps">
+      <div class="ob-step">
+        <div class="ob-step-circle active" id="step-circle-1">1</div>
+        <div class="ob-step-label active" id="step-label-1">Goal</div>
+      </div>
+      <div class="ob-connector" id="connector-1"></div>
+      <div class="ob-step">
+        <div class="ob-step-circle" id="step-circle-2">2</div>
+        <div class="ob-step-label" id="step-label-2">Time</div>
+      </div>
+      <div class="ob-connector" id="connector-2"></div>
+      <div class="ob-step">
+        <div class="ob-step-circle" id="step-circle-3">3</div>
+        <div class="ob-step-label" id="step-label-3">Level</div>
+      </div>
+    </div>
+
+    <!-- Step card -->
+    <div class="ob-card">
+
+      <!-- Step 1: Goal -->
+      <div id="step-1">
+        <h2 class="ob-step-title">What's your dream career goal?</h2>
+        <p class="ob-step-sub">Be specific. The more detail you give, the better your personalized roadmap will be.</p>
+
+        <input class="goal-input" type="text" id="goal-input"
+          placeholder="e.g. Become a Machine Learning Engineer at a top tech company"
+          maxlength="200">
+
+        <div class="suggestions" id="suggestions">
+          <div class="suggestion" data-val="Become a Machine Learning Engineer">ML Engineer</div>
+          <div class="suggestion" data-val="Become a Full-Stack Web Developer">Full-Stack Dev</div>
+          <div class="suggestion" data-val="Become a Data Scientist">Data Scientist</div>
+          <div class="suggestion" data-val="Become a UX/UI Designer">UX Designer</div>
+          <div class="suggestion" data-val="Become a DevOps/Cloud Engineer">DevOps Engineer</div>
+          <div class="suggestion" data-val="Become a Cybersecurity Analyst">Security Analyst</div>
+          <div class="suggestion" data-val="Become a Mobile App Developer">Mobile Dev</div>
+          <div class="suggestion" data-val="Become a Product Manager in tech">Product Manager</div>
+        </div>
+
+        <div id="goal-error" class="form-error" style="margin-top:10px"></div>
+
+        <div class="ob-nav">
+          <div></div>
+          <button class="btn btn-primary ob-next" onclick="nextStep(1)">Continue →</button>
+        </div>
+      </div>
+
+      <!-- Step 2: Time -->
+      <div id="step-2" style="display:none">
+        <h2 class="ob-step-title">How much time can you dedicate daily?</h2>
+        <p class="ob-step-sub">Your roadmap will be paced to fit your schedule. Consistency beats intensity.</p>
+
+        <div class="radio-group" id="time-options">
+          <div class="radio-option" data-val="30 minutes per day" onclick="selectOption(this, 'time-options')">
+            <div class="radio-dot"></div>
+            <div>
+              <div class="radio-label">30 minutes / day</div>
+              <div class="radio-desc">Perfect for busy schedules. Small but consistent wins.</div>
+            </div>
+            <div class="radio-badge"><span class="badge badge-green">Sustainable</span></div>
+          </div>
+          <div class="radio-option" data-val="1 hour per day" onclick="selectOption(this, 'time-options')">
+            <div class="radio-dot"></div>
+            <div>
+              <div class="radio-label">1 hour / day</div>
+              <div class="radio-desc">The sweet spot. Real progress without burning out.</div>
+            </div>
+            <div class="radio-badge"><span class="badge badge-blue">Recommended</span></div>
+          </div>
+          <div class="radio-option" data-val="2 hours per day" onclick="selectOption(this, 'time-options')">
+            <div class="radio-dot"></div>
+            <div>
+              <div class="radio-label">2 hours / day</div>
+              <div class="radio-desc">Accelerated path. You'll get there in half the time.</div>
+            </div>
+            <div class="radio-badge"><span class="badge badge-purple">Fast Track</span></div>
+          </div>
+          <div class="radio-option" data-val="3+ hours per day" onclick="selectOption(this, 'time-options')">
+            <div class="radio-dot"></div>
+            <div>
+              <div class="radio-label">3+ hours / day</div>
+              <div class="radio-desc">Full-send mode. For the committed career switchers.</div>
+            </div>
+            <div class="radio-badge"><span class="badge badge-orange">Intense</span></div>
+          </div>
+        </div>
+
+        <div id="time-error" class="form-error" style="margin-top:10px"></div>
+
+        <div class="ob-nav">
+          <button class="btn btn-secondary" onclick="prevStep(2)">← Back</button>
+          <button class="btn btn-primary ob-next" onclick="nextStep(2)">Continue →</button>
+        </div>
+      </div>
+
+      <!-- Step 3: Skill level -->
+      <div id="step-3" style="display:none">
+        <h2 class="ob-step-title">What's your current skill level?</h2>
+        <p class="ob-step-sub">Be honest — this sets where your roadmap starts so you're not bored or overwhelmed.</p>
+
+        <div class="radio-group" id="level-options">
+          <div class="radio-option" data-val="Complete beginner" onclick="selectOption(this, 'level-options')">
+            <div class="radio-dot"></div>
+            <div>
+              <div class="radio-label">Complete beginner 🌱</div>
+              <div class="radio-desc">I'm starting from scratch. No relevant experience yet.</div>
+            </div>
+          </div>
+          <div class="radio-option" data-val="Some experience" onclick="selectOption(this, 'level-options')">
+            <div class="radio-dot"></div>
+            <div>
+              <div class="radio-label">Some experience 🌿</div>
+              <div class="radio-desc">I've dabbled. I know the basics but haven't gone deep.</div>
+            </div>
+          </div>
+          <div class="radio-option" data-val="Intermediate" onclick="selectOption(this, 'level-options')">
+            <div class="radio-dot"></div>
+            <div>
+              <div class="radio-label">Intermediate 🌳</div>
+              <div class="radio-desc">I can build things but I'm missing key advanced skills.</div>
+            </div>
+          </div>
+        </div>
+
+        <div id="level-error" class="form-error" style="margin-top:10px"></div>
+
+        <div class="ob-nav">
+          <button class="btn btn-secondary" onclick="prevStep(3)">← Back</button>
+          <button class="btn btn-primary ob-next" id="generate-btn" onclick="generate()">
+            Build My Roadmap 🚀
+          </button>
+        </div>
+      </div>
+
+      <!-- Loading -->
+      <div class="ob-loading" id="loading-screen">
+        <div class="loading-orb">🤖</div>
+        <h2 class="loading-title">AI is crafting your roadmap</h2>
+        <p class="loading-sub">Gemini is analyzing your goal and building something personalized just for you...</p>
+        <div class="loading-steps">
+          <div class="loading-step" id="ls-1"><div class="loading-step-icon">⏳</div>Analyzing your career goal...</div>
+          <div class="loading-step" id="ls-2"><div class="loading-step-icon">⏳</div>Detecting skill gaps...</div>
+          <div class="loading-step" id="ls-3"><div class="loading-step-icon">⏳</div>Building your skill tree...</div>
+          <div class="loading-step" id="ls-4"><div class="loading-step-icon">⏳</div>Generating personalized roadmap...</div>
+          <div class="loading-step" id="ls-5"><div class="loading-step-icon">⏳</div>Creating your first daily quests...</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <script src="/js/app.js"></script>
+  <script>
+    if (!CC.requireAuth()) throw new Error('Not authenticated');
+
+    let currentStep = 1;
+    const answers = { goal: '', timePerDay: '', skillLevel: '' };
+
+    // Suggestion chips
+    document.querySelectorAll('.suggestion').forEach(chip => {
+      chip.addEventListener('click', () => {
+        document.getElementById('goal-input').value = chip.dataset.val;
+        document.querySelectorAll('.suggestion').forEach(c => c.classList.remove('selected'));
+        chip.classList.add('selected');
+      });
+    });
+
+    document.getElementById('goal-input').addEventListener('input', () => {
+      document.querySelectorAll('.suggestion').forEach(c => c.classList.remove('selected'));
+    });
+
+    function selectOption(el, groupId) {
+      document.querySelectorAll(`#${groupId} .radio-option`).forEach(o => o.classList.remove('selected'));
+      el.classList.add('selected');
+    }
+
+    function setStepState(n, state) {
+      const circle = document.getElementById(`step-circle-${n}`);
+      const label = document.getElementById(`step-label-${n}`);
+      circle.className = `ob-step-circle ${state}`;
+      label.className = `ob-step-label ${state === 'active' ? 'active' : ''}`;
+      if (state === 'done') circle.textContent = '✓';
+    }
+
+    function nextStep(from) {
+      if (from === 1) {
+        const goal = document.getElementById('goal-input').value.trim();
+        if (!goal || goal.length < 5) {
+          document.getElementById('goal-error').textContent = 'Please describe your career goal (at least 5 characters)';
+          return;
+        }
+        document.getElementById('goal-error').textContent = '';
+        answers.goal = goal;
+        setStepState(1, 'done');
+        setStepState(2, 'active');
+        document.getElementById('connector-1').classList.add('done');
+      } else if (from === 2) {
+        const sel = document.querySelector('#time-options .radio-option.selected');
+        if (!sel) { document.getElementById('time-error').textContent = 'Please select a time commitment'; return; }
+        document.getElementById('time-error').textContent = '';
+        answers.timePerDay = sel.dataset.val;
+        setStepState(2, 'done');
+        setStepState(3, 'active');
+        document.getElementById('connector-2').classList.add('done');
+      }
+
+      document.getElementById(`step-${from}`).style.display = 'none';
+      document.getElementById(`step-${from + 1}`).style.display = 'block';
+      currentStep = from + 1;
+    }
+
+    function prevStep(from) {
+      document.getElementById(`step-${from}`).style.display = 'none';
+      document.getElementById(`step-${from - 1}`).style.display = 'block';
+      currentStep = from - 1;
+      setStepState(from, '');
+      setStepState(from - 1, 'active');
+      if (from === 3) document.getElementById('connector-2').classList.remove('done');
+      if (from === 2) document.getElementById('connector-1').classList.remove('done');
+    }
+
+    async function generate() {
+      const sel = document.querySelector('#level-options .radio-option.selected');
+      if (!sel) { document.getElementById('level-error').textContent = 'Please select your skill level'; return; }
+      answers.skillLevel = sel.dataset.val;
+
+      // Show loading
+      document.getElementById('step-3').style.display = 'none';
+      const loading = document.getElementById('loading-screen');
+      loading.style.display = 'block';
+
+      // Animate loading steps
+      const steps = ['ls-1', 'ls-2', 'ls-3', 'ls-4', 'ls-5'];
+      steps.forEach((id, i) => {
+        setTimeout(() => {
+          const el = document.getElementById(id);
+          el.classList.add('active');
+          el.querySelector('.loading-step-icon').textContent = '⏺';
+          if (i > 0) {
+            const prev = document.getElementById(steps[i - 1]);
+            prev.classList.remove('active');
+            prev.classList.add('done');
+            prev.querySelector('.loading-step-icon').textContent = '✓';
+          }
+        }, i * 900);
+      });
+
+      try {
+        const res = await fetch('/api/generate-roadmap', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(answers)
+        });
+        const json = await res.json();
+
+        if (!json.success) throw new Error(json.error || 'Generation failed');
+
+        const data = json.data;
+
+        // Mark last loading step done
+        setTimeout(() => {
+          const last = document.getElementById('ls-5');
+          last.classList.remove('active');
+          last.classList.add('done');
+          last.querySelector('.loading-step-icon').textContent = '✓';
+        }, 4 * 900);
+
+        // Save to localStorage
+        const progress = CC.getProgress() || CC.defaultProgress();
+        progress.goal = answers.goal;
+        progress.timePerDay = answers.timePerDay;
+        progress.skillLevel = answers.skillLevel;
+        progress.roadmap = data.roadmap;
+        progress.skillTree = data.skillTree;
+        progress.resources = data.resources || [];
+        progress.onboardingComplete = true;
+
+        // Set up today's quests
+        progress.todayQuests = {
+          date: CC.today(),
+          items: data.dailyQuests,
+          completed: []
+        };
+
+        CC.saveProgress(progress);
+
+        setTimeout(() => { window.location.href = '/dashboard.html'; }, 5200);
+
+      } catch (err) {
+        console.error(err);
+        loading.style.display = 'none';
+        document.getElementById('step-3').style.display = 'block';
+        setStepState(3, 'active');
+        document.getElementById('level-error').textContent = 'Something went wrong. Please try again.';
+      }
+    }
+  </script>
+</body>
+</html>

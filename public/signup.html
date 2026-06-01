@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign Up — Career Copilot</title>
+  <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body class="auth-page">
+
+  <div class="auth-orb" style="width:400px;height:400px;background:rgba(79,142,247,0.08);top:-100px;right:-100px;"></div>
+  <div class="auth-orb" style="width:300px;height:300px;background:rgba(139,92,246,0.08);bottom:-80px;left:-80px;"></div>
+
+  <div class="auth-card animate-slide-up">
+    <a href="/" class="auth-logo">
+      <div class="auth-logo-icon">🎯</div>
+      <span class="auth-logo-text">Career Copilot</span>
+    </a>
+
+    <h1 class="auth-title">Create your account</h1>
+    <p class="auth-sub">Start your journey to your dream career. Free forever.</p>
+
+    <form class="auth-form" id="signup-form" novalidate>
+      <div class="form-group">
+        <label class="form-label" for="name">Full Name</label>
+        <input class="form-input" type="text" id="name" placeholder="Alex Johnson" autocomplete="name" required>
+        <div class="form-error" id="name-error"></div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="email">Email</label>
+        <input class="form-input" type="email" id="email" placeholder="alex@example.com" autocomplete="email" required>
+        <div class="form-error" id="email-error"></div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="password">Password</label>
+        <input class="form-input" type="password" id="password" placeholder="8+ characters" autocomplete="new-password" required>
+        <div class="form-error" id="password-error"></div>
+      </div>
+
+      <div id="form-error" style="display:none;background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.2);border-radius:var(--radius-sm);padding:10px 14px;font-size:0.875rem;color:#FCA5A5;"></div>
+
+      <button type="submit" class="btn btn-primary" style="width:100%;padding:13px" id="submit-btn">
+        Create Account →
+      </button>
+    </form>
+
+    <div class="auth-footer">
+      Already have an account? <a href="/login.html">Sign in</a>
+    </div>
+
+    <div class="divider-text" style="margin-top:20px;font-size:0.75rem;color:var(--text-3)">
+      By signing up you agree to our terms. No spam, ever.
+    </div>
+  </div>
+
+  <script src="/js/app.js"></script>
+  <script>
+    // Redirect if already logged in
+    if (CC.getCurrentUserId()) window.location.href = '/dashboard.html';
+
+    const form = document.getElementById('signup-form');
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+
+      const name = document.getElementById('name').value.trim();
+      const email = document.getElementById('email').value.trim().toLowerCase();
+      const password = document.getElementById('password').value;
+      const btn = document.getElementById('submit-btn');
+      const formErr = document.getElementById('form-error');
+
+      // Clear errors
+      ['name', 'email', 'password'].forEach(f => {
+        document.getElementById(`${f}-error`).textContent = '';
+      });
+      formErr.style.display = 'none';
+
+      // Validate
+      let valid = true;
+      if (!name || name.length < 2) {
+        document.getElementById('name-error').textContent = 'Enter your full name';
+        valid = false;
+      }
+      if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        document.getElementById('email-error').textContent = 'Enter a valid email address';
+        valid = false;
+      }
+      if (!password || password.length < 8) {
+        document.getElementById('password-error').textContent = 'Password must be at least 8 characters';
+        valid = false;
+      }
+      if (!valid) return;
+
+      // Check if email already exists
+      const users = CC.getUsers();
+      if (users.find(u => u.email === email)) {
+        formErr.textContent = 'An account with this email already exists. Try signing in.';
+        formErr.style.display = 'block';
+        return;
+      }
+
+      // Create user
+      btn.disabled = true;
+      btn.textContent = 'Creating account...';
+
+      const newUser = {
+        id: `user_${Date.now()}_${Math.random().toString(36).slice(2, 7)}`,
+        name,
+        email,
+        password,
+        createdAt: Date.now()
+      };
+
+      users.push(newUser);
+      CC.saveUsers(users);
+      localStorage.setItem(CC.KEYS.CURRENT, newUser.id);
+
+      // Create blank progress
+      CC.saveProgress(CC.defaultProgress(), newUser.id);
+
+      window.location.href = '/onboarding.html';
+    });
+  </script>
+</body>
+</html>

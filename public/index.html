@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Career Copilot — Level Up Your Career with AI</title>
+  <link rel="stylesheet" href="/css/styles.css">
+  <style>
+    /* Landing-specific styles */
+    .landing-navbar {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      padding: 0 24px;
+      height: 64px;
+      display: flex;
+      align-items: center;
+      background: rgba(10,10,10,0.8);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+    }
+    .landing-navbar-inner {
+      max-width: 1200px;
+      width: 100%;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .nav-logo-land {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 1.125rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+    .nav-logo-land-icon {
+      width: 32px; height: 32px;
+      background: var(--grad);
+      border-radius: 9px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 15px;
+    }
+
+    /* Hero */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 120px 24px 80px;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      overflow: hidden;
+    }
+    .hero-orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(120px);
+    }
+    .orb-1 {
+      width: 700px; height: 700px;
+      background: rgba(79,142,247,0.12);
+      top: -200px; right: -200px;
+    }
+    .orb-2 {
+      width: 500px; height: 500px;
+      background: rgba(139,92,246,0.1);
+      bottom: -150px; left: -150px;
+    }
+    .orb-3 {
+      width: 300px; height: 300px;
+      background: rgba(16,185,129,0.06);
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+    }
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 16px;
+      background: rgba(79,142,247,0.1);
+      border: 1px solid rgba(79,142,247,0.2);
+      border-radius: 99px;
+      font-size: 0.8125rem;
+      font-weight: 600;
+      color: #7EB3FA;
+      margin-bottom: 28px;
+      animation: slideUp 0.6s ease;
+    }
+    .hero-badge-dot {
+      width: 6px; height: 6px;
+      background: var(--blue);
+      border-radius: 50%;
+      animation: pulse-ring 2s infinite;
+    }
+    .hero-title {
+      font-size: clamp(2.5rem, 6vw, 5rem);
+      font-weight: 900;
+      letter-spacing: -0.03em;
+      line-height: 1.08;
+      margin-bottom: 24px;
+      animation: slideUp 0.6s ease 0.1s both;
+    }
+    .hero-sub {
+      font-size: clamp(1rem, 2vw, 1.25rem);
+      color: var(--text-2);
+      max-width: 560px;
+      margin: 0 auto 40px;
+      line-height: 1.65;
+      animation: slideUp 0.6s ease 0.2s both;
+    }
+    .hero-actions {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 14px;
+      flex-wrap: wrap;
+      animation: slideUp 0.6s ease 0.3s both;
+    }
+    .hero-btn-primary {
+      padding: 14px 32px;
+      background: var(--grad);
+      color: #fff;
+      border-radius: 10px;
+      font-size: 1rem;
+      font-weight: 700;
+      transition: var(--t);
+      box-shadow: 0 0 0 0 rgba(79,142,247,0.3);
+    }
+    .hero-btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 30px rgba(79,142,247,0.3);
+    }
+    .hero-btn-ghost {
+      padding: 14px 24px;
+      color: var(--text-2);
+      font-size: 0.9375rem;
+      font-weight: 600;
+      border-radius: 10px;
+      border: 1px solid var(--border-md);
+      transition: var(--t);
+    }
+    .hero-btn-ghost:hover { color: var(--text); border-color: var(--border-hi); background: var(--bg-1); }
+
+    /* Stats bar */
+    .stats-bar {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 40px;
+      padding: 24px;
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      background: var(--bg-1);
+      flex-wrap: wrap;
+    }
+    .stat-item { text-align: center; }
+    .stat-value { font-size: 1.5rem; font-weight: 800; letter-spacing: -0.02em; }
+    .stat-label { font-size: 0.8125rem; color: var(--text-2); margin-top: 2px; }
+
+    /* Features */
+    .section { padding: 100px 24px; }
+    .section-header { text-align: center; margin-bottom: 64px; }
+    .section-tag {
+      display: inline-block;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--blue);
+      margin-bottom: 16px;
+    }
+    .section-title {
+      font-size: clamp(1.75rem, 4vw, 2.75rem);
+      font-weight: 800;
+      letter-spacing: -0.025em;
+      line-height: 1.15;
+      margin-bottom: 16px;
+    }
+    .section-sub { font-size: 1.0625rem; color: var(--text-2); max-width: 500px; margin: 0 auto; }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+    .feature-card {
+      background: var(--bg-1);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 28px;
+      transition: all 0.3s var(--ease);
+      position: relative;
+      overflow: hidden;
+    }
+    .feature-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 1px;
+      background: var(--grad);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+    .feature-card:hover { border-color: var(--border-md); transform: translateY(-3px); }
+    .feature-card:hover::before { opacity: 1; }
+    .feature-icon {
+      width: 48px; height: 48px;
+      border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 22px;
+      margin-bottom: 20px;
+    }
+    .feature-icon.blue { background: rgba(79,142,247,0.12); }
+    .feature-icon.purple { background: rgba(139,92,246,0.12); }
+    .feature-icon.green { background: rgba(16,185,129,0.12); }
+    .feature-title { font-size: 1.0625rem; font-weight: 700; margin-bottom: 10px; }
+    .feature-desc { font-size: 0.9rem; color: var(--text-2); line-height: 1.6; }
+
+    /* How it works */
+    .how-bg { background: var(--bg-1); }
+    .steps-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 32px;
+      max-width: 900px;
+      margin: 0 auto;
+      position: relative;
+    }
+    .step-card { text-align: center; padding: 8px; }
+    .step-number {
+      width: 52px; height: 52px;
+      border-radius: 14px;
+      background: var(--grad);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.25rem; font-weight: 900;
+      margin: 0 auto 20px;
+      box-shadow: 0 0 20px rgba(79,142,247,0.2);
+    }
+    .step-title { font-size: 1.0625rem; font-weight: 700; margin-bottom: 10px; }
+    .step-desc { font-size: 0.9rem; color: var(--text-2); line-height: 1.6; }
+
+    /* CTA section */
+    .cta-section {
+      padding: 100px 24px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .cta-card {
+      background: var(--bg-1);
+      border: 1px solid var(--border);
+      border-radius: 28px;
+      padding: 64px 48px;
+      max-width: 680px;
+      margin: 0 auto;
+      position: relative;
+      overflow: hidden;
+    }
+    .cta-card::before {
+      content: '';
+      position: absolute;
+      inset: -1px;
+      border-radius: 29px;
+      background: var(--grad);
+      z-index: -1;
+      opacity: 0.3;
+    }
+    .cta-title { font-size: clamp(1.75rem, 4vw, 2.5rem); font-weight: 800; margin-bottom: 16px; letter-spacing: -0.025em; }
+    .cta-sub { color: var(--text-2); font-size: 1.0625rem; margin-bottom: 32px; line-height: 1.6; }
+
+    /* Footer */
+    footer {
+      padding: 32px 24px;
+      border-top: 1px solid var(--border);
+      text-align: center;
+      color: var(--text-3);
+      font-size: 0.875rem;
+    }
+    footer span { color: var(--text-2); }
+
+    /* Dashboard preview mock */
+    .hero-preview {
+      margin-top: 64px;
+      max-width: 800px;
+      margin-left: auto;
+      margin-right: auto;
+      border-radius: var(--radius-xl);
+      border: 1px solid var(--border-md);
+      overflow: hidden;
+      box-shadow: 0 32px 80px rgba(0,0,0,0.6);
+      animation: slideUp 0.6s ease 0.4s both;
+    }
+    .preview-bar {
+      padding: 12px 16px;
+      background: var(--bg-2);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .preview-dot {
+      width: 10px; height: 10px;
+      border-radius: 50%;
+    }
+    .preview-body {
+      background: var(--bg-1);
+      padding: 20px;
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 14px;
+    }
+    .preview-col-title { font-size: 0.6875rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-3); margin-bottom: 10px; }
+    .preview-node {
+      padding: 8px 10px;
+      border-radius: 8px;
+      font-size: 0.75rem;
+      font-weight: 500;
+      margin-bottom: 6px;
+    }
+    .preview-node.done { background: rgba(16,185,129,0.1); border: 1px solid rgba(16,185,129,0.2); color: #34D399; }
+    .preview-node.active { background: rgba(79,142,247,0.1); border: 1px solid rgba(79,142,247,0.2); color: #7EB3FA; }
+    .preview-node.locked { background: var(--bg-2); border: 1px solid var(--border); color: var(--text-3); opacity: 0.5; }
+    .preview-quest {
+      padding: 8px 10px;
+      border-radius: 8px;
+      background: var(--bg-2);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--blue);
+      font-size: 0.75rem;
+      margin-bottom: 6px;
+    }
+    .preview-quest.done { border-left-color: var(--green); opacity: 0.5; text-decoration: line-through; color: var(--text-2); }
+    .preview-phase {
+      margin-bottom: 8px;
+    }
+    .preview-phase-label { font-size: 0.7rem; color: var(--text-2); margin-bottom: 4px; }
+    .preview-phase-bar {
+      height: 4px;
+      border-radius: 2px;
+      background: var(--bg-3);
+    }
+    .preview-phase-fill {
+      height: 100%;
+      border-radius: 2px;
+      background: var(--grad);
+    }
+
+    @media (max-width: 640px) {
+      .preview-body { grid-template-columns: 1fr; }
+      .preview-body > div:not(:first-child) { display: none; }
+      .hero-actions { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navbar -->
+  <nav class="landing-navbar">
+    <div class="landing-navbar-inner">
+      <a href="/" class="nav-logo-land">
+        <div class="nav-logo-land-icon">🎯</div>
+        Career Copilot
+      </a>
+      <div style="display:flex;align-items:center;gap:8px">
+        <a href="/login.html" class="btn btn-ghost btn-sm">Sign in</a>
+        <a href="/signup.html" class="btn btn-primary btn-sm">Get Started Free</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="hero-bg">
+      <div class="hero-orb orb-1"></div>
+      <div class="hero-orb orb-2"></div>
+      <div class="hero-orb orb-3"></div>
+    </div>
+
+    <div style="position:relative;z-index:1;width:100%">
+      <div class="hero-badge">
+        <div class="hero-badge-dot"></div>
+        Powered by Google Gemini AI
+      </div>
+
+      <h1 class="hero-title">
+        Level Up Your Career.<br>
+        <span class="gradient-text">Powered by AI.</span>
+      </h1>
+
+      <p class="hero-sub">
+        Pick your dream goal. Get a personalized roadmap. Complete daily quests.
+        Build your portfolio automatically. Get hired.
+      </p>
+
+      <div class="hero-actions">
+        <a href="/signup.html" class="hero-btn-primary">Get Started Free →</a>
+        <a href="/login.html" class="hero-btn-ghost">Already have an account</a>
+      </div>
+
+      <!-- Dashboard preview -->
+      <div class="hero-preview">
+        <div class="preview-bar">
+          <div class="preview-dot" style="background:#ef4444"></div>
+          <div class="preview-dot" style="background:#f59e0b"></div>
+          <div class="preview-dot" style="background:#10b981"></div>
+          <span style="margin-left:8px;font-size:0.75rem;color:var(--text-3)">Career Copilot — Dashboard</span>
+        </div>
+        <div class="preview-body">
+          <div>
+            <div class="preview-col-title">Skill Tree</div>
+            <div class="preview-node done">✓ Python Basics</div>
+            <div class="preview-node done">✓ Git & GitHub</div>
+            <div class="preview-node active">→ NumPy & Pandas</div>
+            <div class="preview-node locked">🔒 Machine Learning</div>
+            <div class="preview-node locked">🔒 TensorFlow</div>
+          </div>
+          <div>
+            <div class="preview-col-title">Today's Quests</div>
+            <div class="preview-quest done">Read: Intro to ML chapter</div>
+            <div class="preview-quest" style="border-left-color:var(--purple)">Build: Linear regression model</div>
+            <div class="preview-quest" style="border-left-color:var(--green)">Practice: NumPy exercises</div>
+          </div>
+          <div>
+            <div class="preview-col-title">Roadmap</div>
+            <div class="preview-phase">
+              <div class="preview-phase-label">Foundation · 100%</div>
+              <div class="preview-phase-bar"><div class="preview-phase-fill" style="width:100%"></div></div>
+            </div>
+            <div class="preview-phase">
+              <div class="preview-phase-label">ML Core · 45%</div>
+              <div class="preview-phase-bar"><div class="preview-phase-fill" style="width:45%"></div></div>
+            </div>
+            <div class="preview-phase">
+              <div class="preview-phase-label">Advanced · 0%</div>
+              <div class="preview-phase-bar"><div class="preview-phase-fill" style="width:0%"></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Stats bar -->
+  <div class="stats-bar">
+    <div class="stat-item">
+      <div class="stat-value gradient-text">10K+</div>
+      <div class="stat-label">Active learners</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-value gradient-text">500K+</div>
+      <div class="stat-label">Quests completed</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-value gradient-text">94%</div>
+      <div class="stat-label">Report landing jobs</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-value gradient-text">∞</div>
+      <div class="stat-label">AI-powered roadmaps</div>
+    </div>
+  </div>
+
+  <!-- Features -->
+  <section class="section">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-tag">How it works</div>
+        <h2 class="section-title">Everything you need to<br><span class="gradient-text">get hired, fast</span></h2>
+        <p class="section-sub">Stop watching random tutorials. Get a structured AI-powered path built exactly for your goal.</p>
+      </div>
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon blue">🎯</div>
+          <div class="feature-title">Personalized AI Roadmap</div>
+          <p class="feature-desc">Tell us your dream role, your current level, and how much time you have. Gemini AI builds a custom roadmap with phases, milestones, and real skill goals.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon purple">⚔️</div>
+          <div class="feature-title">Daily Quests That Level You Up</div>
+          <p class="feature-desc">Every morning you get 3 fresh quests tailored to where you are in your journey. Complete them to earn XP, unlock skills, and level up your profile.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon green">🏆</div>
+          <div class="feature-title">Auto-Generated Portfolio</div>
+          <p class="feature-desc">As you complete quests and unlock skills, Career Copilot automatically builds your portfolio — skill badges, XP charts, and a professional bio ready to share.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- How it works steps -->
+  <section class="section how-bg">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-tag">Get started in minutes</div>
+        <h2 class="section-title">Your career RPG<br><span class="gradient-text">in three steps</span></h2>
+      </div>
+      <div class="steps-grid">
+        <div class="step-card">
+          <div class="step-number">1</div>
+          <div class="step-title">Set Your Dream Goal</div>
+          <p class="step-desc">Tell us what you want to become — ML Engineer, UX Designer, Data Scientist, anything. Our AI tailors everything to your specific goal.</p>
+        </div>
+        <div class="step-card">
+          <div class="step-number">2</div>
+          <div class="step-title">Get Your Roadmap</div>
+          <p class="step-desc">Gemini analyzes your goal and skill level to build a personalized roadmap with a visual skill tree, phases, and learning resources.</p>
+        </div>
+        <div class="step-card">
+          <div class="step-number">3</div>
+          <div class="step-title">Complete Quests Daily</div>
+          <p class="step-desc">Show up every day, complete your quests, earn XP, level up. Watch your portfolio fill with verified skills that recruiters actually care about.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta-section">
+    <div class="container">
+      <div class="cta-card">
+        <div style="font-size:2.5rem;margin-bottom:16px">🚀</div>
+        <h2 class="cta-title">Ready to level up?</h2>
+        <p class="cta-sub">Join thousands of learners who are using AI to take the guesswork out of their career journey. Free to start, forever.</p>
+        <a href="/signup.html" class="hero-btn-primary" style="display:inline-flex;align-items:center;gap:8px;font-size:1.0625rem">
+          Start Your Journey Free →
+        </a>
+        <p style="margin-top:16px;font-size:0.8125rem;color:var(--text-3)">No credit card required · Free to use · Takes 2 minutes</p>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="nav-logo-land" style="justify-content:center;margin-bottom:12px">
+      <div class="nav-logo-land-icon">🎯</div>
+      Career Copilot
+    </div>
+    <p>Built with Gemini AI · © 2025 Career Copilot · <span>Made for ambitious learners</span></p>
+  </footer>
+
+  <script>
+    // Redirect to dashboard if already logged in
+    const uid = localStorage.getItem('cc_current');
+    if (uid) {
+      const users = JSON.parse(localStorage.getItem('cc_users') || '[]');
+      if (users.find(u => u.id === uid)) {
+        window.location.href = '/dashboard.html';
+      }
+    }
+
+    // Intersection observer for scroll animations
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.style.animation = 'slideUp 0.6s ease forwards';
+          observer.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('.feature-card, .step-card').forEach(el => {
+      el.style.opacity = '0';
+      observer.observe(el);
+    });
+  </script>
+</body>
+</html>

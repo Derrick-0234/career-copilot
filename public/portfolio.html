@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Portfolio — Career Copilot</title>
+  <link rel="stylesheet" href="/css/styles.css">
+  <style>
+    body { background: var(--bg); min-height: 100vh; padding-top: 60px; }
+    .port-layout { max-width: 900px; margin: 0 auto; padding: 32px 20px; display: flex; flex-direction: column; gap: 24px; }
+
+    /* Profile card */
+    .profile-card {
+      background: var(--bg-1);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-xl);
+      padding: 40px;
+      position: relative;
+      overflow: hidden;
+    }
+    .profile-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 4px;
+      background: var(--grad);
+    }
+    .profile-top { display: flex; align-items: flex-start; gap: 24px; margin-bottom: 24px; flex-wrap: wrap; }
+    .profile-avatar {
+      width: 80px; height: 80px;
+      background: var(--grad);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 2rem;
+      font-weight: 800;
+      flex-shrink: 0;
+      box-shadow: 0 0 30px rgba(79,142,247,0.2);
+    }
+    .profile-info { flex: 1; }
+    .profile-name { font-size: 1.75rem; font-weight: 800; letter-spacing: -0.025em; margin-bottom: 4px; }
+    .profile-headline { font-size: 1rem; color: var(--text-2); margin-bottom: 12px; }
+    .profile-badges { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+    .profile-goal { font-size: 0.875rem; color: var(--text-2); margin-bottom: 20px; display: flex; align-items: center; gap: 6px; }
+    .profile-bio { font-size: 1rem; color: var(--text-2); line-height: 1.7; }
+    .profile-actions { display: flex; gap: 10px; margin-top: 20px; flex-wrap: wrap; }
+    .bio-loading { display: flex; align-items: center; gap: 10px; color: var(--text-3); font-size: 0.875rem; }
+    .bio-text { color: var(--text-2); font-size: 0.9375rem; line-height: 1.7; animation: fadeIn 0.5s ease; }
+    .highlights-list { margin-top: 16px; display: flex; flex-direction: column; gap: 6px; }
+    .highlight-item { display: flex; align-items: center; gap: 8px; font-size: 0.875rem; color: var(--text-2); }
+    .highlight-item::before { content: '→'; color: var(--blue); font-weight: 700; }
+
+    /* Stats row */
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+    }
+    .stat-card {
+      background: var(--bg-1);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 20px;
+      text-align: center;
+    }
+    .stat-card-value { font-size: 2rem; font-weight: 800; letter-spacing: -0.03em; }
+    .stat-card-label { font-size: 0.8125rem; color: var(--text-2); margin-top: 4px; }
+
+    /* Skill badges */
+    .section-card {
+      background: var(--bg-1);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+    }
+    .badges-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: 12px; margin-top: 16px; }
+    .skill-badge-card {
+      background: var(--bg-2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      text-align: center;
+      transition: var(--t);
+      position: relative;
+    }
+    .skill-badge-card.earned {
+      border-color: rgba(16,185,129,0.3);
+      background: rgba(16,185,129,0.05);
+    }
+    .skill-badge-card:hover { transform: translateY(-2px); box-shadow: 0 4px 16px rgba(0,0,0,0.3); }
+    .badge-icon-big { font-size: 1.5rem; }
+    .badge-name-text { font-size: 0.75rem; font-weight: 600; line-height: 1.3; }
+    .badge-check-overlay {
+      position: absolute;
+      top: 6px; right: 6px;
+      width: 18px; height: 18px;
+      background: var(--green);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 10px;
+      font-weight: 700;
+      color: #fff;
+    }
+    .no-skills { text-align: center; padding: 32px; color: var(--text-3); font-size: 0.9375rem; }
+    .no-skills p { margin-top: 8px; font-size: 0.875rem; }
+
+    /* XP Chart */
+    .chart-container { margin-top: 16px; position: relative; }
+    #xp-chart { width: 100%; border-radius: var(--radius); }
+    .chart-empty { text-align: center; padding: 40px; color: var(--text-3); font-size: 0.875rem; }
+
+    /* Quest history */
+    .quest-history-list { display: flex; flex-direction: column; gap: 8px; margin-top: 16px; }
+    .quest-history-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 14px;
+      background: var(--bg-2);
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border);
+      font-size: 0.875rem;
+    }
+    .quest-hist-icon { width: 28px; height: 28px; border-radius: 50%; background: rgba(16,185,129,0.15); display: flex; align-items: center; justify-content: center; font-size: 12px; flex-shrink: 0; }
+    .quest-hist-title { flex: 1; font-weight: 500; }
+    .quest-hist-xp { font-size: 0.75rem; font-weight: 700; color: #FCD34D; }
+
+    /* Share */
+    .share-card {
+      background: linear-gradient(135deg, rgba(79,142,247,0.08), rgba(139,92,246,0.08));
+      border: 1px solid rgba(79,142,247,0.15);
+      border-radius: var(--radius-lg);
+      padding: 28px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+    .share-text { flex: 1; }
+    .share-title { font-size: 1rem; font-weight: 700; margin-bottom: 4px; }
+    .share-sub { font-size: 0.875rem; color: var(--text-2); }
+    .share-link-wrap { display: flex; align-items: center; gap: 8px; }
+    .share-link-input {
+      background: var(--bg-2);
+      border: 1px solid var(--border-md);
+      border-radius: var(--radius-sm);
+      padding: 8px 12px;
+      color: var(--text-3);
+      font-size: 0.8125rem;
+      width: 240px;
+      outline: none;
+      cursor: default;
+    }
+
+    @media (max-width: 640px) {
+      .stats-row { grid-template-columns: repeat(2, 1fr); }
+      .profile-top { flex-direction: column; }
+      .share-card { flex-direction: column; align-items: flex-start; }
+      .share-link-input { width: 100%; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navbar -->
+  <nav class="navbar">
+    <div class="navbar-inner">
+      <a href="/" class="nav-logo">
+        <div class="nav-logo-icon">🎯</div>
+        Career Copilot
+      </a>
+      <div class="nav-links">
+        <a href="/dashboard.html" class="nav-link">For You</a>
+        <a href="/portfolio.html" class="nav-link active">Portfolio</a>
+      </div>
+      <div class="nav-actions">
+        <div class="streak-badge">🔥 <span id="streak-count">0</span></div>
+        <div class="nav-user">
+          <div class="nav-avatar" data-nav-avatar>U</div>
+          <span data-nav-user>User</span>
+        </div>
+        <button class="btn btn-ghost btn-sm" onclick="CC.logout()">Sign out</button>
+      </div>
+    </div>
+  </nav>
+
+  <div class="port-layout">
+
+    <!-- Profile card -->
+    <div class="profile-card" id="profile-card">
+      <div class="profile-top">
+        <div class="profile-avatar" id="profile-avatar">U</div>
+        <div class="profile-info">
+          <div class="profile-name" id="profile-name">—</div>
+          <div class="profile-headline" id="profile-headline">—</div>
+          <div class="profile-badges">
+            <span class="badge badge-blue" id="profile-level-badge">Level 1</span>
+            <span class="badge badge-purple" id="profile-goal-badge">—</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="profile-goal">
+        🎯 <span id="profile-goal-text">—</span>
+      </div>
+
+      <div id="bio-section">
+        <div class="bio-loading">
+          <div class="spinner" style="width:20px;height:20px;border-width:2px"></div>
+          Generating AI bio...
+        </div>
+      </div>
+
+      <div class="profile-actions">
+        <a href="/dashboard.html" class="btn btn-primary">Go to Dashboard →</a>
+        <button class="btn btn-secondary" onclick="regenerateBio()">Refresh Bio</button>
+      </div>
+    </div>
+
+    <!-- Stats row -->
+    <div class="stats-row">
+      <div class="stat-card">
+        <div class="stat-card-value gradient-text" id="stat-xp">0</div>
+        <div class="stat-card-label">Total XP</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-card-value gradient-text" id="stat-level">1</div>
+        <div class="stat-card-label">Current Level</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-card-value gradient-text" id="stat-skills">0</div>
+        <div class="stat-card-label">Skills Earned</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-card-value gradient-text" id="stat-streak">0</div>
+        <div class="stat-card-label">Day Streak 🔥</div>
+      </div>
+    </div>
+
+    <!-- Skill badges -->
+    <div class="section-card">
+      <div style="display:flex;align-items:center;justify-content:space-between">
+        <div>
+          <div class="panel-title">Skill Badges</div>
+          <div style="font-size:0.8125rem;color:var(--text-3);margin-top:2px">Skills you've earned on your journey</div>
+        </div>
+        <span class="badge badge-green" id="skills-count-badge">0 earned</span>
+      </div>
+      <div class="badges-grid" id="badges-grid">
+        <div class="no-skills">
+          <div style="font-size:2rem">🏅</div>
+          <p>Complete quests and unlock skills to earn badges.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- XP Growth Chart -->
+    <div class="section-card">
+      <div class="panel-title">XP Growth</div>
+      <div style="font-size:0.8125rem;color:var(--text-3);margin-top:2px;margin-bottom:4px">Your experience over time</div>
+      <div class="chart-container">
+        <canvas id="xp-chart" height="200"></canvas>
+      </div>
+    </div>
+
+    <!-- Quest History -->
+    <div class="section-card">
+      <div style="display:flex;align-items:center;justify-content:space-between">
+        <div>
+          <div class="panel-title">Completed Quests</div>
+          <div style="font-size:0.8125rem;color:var(--text-3);margin-top:2px">Recent quest completions</div>
+        </div>
+        <span class="badge badge-blue" id="quests-count-badge">0 done</span>
+      </div>
+      <div class="quest-history-list" id="quest-history"></div>
+    </div>
+
+    <!-- Share card -->
+    <div class="share-card">
+      <div class="share-text">
+        <div class="share-title">Share Your Portfolio</div>
+        <div class="share-sub">Show recruiters what you've built with Career Copilot.</div>
+      </div>
+      <div class="share-link-wrap">
+        <input class="share-link-input" id="share-link-input" type="text" readonly value="">
+        <button class="btn btn-primary btn-sm" onclick="copyLink()">Copy Link</button>
+      </div>
+    </div>
+
+  </div>
+
+  <script src="/js/app.js"></script>
+  <script>
+    if (!CC.requireAuth()) throw new Error('Not authenticated');
+    CC.renderNavUser();
+
+    let progress = null;
+    let user = null;
+
+    async function init() {
+      user = CC.getUser();
+      progress = CC.getProgress();
+
+      if (!user || !progress || !progress.onboardingComplete) {
+        window.location.href = '/onboarding.html';
+        return;
+      }
+
+      document.getElementById('streak-count').textContent = progress.streak || 0;
+      renderProfile();
+      renderStats();
+      renderBadges();
+      drawXPChart();
+      renderQuestHistory();
+      renderShareLink();
+      generateBio();
+    }
+
+    function renderProfile() {
+      const info = CC.levelInfo(progress.xp);
+      const initial = user.name.charAt(0).toUpperCase();
+
+      document.getElementById('profile-avatar').textContent = initial;
+      document.getElementById('profile-name').textContent = user.name;
+      document.getElementById('profile-goal-text').textContent = progress.goal || 'Career goal not set';
+      document.getElementById('profile-level-badge').textContent = `Level ${info.level}`;
+      document.getElementById('profile-goal-badge').textContent = (progress.goal || '').split(' ').slice(0, 4).join(' ') + '...';
+    }
+
+    function renderStats() {
+      const info = CC.levelInfo(progress.xp);
+      const completedSkills = (progress.completedSkills || []).length;
+      document.getElementById('stat-xp').textContent = progress.xp.toLocaleString();
+      document.getElementById('stat-level').textContent = info.level;
+      document.getElementById('stat-skills').textContent = completedSkills;
+      document.getElementById('stat-streak').textContent = progress.streak || 0;
+    }
+
+    function renderBadges() {
+      const skills = progress.skillTree || [];
+      const completed = new Set(progress.completedSkills || []);
+
+      const earnedSkills = skills.filter(s => completed.has(s.id));
+      const allSkills = skills;
+
+      document.getElementById('skills-count-badge').textContent = `${earnedSkills.length} earned`;
+
+      if (!allSkills.length) {
+        document.getElementById('badges-grid').innerHTML = `<div class="no-skills"><div style="font-size:2rem">🏅</div><p>Complete onboarding to unlock your skill tree.</p></div>`;
+        return;
+      }
+
+      // Determine which skills are unlocked (but not necessarily completed)
+      const xp = progress.xp;
+      const unlockedSet = new Set();
+      skills.filter(s => s.level === 1 || s.unlocked).forEach(s => unlockedSet.add(s.id));
+      if (xp >= 100) skills.filter(s => s.level === 2).forEach(s => unlockedSet.add(s.id));
+      if (xp >= 300) skills.filter(s => s.level === 3).forEach(s => unlockedSet.add(s.id));
+
+      const html = allSkills.map(skill => {
+        const isEarned = completed.has(skill.id);
+        const isUnlocked = unlockedSet.has(skill.id);
+        const icon = CC.getSkillIcon(skill.name);
+        return `<div class="skill-badge-card ${isEarned ? 'earned' : ''}" title="${skill.description || skill.name}">
+          <div class="badge-icon-big">${isUnlocked ? icon : '🔒'}</div>
+          <div class="badge-name-text">${skill.name}</div>
+          ${isEarned ? '<div class="badge-check-overlay">✓</div>' : ''}
+        </div>`;
+      }).join('');
+
+      document.getElementById('badges-grid').innerHTML = html;
+    }
+
+    function drawXPChart() {
+      const canvas = document.getElementById('xp-chart');
+      const history = progress.xpHistory || [];
+
+      if (!history.length) {
+        canvas.parentElement.innerHTML = `<div class="chart-empty">📈 Complete quests to see your XP growth chart here.</div>`;
+        return;
+      }
+
+      // Ensure at least two data points for a meaningful chart
+      const data = history.length === 1
+        ? [{ date: 'Start', total: 0 }, history[0]]
+        : history;
+
+      const dpr = window.devicePixelRatio || 1;
+      const W = canvas.parentElement.clientWidth;
+      const H = 200;
+      canvas.width = W * dpr;
+      canvas.height = H * dpr;
+      canvas.style.width = W + 'px';
+      canvas.style.height = H + 'px';
+
+      const ctx = canvas.getContext('2d');
+      ctx.scale(dpr, dpr);
+
+      const pad = { top: 20, right: 20, bottom: 36, left: 48 };
+      const cw = W - pad.left - pad.right;
+      const ch = H - pad.top - pad.bottom;
+
+      const maxXP = Math.max(...data.map(d => d.total), 10);
+
+      const pts = data.map((d, i) => ({
+        x: pad.left + (i / (data.length - 1)) * cw,
+        y: pad.top + ch - (d.total / maxXP) * ch,
+        label: typeof d.date === 'string' ? d.date.slice(5) : '',
+        val: d.total
+      }));
+
+      // Grid lines
+      ctx.strokeStyle = 'rgba(255,255,255,0.04)';
+      ctx.lineWidth = 1;
+      for (let i = 0; i <= 4; i++) {
+        const y = pad.top + (i / 4) * ch;
+        ctx.beginPath(); ctx.moveTo(pad.left, y); ctx.lineTo(W - pad.right, y); ctx.stroke();
+      }
+
+      // Gradient fill
+      const grad = ctx.createLinearGradient(0, pad.top, 0, pad.top + ch);
+      grad.addColorStop(0, 'rgba(79,142,247,0.35)');
+      grad.addColorStop(1, 'rgba(79,142,247,0)');
+
+      ctx.beginPath();
+      ctx.moveTo(pts[0].x, pts[0].y);
+      for (let i = 1; i < pts.length; i++) {
+        const cpx = (pts[i-1].x + pts[i].x) / 2;
+        ctx.bezierCurveTo(cpx, pts[i-1].y, cpx, pts[i].y, pts[i].x, pts[i].y);
+      }
+      ctx.lineTo(pts[pts.length-1].x, pad.top + ch);
+      ctx.lineTo(pts[0].x, pad.top + ch);
+      ctx.closePath();
+      ctx.fillStyle = grad;
+      ctx.fill();
+
+      // Line
+      ctx.beginPath();
+      ctx.moveTo(pts[0].x, pts[0].y);
+      for (let i = 1; i < pts.length; i++) {
+        const cpx = (pts[i-1].x + pts[i].x) / 2;
+        ctx.bezierCurveTo(cpx, pts[i-1].y, cpx, pts[i].y, pts[i].x, pts[i].y);
+      }
+      ctx.strokeStyle = '#4F8EF7';
+      ctx.lineWidth = 2.5;
+      ctx.stroke();
+
+      // Dots + labels
+      pts.forEach((p, i) => {
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, 5, 0, Math.PI * 2);
+        ctx.fillStyle = '#4F8EF7';
+        ctx.fill();
+        ctx.strokeStyle = '#0a0a0a';
+        ctx.lineWidth = 2;
+        ctx.stroke();
+
+        // X labels
+        ctx.fillStyle = 'rgba(160,160,170,0.7)';
+        ctx.font = '11px Inter, sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText(p.label, p.x, H - 8);
+      });
+
+      // Y axis labels
+      ctx.textAlign = 'right';
+      for (let i = 0; i <= 4; i++) {
+        const y = pad.top + (i / 4) * ch;
+        const val = Math.round(maxXP - (i / 4) * maxXP);
+        ctx.fillStyle = 'rgba(160,160,170,0.5)';
+        ctx.font = '10px Inter, sans-serif';
+        ctx.fillText(val, pad.left - 6, y + 4);
+      }
+    }
+
+    function renderQuestHistory() {
+      // Collect completed quests from today's quests
+      const tq = progress.todayQuests;
+      const allHistory = [];
+
+      if (tq && tq.items) {
+        const completedSet = new Set(tq.completed || []);
+        tq.items.filter(q => completedSet.has(q.id)).forEach(q => {
+          allHistory.push({ ...q, date: tq.date });
+        });
+      }
+
+      document.getElementById('quests-count-badge').textContent = `${allHistory.length} done`;
+
+      if (!allHistory.length) {
+        document.getElementById('quest-history').innerHTML = `<div style="text-align:center;padding:24px;color:var(--text-3);font-size:0.875rem">No completed quests yet. Head to your dashboard to complete some!</div>`;
+        return;
+      }
+
+      const TYPE_ICONS = { learn: '📚', practice: '💪', build: '🔨', review: '🔍' };
+      const html = allHistory.map(q => `
+        <div class="quest-history-item">
+          <div class="quest-hist-icon">${TYPE_ICONS[q.type] || '⚡'}</div>
+          <div class="quest-hist-title">${q.title}</div>
+          <div class="quest-hist-xp">+${q.xp} XP</div>
+        </div>`).join('');
+
+      document.getElementById('quest-history').innerHTML = html;
+    }
+
+    function renderShareLink() {
+      const url = `${window.location.origin}/portfolio.html?user=${CC.getCurrentUserId()}`;
+      document.getElementById('share-link-input').value = url;
+    }
+
+    function copyLink() {
+      const input = document.getElementById('share-link-input');
+      navigator.clipboard.writeText(input.value).then(() => {
+        CC.toast('Portfolio link copied to clipboard!', 'success');
+      }).catch(() => {
+        input.select();
+        document.execCommand('copy');
+        CC.toast('Link copied!', 'success');
+      });
+    }
+
+    async function generateBio() {
+      const section = document.getElementById('bio-section');
+      const completedSkills = (progress.completedSkills || [])
+        .map(id => (progress.skillTree || []).find(s => s.id === id)?.name)
+        .filter(Boolean);
+      const info = CC.levelInfo(progress.xp);
+
+      // Use cached bio if available and skills haven't changed
+      if (progress.portfolioBio) {
+        renderBioSection(progress.portfolioBio);
+        return;
+      }
+
+      try {
+        const res = await fetch('/api/generate-portfolio', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name: user.name, goal: progress.goal, completedSkills, level: info.level, xp: progress.xp })
+        });
+        const json = await res.json();
+        if (json.success && json.data) {
+          progress.portfolioBio = json.data;
+          CC.saveProgress(progress);
+          renderBioSection(json.data);
+          document.getElementById('profile-headline').textContent = json.data.headline || '';
+        }
+      } catch (err) {
+        section.innerHTML = `<div style="color:var(--text-3);font-size:0.875rem">Bio generation unavailable.</div>`;
+      }
+    }
+
+    function renderBioSection(data) {
+      document.getElementById('profile-headline').textContent = data.headline || '';
+      const highlightsHtml = (data.highlights || []).map(h => `<div class="highlight-item">${h}</div>`).join('');
+      document.getElementById('bio-section').innerHTML = `
+        <div class="bio-text">${data.bio}</div>
+        ${highlightsHtml ? `<div class="highlights-list">${highlightsHtml}</div>` : ''}`;
+    }
+
+    async function regenerateBio() {
+      progress.portfolioBio = null;
+      CC.saveProgress(progress);
+      document.getElementById('bio-section').innerHTML = `<div class="bio-loading"><div class="spinner" style="width:20px;height:20px;border-width:2px"></div>Regenerating bio...</div>`;
+      await generateBio();
+    }
+
+    init();
+  </script>
+</body>
+</html>

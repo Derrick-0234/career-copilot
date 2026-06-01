@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard — Career Copilot</title>
+  <link rel="stylesheet" href="/css/styles.css">
+  <style>
+    body { background: var(--bg); min-height: 100vh; padding-top: 60px; }
+
+    /* Main layout */
+    .dash-layout {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 24px 20px;
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      gap: 20px;
+    }
+
+    /* Stats bar */
+    .stats-bar {
+      background: var(--bg-1);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 18px 24px;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+    .stat-level { display: flex; align-items: center; gap: 12px; }
+    .level-info { flex: 1; min-width: 0; }
+    .level-title { font-size: 0.8125rem; font-weight: 600; color: var(--text-2); margin-bottom: 2px; }
+    .level-number { font-size: 1.25rem; font-weight: 800; letter-spacing: -0.02em; }
+    .xp-section { flex: 1; min-width: 180px; max-width: 340px; }
+    .xp-labels { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
+    .xp-label { font-size: 0.75rem; color: var(--text-2); font-weight: 500; }
+    .xp-value { font-size: 0.75rem; font-weight: 700; color: var(--blue); }
+    .goal-pill {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 14px;
+      background: var(--bg-2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      font-size: 0.8125rem;
+      font-weight: 500;
+      color: var(--text-2);
+      max-width: 280px;
+      overflow: hidden;
+    }
+    .goal-pill-text { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+    /* Three-column grid */
+    .dash-columns {
+      display: grid;
+      grid-template-columns: 280px 1fr 260px;
+      gap: 16px;
+      align-items: start;
+    }
+
+    /* Skill tree panel */
+    .skill-panel {
+      background: var(--bg-1);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 20px;
+      position: sticky;
+      top: 80px;
+      max-height: calc(100vh - 100px);
+      overflow-y: auto;
+    }
+    .panel-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px; }
+    .panel-title { font-size: 0.9375rem; font-weight: 700; }
+
+    .skill-level-group { margin-bottom: 20px; }
+    .skill-level-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 10px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: var(--text-3);
+    }
+    .skill-level-header::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+    .skill-nodes-grid { display: flex; flex-direction: column; gap: 6px; }
+    .skill-node { padding: 8px 12px; font-size: 0.8rem; }
+    .skill-node-content { display: flex; align-items: center; gap: 8px; }
+    .skill-node-icon { font-size: 14px; flex-shrink: 0; }
+    .skill-node-name { font-weight: 500; font-size: 0.8125rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .skill-node-check { margin-left: auto; font-size: 11px; flex-shrink: 0; }
+    .skill-connector {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 16px;
+      color: var(--text-3);
+      font-size: 10px;
+      margin: 2px 0;
+    }
+    .skill-connector-line { width: 1px; height: 100%; background: var(--border); }
+
+    /* Center column */
+    .center-col { display: flex; flex-direction: column; gap: 16px; }
+
+    /* Quest section */
+    .quest-panel {
+      background: var(--bg-1);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 20px 24px;
+    }
+    .quest-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px; }
+    .quest-list { display: flex; flex-direction: column; gap: 12px; }
+    .quest-empty { text-align: center; padding: 32px; color: var(--text-3); font-size: 0.9375rem; }
+    .quest-progress-summary {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 14px;
+      background: var(--bg-2);
+      border-radius: var(--radius-sm);
+      margin-bottom: 16px;
+    }
+    .quest-prog-bar { flex: 1; height: 4px; background: var(--bg-3); border-radius: 99px; overflow: hidden; }
+    .quest-prog-fill { height: 100%; background: var(--green); border-radius: 99px; transition: width 0.6s ease; }
+    .quest-prog-text { font-size: 0.8125rem; font-weight: 600; color: var(--text-2); white-space: nowrap; }
+
+    /* Resources */
+    .resources-panel {
+      background: var(--bg-1);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 20px 24px;
+    }
+    .resources-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+    .resource-card {
+      background: var(--bg-2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 14px;
+      transition: var(--t);
+    }
+    .resource-card:hover { border-color: var(--border-md); transform: translateY(-1px); }
+    .resource-type-icon { font-size: 1.25rem; margin-bottom: 8px; }
+    .resource-title { font-size: 0.875rem; font-weight: 600; margin-bottom: 4px; line-height: 1.35; }
+    .resource-provider { font-size: 0.75rem; color: var(--text-3); margin-bottom: 6px; }
+    .resource-desc { font-size: 0.75rem; color: var(--text-2); line-height: 1.5; }
+
+    /* Roadmap panel */
+    .roadmap-panel {
+      background: var(--bg-1);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 20px;
+      position: sticky;
+      top: 80px;
+    }
+    .roadmap-phases { display: flex; flex-direction: column; gap: 16px; margin-top: 4px; }
+    .phase-item {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      padding: 14px;
+      background: var(--bg-2);
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+    }
+    .phase-header-row { display: flex; align-items: center; gap: 8px; }
+    .phase-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+    .phase-name { font-size: 0.875rem; font-weight: 600; }
+    .phase-pct-val { margin-left: auto; font-size: 0.75rem; font-weight: 700; }
+    .phase-desc { font-size: 0.75rem; color: var(--text-2); line-height: 1.5; }
+    .phase-skills-wrap { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 4px; }
+    .phase-skill-chip { font-size: 0.6875rem; padding: 2px 8px; background: var(--bg-3); border-radius: 99px; color: var(--text-3); }
+    .total-progress-wrap { margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--border); }
+    .total-prog-label { font-size: 0.75rem; color: var(--text-2); margin-bottom: 6px; display: flex; justify-content: space-between; }
+
+    /* Refresh quests btn */
+    .refresh-btn { display: flex; align-items: center; gap: 6px; }
+    .spin-on-load { transition: transform 0.5s ease; }
+    .spin-on-load.spinning { transform: rotate(360deg); }
+
+    /* Mobile responsive */
+    @media (max-width: 1024px) {
+      .dash-columns { grid-template-columns: 1fr 1fr; }
+      .roadmap-panel { grid-column: 1 / -1; position: static; }
+      .resources-grid { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 640px) {
+      .dash-columns { grid-template-columns: 1fr; }
+      .skill-panel { position: static; max-height: none; }
+      .resources-grid { grid-template-columns: 1fr; }
+      .stats-bar { flex-direction: column; align-items: flex-start; }
+      .xp-section { max-width: none; width: 100%; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navbar -->
+  <nav class="navbar">
+    <div class="navbar-inner">
+      <a href="/" class="nav-logo">
+        <div class="nav-logo-icon">🎯</div>
+        Career Copilot
+      </a>
+      <div class="nav-links">
+        <a href="/dashboard.html" class="nav-link active">For You</a>
+        <a href="/portfolio.html" class="nav-link">Portfolio</a>
+      </div>
+      <div class="nav-actions">
+        <div class="streak-badge" id="streak-badge">🔥 <span id="streak-count">0</span></div>
+        <div class="nav-user">
+          <div class="nav-avatar" data-nav-avatar>U</div>
+          <span data-nav-user>User</span>
+        </div>
+        <button class="btn btn-ghost btn-sm" onclick="CC.logout()">Sign out</button>
+      </div>
+    </div>
+  </nav>
+
+  <div class="dash-layout">
+
+    <!-- Stats bar -->
+    <div class="stats-bar">
+      <div class="stat-level">
+        <div class="level-badge" id="level-badge">1</div>
+        <div class="level-info">
+          <div class="level-title">Player Level</div>
+          <div class="level-number gradient-text" id="level-num">Level 1</div>
+        </div>
+      </div>
+
+      <div class="xp-section">
+        <div class="xp-labels">
+          <span class="xp-label">XP Progress</span>
+          <span class="xp-value" id="xp-label-val">0 / 100 XP</span>
+        </div>
+        <div class="xp-bar-track">
+          <div class="xp-bar-fill" id="xp-fill" style="width:0%"></div>
+        </div>
+      </div>
+
+      <div style="margin-left:auto;display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
+        <div class="goal-pill">
+          <span>🎯</span>
+          <span class="goal-pill-text" id="goal-display">Loading...</span>
+        </div>
+        <div style="font-size:0.8125rem;color:var(--text-3)">
+          Total: <strong id="total-xp-display" style="color:var(--text)">0 XP</strong>
+        </div>
+      </div>
+    </div>
+
+    <!-- Three-column layout -->
+    <div class="dash-columns">
+
+      <!-- LEFT: Skill Tree -->
+      <div class="skill-panel">
+        <div class="panel-header">
+          <div class="panel-title">Skill Tree</div>
+          <span class="badge badge-blue" id="skills-unlocked-badge">0 / 0</span>
+        </div>
+        <div id="skill-tree-container">
+          <div style="text-align:center;padding:32px;color:var(--text-3)">
+            <div class="spinner" style="margin:0 auto 12px"></div>
+            Loading skills...
+          </div>
+        </div>
+      </div>
+
+      <!-- CENTER: Quests + Resources -->
+      <div class="center-col">
+
+        <!-- Daily Quests -->
+        <div class="quest-panel">
+          <div class="quest-header">
+            <div>
+              <div class="panel-title">Today's Quests</div>
+              <div style="font-size:0.8125rem;color:var(--text-3);margin-top:2px" id="quest-date-label">—</div>
+            </div>
+            <button class="btn btn-secondary btn-sm refresh-btn" id="refresh-btn" onclick="refreshQuests()">
+              <span class="spin-on-load" id="refresh-icon">↻</span>
+              New Quests
+            </button>
+          </div>
+
+          <!-- Quest progress summary -->
+          <div class="quest-progress-summary">
+            <div class="quest-prog-bar">
+              <div class="quest-prog-fill" id="quest-prog-fill" style="width:0%"></div>
+            </div>
+            <span class="quest-prog-text" id="quest-prog-text">0 of 3 complete</span>
+          </div>
+
+          <div class="quest-list" id="quest-list">
+            <div class="quest-empty">
+              <div class="spinner" style="margin:0 auto 12px"></div>
+              Loading quests...
+            </div>
+          </div>
+        </div>
+
+        <!-- Resources -->
+        <div class="resources-panel">
+          <div class="panel-header" style="margin-bottom:16px">
+            <div class="panel-title">Recommended Resources</div>
+          </div>
+          <div class="resources-grid" id="resources-grid">
+            <div style="grid-column:1/-1;text-align:center;padding:20px;color:var(--text-3)">Loading resources...</div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- RIGHT: Roadmap -->
+      <div class="roadmap-panel">
+        <div class="panel-header">
+          <div class="panel-title">Roadmap</div>
+          <span class="badge badge-purple" id="roadmap-weeks-badge">— wks</span>
+        </div>
+        <div class="roadmap-phases" id="roadmap-phases">
+          <div style="text-align:center;padding:20px;color:var(--text-3)">
+            <div class="spinner" style="margin:0 auto 10px"></div>
+          </div>
+        </div>
+        <div class="total-progress-wrap">
+          <div class="total-prog-label">
+            <span>Overall Progress</span>
+            <span id="total-prog-pct" style="font-weight:700">0%</span>
+          </div>
+          <div class="progress-bar">
+            <div class="progress-fill" id="total-prog-fill" style="width:0%"></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+  <script src="/js/app.js"></script>
+  <script>
+    if (!CC.requireAuth()) throw new Error('Not authenticated');
+    CC.renderNavUser();
+
+    // ── State ──────────────────────────────────────────────────────────────
+    let progress = null;
+    let refreshing = false;
+
+    // ── Init ───────────────────────────────────────────────────────────────
+    async function init() {
+      progress = CC.getProgress();
+      if (!progress || !progress.onboardingComplete) {
+        window.location.href = '/onboarding.html';
+        return;
+      }
+
+      progress = CC.touchStreak(progress);
+
+      // Check if quests need refreshing (new day)
+      if (!progress.todayQuests || progress.todayQuests.date !== CC.today()) {
+        await fetchNewQuests();
+      } else {
+        CC.saveProgress(progress);
+        render();
+      }
+    }
+
+    // ── Render everything ──────────────────────────────────────────────────
+    function render() {
+      renderStats();
+      renderSkillTree();
+      renderQuests();
+      renderRoadmap();
+      renderResources();
+    }
+
+    // ── Stats bar ──────────────────────────────────────────────────────────
+    function renderStats() {
+      const info = CC.levelInfo(progress.xp);
+      document.getElementById('level-badge').textContent = info.level;
+      document.getElementById('level-num').textContent = `Level ${info.level}`;
+      document.getElementById('xp-label-val').textContent = `${info.xpInLevel} / ${info.xpForNext} XP`;
+      document.getElementById('total-xp-display').textContent = `${progress.xp} XP`;
+      document.getElementById('goal-display').textContent = progress.goal || 'Your career goal';
+      document.getElementById('streak-count').textContent = progress.streak || 0;
+
+      // Animate XP bar
+      requestAnimationFrame(() => {
+        document.getElementById('xp-fill').style.width = `${info.pct}%`;
+      });
+    }
+
+    // ── Skill tree ─────────────────────────────────────────────────────────
+    function renderSkillTree() {
+      const container = document.getElementById('skill-tree-container');
+      const skills = progress.skillTree || [];
+      if (!skills.length) {
+        container.innerHTML = '<div style="text-align:center;padding:20px;color:var(--text-3);font-size:0.875rem">No skills yet</div>';
+        return;
+      }
+
+      // Determine unlock status based on XP
+      const unlockedCount = getUnlockedSkillIds(skills, progress.xp).size;
+      document.getElementById('skills-unlocked-badge').textContent = `${unlockedCount} / ${skills.length}`;
+
+      // Group by level
+      const levels = {};
+      skills.forEach(s => {
+        if (!levels[s.level]) levels[s.level] = [];
+        levels[s.level].push(s);
+      });
+
+      let html = '';
+      const unlockedSet = getUnlockedSkillIds(skills, progress.xp);
+      const completedSet = new Set(progress.completedSkills || []);
+
+      Object.keys(levels).sort((a, b) => a - b).forEach((lvl, li) => {
+        const label = lvl === '1' ? 'Foundation' : lvl === '2' ? 'Core Skills' : 'Advanced';
+        if (li > 0) html += `<div class="skill-connector"><div class="skill-connector-line"></div></div>`;
+        html += `<div class="skill-level-group">
+          <div class="skill-level-header">${label}</div>
+          <div class="skill-nodes-grid">`;
+
+        levels[lvl].forEach(skill => {
+          const isCompleted = completedSet.has(skill.id);
+          const isUnlocked = unlockedSet.has(skill.id);
+          const icon = CC.getSkillIcon(skill.name);
+          let cls = 'skill-node';
+          let checkIcon = '';
+          if (isCompleted) { cls += ' completed'; checkIcon = '<span class="skill-node-check">✓</span>'; }
+          else if (isUnlocked) { cls += ' unlocked'; }
+          else { cls += ' locked'; }
+
+          const title = skill.description ? `title="${skill.description}"` : '';
+          html += `<div class="${cls}" ${title} data-id="${skill.id}" ${isUnlocked && !isCompleted ? 'onclick="completeSkill(\'' + skill.id + '\')" style="cursor:pointer"' : ''}>
+            <div class="skill-node-content">
+              <span class="skill-node-icon">${isUnlocked ? icon : '🔒'}</span>
+              <span class="skill-node-name">${skill.name}</span>
+              ${checkIcon}
+            </div>
+          </div>`;
+        });
+
+        html += '</div></div>';
+      });
+
+      container.innerHTML = html;
+    }
+
+    function getUnlockedSkillIds(skills, xp) {
+      const unlocked = new Set();
+      // XP-based unlocking: distribute skill unlocks evenly across XP milestones
+      // Level 1 skills always unlocked, higher levels unlock progressively
+      skills.filter(s => s.level === 1 || s.unlocked).forEach(s => unlocked.add(s.id));
+
+      // Unlock level 2 skills at 100 XP, level 3 at 300 XP
+      if (xp >= 100) skills.filter(s => s.level === 2).forEach(s => unlocked.add(s.id));
+      if (xp >= 300) skills.filter(s => s.level === 3).forEach(s => unlocked.add(s.id));
+
+      return unlocked;
+    }
+
+    function completeSkill(skillId) {
+      if (!progress.completedSkills) progress.completedSkills = [];
+      if (progress.completedSkills.includes(skillId)) return;
+
+      const xpGain = 15;
+      const { progress: updated, leveledUp, newLevel } = CC.awardXP(progress, xpGain);
+      progress = updated;
+      progress.completedSkills.push(skillId);
+      CC.saveProgress(progress);
+
+      const nodeEl = document.querySelector(`[data-id="${skillId}"]`);
+      if (nodeEl) CC.showXPPopup(xpGain, nodeEl);
+      CC.toast(`Skill marked complete! +${xpGain} XP`, 'success');
+      if (leveledUp) setTimeout(() => CC.showLevelUpModal(newLevel), 600);
+
+      renderStats();
+      renderSkillTree();
+      renderRoadmap();
+    }
+
+    // ── Quests ─────────────────────────────────────────────────────────────
+    function renderQuests() {
+      const tq = progress.todayQuests;
+      if (!tq || !tq.items || !tq.items.length) {
+        document.getElementById('quest-list').innerHTML = '<div class="quest-empty">No quests yet. Click "New Quests" to generate!</div>';
+        return;
+      }
+
+      const completed = new Set(tq.completed || []);
+      const total = tq.items.length;
+      const doneCount = completed.size;
+
+      document.getElementById('quest-date-label').textContent = new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
+      document.getElementById('quest-prog-fill').style.width = `${(doneCount / total) * 100}%`;
+      document.getElementById('quest-prog-text').textContent = `${doneCount} of ${total} complete`;
+
+      const TYPE_ICONS = { learn: '📚', practice: '💪', build: '🔨', review: '🔍' };
+
+      const html = tq.items.map(q => {
+        const isDone = completed.has(q.id);
+        return `<div class="quest-card ${isDone ? 'completed' : ''}" data-type="${q.type}" data-id="${q.id}" data-xp="${q.xp}">
+          <div class="quest-checkbox ${isDone ? 'checked' : ''}" onclick="completeQuest('${q.id}', ${q.xp}, this)" id="cb-${q.id}">
+            ${isDone ? '✓' : ''}
+          </div>
+          <div style="flex:1;min-width:0">
+            <div class="quest-meta" style="margin-bottom:6px">
+              <span class="badge ${q.type === 'learn' ? 'badge-blue' : q.type === 'practice' ? 'badge-purple' : q.type === 'build' ? 'badge-green' : 'badge-orange'}">
+                ${TYPE_ICONS[q.type] || '⚡'} ${q.type}
+              </span>
+              <span class="quest-xp">+${q.xp} XP</span>
+            </div>
+            <div class="quest-title">${q.title}</div>
+            <div class="quest-desc">${q.description}</div>
+            <div class="quest-meta">
+              <span class="quest-duration">⏱ ${q.duration}</span>
+            </div>
+          </div>
+        </div>`;
+      }).join('');
+
+      document.getElementById('quest-list').innerHTML = html;
+    }
+
+    function completeQuest(questId, xp, checkboxEl) {
+      const tq = progress.todayQuests;
+      if (!tq || tq.completed.includes(questId)) return;
+
+      tq.completed.push(questId);
+      const { progress: updated, leveledUp, newLevel } = CC.awardXP(progress, xp);
+      progress = updated;
+      CC.saveProgress(progress);
+
+      // Animate checkbox
+      checkboxEl.classList.add('checked');
+      checkboxEl.textContent = '✓';
+
+      // Quest card animation
+      const card = checkboxEl.closest('.quest-card');
+      card.style.animation = 'questComplete 0.4s ease';
+      setTimeout(() => { card.classList.add('completed'); }, 400);
+
+      // XP popup
+      CC.showXPPopup(xp, card);
+      CC.toast(`Quest complete! +${xp} XP earned 🎉`, 'success');
+
+      if (leveledUp) setTimeout(() => CC.showLevelUpModal(newLevel), 800);
+
+      // Check all quests done
+      if (tq.completed.length === tq.items.length) {
+        setTimeout(() => {
+          CC.toast('All quests complete! 🏆 Come back tomorrow for new ones.', 'success', 5000);
+        }, 1200);
+      }
+
+      renderStats();
+      renderQuests();
+      renderRoadmap();
+    }
+
+    async function refreshQuests() {
+      if (refreshing) return;
+      refreshing = true;
+
+      const icon = document.getElementById('refresh-icon');
+      icon.style.display = 'inline-block';
+      icon.style.animation = 'spin 0.7s linear infinite';
+      document.getElementById('refresh-btn').disabled = true;
+
+      try {
+        const completedSkills = progress.completedSkills || [];
+        const currentPhase = progress.roadmap?.phases?.[0]?.name || 'Foundation';
+        const info = CC.levelInfo(progress.xp);
+
+        const res = await fetch('/api/generate-quests', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ goal: progress.goal, completedSkills, currentPhase, level: info.level })
+        });
+        const json = await res.json();
+
+        if (json.success && json.data?.quests) {
+          progress.todayQuests = { date: CC.today(), items: json.data.quests, completed: [] };
+          CC.saveProgress(progress);
+          renderQuests();
+          CC.toast('Fresh quests generated! 🗡️', 'success');
+        }
+      } catch (err) {
+        CC.toast('Failed to generate quests. Try again.', 'error');
+      }
+
+      icon.style.animation = '';
+      document.getElementById('refresh-btn').disabled = false;
+      refreshing = false;
+    }
+
+    async function fetchNewQuests() {
+      try {
+        const completedSkills = progress.completedSkills || [];
+        const currentPhase = progress.roadmap?.phases?.[0]?.name || 'Foundation';
+        const info = CC.levelInfo(progress.xp);
+
+        const res = await fetch('/api/generate-quests', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ goal: progress.goal, completedSkills, currentPhase, level: info.level })
+        });
+        const json = await res.json();
+
+        if (json.success && json.data?.quests) {
+          progress.todayQuests = { date: CC.today(), items: json.data.quests, completed: [] };
+        }
+      } catch (err) {
+        console.error('Failed to fetch quests', err);
+        // Keep existing quests if any
+      }
+
+      CC.saveProgress(progress);
+      render();
+    }
+
+    // ── Roadmap ─────────────────────────────────────────────────────────────
+    function renderRoadmap() {
+      const roadmap = progress.roadmap;
+      if (!roadmap) {
+        document.getElementById('roadmap-phases').innerHTML = '<div style="text-align:center;padding:20px;color:var(--text-3)">No roadmap data</div>';
+        return;
+      }
+
+      document.getElementById('roadmap-weeks-badge').textContent = `${roadmap.totalWeeks} wks`;
+
+      const skills = progress.skillTree || [];
+      const completed = new Set(progress.completedSkills || []);
+      const xp = progress.xp;
+
+      let totalSkills = 0, totalDone = 0;
+
+      const html = (roadmap.phases || []).map((phase, pi) => {
+        const phaseSkills = skills.filter(s => s.level === pi + 1);
+        const phaseDone = phaseSkills.filter(s => completed.has(s.id)).length;
+        const phasePct = phaseSkills.length ? Math.round((phaseDone / phaseSkills.length) * 100) : 0;
+        totalSkills += phaseSkills.length;
+        totalDone += phaseDone;
+
+        const color = phase.color || '#4F8EF7';
+        const skillChips = (phase.skills || []).slice(0, 4).map(s =>
+          `<span class="phase-skill-chip">${s}</span>`).join('');
+
+        return `<div class="phase-item">
+          <div class="phase-header-row">
+            <div class="phase-dot" style="background:${color}"></div>
+            <div class="phase-name">${phase.name}</div>
+            <div class="phase-pct-val" style="color:${color}">${phasePct}%</div>
+          </div>
+          <div class="progress-bar"><div class="progress-fill" style="background:${color};width:${phasePct}%"></div></div>
+          <div class="phase-desc">${phase.description}</div>
+          ${skillChips ? `<div class="phase-skills-wrap">${skillChips}</div>` : ''}
+        </div>`;
+      }).join('');
+
+      document.getElementById('roadmap-phases').innerHTML = html;
+
+      const overallPct = totalSkills ? Math.round((totalDone / totalSkills) * 100) : 0;
+      document.getElementById('total-prog-pct').textContent = `${overallPct}%`;
+      document.getElementById('total-prog-fill').style.width = `${overallPct}%`;
+    }
+
+    // ── Resources ──────────────────────────────────────────────────────────
+    function renderResources() {
+      const resources = progress.resources || [];
+      if (!resources.length) {
+        document.getElementById('resources-grid').innerHTML = '<div style="grid-column:1/-1;text-align:center;color:var(--text-3);padding:16px;font-size:0.875rem">No resources yet — complete onboarding to unlock.</div>';
+        return;
+      }
+
+      const TYPE_ICONS = { course: '📺', video: '▶️', article: '📖', book: '📚', tool: '🔧' };
+      const DIFF_COLORS = { beginner: 'badge-green', intermediate: 'badge-blue', advanced: 'badge-purple' };
+
+      const html = resources.map(r => `
+        <div class="resource-card">
+          <div class="resource-type-icon">${TYPE_ICONS[r.type] || '📌'}</div>
+          <div class="resource-title">${r.title}</div>
+          <div class="resource-provider">${r.provider}</div>
+          <div class="resource-desc">${r.description || ''}</div>
+          <div style="margin-top:8px">
+            <span class="badge ${DIFF_COLORS[r.difficulty] || 'badge-blue'}">${r.difficulty || 'beginner'}</span>
+          </div>
+        </div>`).join('');
+
+      document.getElementById('resources-grid').innerHTML = html;
+    }
+
+    // ── Start ──────────────────────────────────────────────────────────────
+    init();
+  </script>
+</body>
+</html>
