@@ -6,572 +6,497 @@
   <title>Career Copilot — Level Up Your Career with AI</title>
   <link rel="stylesheet" href="/css/styles.css">
   <style>
-    /* Landing-specific styles */
-    .landing-navbar {
-      position: fixed;
-      top: 0; left: 0; right: 0;
-      z-index: 100;
-      padding: 0 24px;
+    /* ── Landing-specific ──────────────────────────────────────────────── */
+    body { background: var(--bg); }
+
+    /* Navbar */
+    .land-nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
       height: 64px;
-      display: flex;
-      align-items: center;
-      background: rgba(10,10,10,0.8);
-      backdrop-filter: blur(20px);
+      display: flex; align-items: center;
+      padding: 0 32px;
+      background: rgba(255,255,255,0.92);
+      backdrop-filter: blur(16px);
       border-bottom: 1px solid var(--border);
     }
-    .landing-navbar-inner {
-      max-width: 1200px;
-      width: 100%;
-      margin: 0 auto;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
+    .land-nav-inner {
+      max-width: 1200px; width: 100%; margin: 0 auto;
+      display: flex; align-items: center; justify-content: space-between;
     }
-    .nav-logo-land {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      font-size: 1.125rem;
-      font-weight: 700;
-      letter-spacing: -0.02em;
+    .land-logo {
+      display: flex; align-items: center; gap: 10px;
+      font-family: var(--font-head); font-size: 1rem; font-weight: 700;
+      color: var(--text);
     }
-    .nav-logo-land-icon {
+    .land-logo-mark {
       width: 32px; height: 32px;
-      background: var(--grad);
-      border-radius: 9px;
+      background: var(--teal);
+      border-radius: 6px;
       display: flex; align-items: center; justify-content: center;
       font-size: 15px;
     }
+    .land-nav-links { display: flex; align-items: center; gap: 2px; }
+    .land-nav-link {
+      padding: 6px 16px; border-radius: var(--radius-sm);
+      font-size: 0.875rem; font-weight: 500;
+      color: var(--text-2); transition: var(--t);
+    }
+    .land-nav-link:hover { color: var(--teal); background: var(--bg-2); }
 
     /* Hero */
     .hero {
       min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      padding: 120px 24px 80px;
+      padding: 100px 32px 0;
+      display: flex; align-items: flex-start;
+      overflow: hidden;
       position: relative;
-      overflow: hidden;
     }
-    .hero-bg {
-      position: absolute;
-      inset: 0;
-      pointer-events: none;
-      overflow: hidden;
-    }
-    .hero-orb {
-      position: absolute;
-      border-radius: 50%;
-      filter: blur(120px);
-    }
-    .orb-1 {
-      width: 700px; height: 700px;
-      background: rgba(79,142,247,0.12);
-      top: -200px; right: -200px;
-    }
-    .orb-2 {
-      width: 500px; height: 500px;
-      background: rgba(139,92,246,0.1);
-      bottom: -150px; left: -150px;
-    }
-    .orb-3 {
-      width: 300px; height: 300px;
-      background: rgba(16,185,129,0.06);
-      top: 50%; left: 50%;
-      transform: translate(-50%, -50%);
-    }
-    .hero-badge {
-      display: inline-flex;
+    .hero-inner {
+      max-width: 1200px; width: 100%; margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
       align-items: center;
-      gap: 8px;
-      padding: 6px 16px;
-      background: rgba(79,142,247,0.1);
-      border: 1px solid rgba(79,142,247,0.2);
-      border-radius: 99px;
-      font-size: 0.8125rem;
-      font-weight: 600;
-      color: #7EB3FA;
-      margin-bottom: 28px;
-      animation: slideUp 0.6s ease;
     }
-    .hero-badge-dot {
-      width: 6px; height: 6px;
-      background: var(--blue);
-      border-radius: 50%;
-      animation: pulse-ring 2s infinite;
+    .hero-left { padding-bottom: 80px; }
+    .hero-tag {
+      font-family: var(--font-head);
+      font-size: 0.6875rem;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--teal);
+      margin-bottom: 20px;
+      animation: slideUp 0.5s ease;
     }
     .hero-title {
-      font-size: clamp(2.5rem, 6vw, 5rem);
-      font-weight: 900;
-      letter-spacing: -0.03em;
-      line-height: 1.08;
-      margin-bottom: 24px;
-      animation: slideUp 0.6s ease 0.1s both;
-    }
-    .hero-sub {
-      font-size: clamp(1rem, 2vw, 1.25rem);
-      color: var(--text-2);
-      max-width: 560px;
-      margin: 0 auto 40px;
-      line-height: 1.65;
-      animation: slideUp 0.6s ease 0.2s both;
-    }
-    .hero-actions {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 14px;
-      flex-wrap: wrap;
-      animation: slideUp 0.6s ease 0.3s both;
-    }
-    .hero-btn-primary {
-      padding: 14px 32px;
-      background: var(--grad);
-      color: #fff;
-      border-radius: 10px;
-      font-size: 1rem;
+      font-family: var(--font-head);
+      font-size: clamp(2.5rem, 4.5vw, 3.75rem);
       font-weight: 700;
-      transition: var(--t);
-      box-shadow: 0 0 0 0 rgba(79,142,247,0.3);
+      line-height: 1.12;
+      letter-spacing: -0.02em;
+      color: var(--text);
+      margin-bottom: 28px;
+      animation: slideUp 0.5s ease 0.1s both;
     }
-    .hero-btn-primary:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 30px rgba(79,142,247,0.3);
-    }
-    .hero-btn-ghost {
-      padding: 14px 24px;
+    .hero-title .teal { color: var(--teal); }
+    .hero-body {
+      font-size: 1rem;
       color: var(--text-2);
+      line-height: 1.7;
+      max-width: 440px;
+      margin-bottom: 36px;
+      animation: slideUp 0.5s ease 0.2s both;
+    }
+    .hero-highlight {
+      display: inline;
+      background: var(--yellow-bg);
+      padding: 1px 6px;
+      border-radius: 3px;
+      color: var(--text);
+      font-weight: 700;
+    }
+    .hero-btns {
+      display: flex; align-items: center; gap: 14px; flex-wrap: wrap;
+      animation: slideUp 0.5s ease 0.3s both;
+    }
+    .hero-btn-fill {
+      padding: 12px 28px;
+      background: var(--teal);
+      color: #fff;
+      border-radius: var(--radius-sm);
       font-size: 0.9375rem;
       font-weight: 600;
-      border-radius: 10px;
-      border: 1px solid var(--border-md);
+      font-family: var(--font-head);
       transition: var(--t);
     }
-    .hero-btn-ghost:hover { color: var(--text); border-color: var(--border-hi); background: var(--bg-1); }
+    .hero-btn-fill:hover { background: var(--teal-dark); transform: translateY(-1px); }
+    .hero-btn-outline {
+      padding: 11px 24px;
+      border: 1.5px solid var(--text);
+      border-radius: var(--radius-sm);
+      font-size: 0.9375rem;
+      font-weight: 600;
+      color: var(--text);
+      transition: var(--t);
+    }
+    .hero-btn-outline:hover { border-color: var(--teal); color: var(--teal); }
 
-    /* Stats bar */
-    .stats-bar {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 40px;
-      padding: 24px;
+    /* Est. stamp */
+    .hero-stamp {
+      position: absolute;
+      top: 90px; right: 32px;
+      border: 1.5px solid var(--text-3);
+      border-radius: 4px;
+      padding: 6px 14px;
+      font-family: var(--font-head);
+      font-size: 0.75rem;
+      color: var(--text-3);
+      transform: rotate(3deg);
+      pointer-events: none;
+    }
+
+    /* Hex grid right side */
+    .hero-right {
+      display: flex; align-items: center; justify-content: center;
+      animation: slideUp 0.5s ease 0.15s both;
+      padding-bottom: 40px;
+    }
+    #hex-grid { width: 100%; max-width: 480px; }
+
+    /* Social proof bar */
+    .proof-bar {
       border-top: 1px solid var(--border);
       border-bottom: 1px solid var(--border);
+      padding: 28px 32px;
       background: var(--bg-1);
+    }
+    .proof-bar-inner {
+      max-width: 1200px; margin: 0 auto;
+      display: flex; align-items: center; gap: 48px;
       flex-wrap: wrap;
     }
-    .stat-item { text-align: center; }
-    .stat-value { font-size: 1.5rem; font-weight: 800; letter-spacing: -0.02em; }
-    .stat-label { font-size: 0.8125rem; color: var(--text-2); margin-top: 2px; }
+    .proof-label { font-family: var(--font-head); font-size: 0.75rem; font-weight: 700; color: var(--text-3); letter-spacing: 0.08em; text-transform: uppercase; white-space: nowrap; }
+    .proof-stats { display: flex; align-items: center; gap: 40px; flex-wrap: wrap; }
+    .proof-stat { display: flex; align-items: baseline; gap: 8px; }
+    .proof-stat-val { font-family: var(--font-head); font-size: 1.5rem; font-weight: 700; color: var(--text); }
+    .proof-stat-label { font-size: 0.875rem; color: var(--text-2); }
 
-    /* Features */
-    .section { padding: 100px 24px; }
-    .section-header { text-align: center; margin-bottom: 64px; }
-    .section-tag {
-      display: inline-block;
-      font-size: 0.75rem;
-      font-weight: 700;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--blue);
-      margin-bottom: 16px;
+    /* Features section */
+    .section { padding: 100px 32px; }
+    .section-bg { background: var(--bg-1); }
+    .section-header { max-width: 1200px; margin: 0 auto 56px; }
+    .section-kicker {
+      font-family: var(--font-head);
+      font-size: 0.6875rem; font-weight: 700;
+      letter-spacing: 0.15em; text-transform: uppercase;
+      color: var(--teal); margin-bottom: 14px;
     }
     .section-title {
-      font-size: clamp(1.75rem, 4vw, 2.75rem);
-      font-weight: 800;
-      letter-spacing: -0.025em;
-      line-height: 1.15;
-      margin-bottom: 16px;
+      font-family: var(--font-head);
+      font-size: clamp(1.75rem, 3vw, 2.5rem);
+      font-weight: 700; line-height: 1.2;
+      letter-spacing: -0.02em;
+      color: var(--text);
     }
-    .section-sub { font-size: 1.0625rem; color: var(--text-2); max-width: 500px; margin: 0 auto; }
+    .section-sub { font-size: 1rem; color: var(--text-2); margin-top: 12px; max-width: 520px; line-height: 1.7; }
 
     .features-grid {
+      max-width: 1200px; margin: 0 auto;
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      grid-template-columns: repeat(3, 1fr);
       gap: 20px;
-      max-width: 1000px;
-      margin: 0 auto;
     }
     .feature-card {
-      background: var(--bg-1);
+      background: var(--bg-2);
       border: 1px solid var(--border);
       border-radius: var(--radius-lg);
       padding: 28px;
       transition: all 0.3s var(--ease);
-      position: relative;
-      overflow: hidden;
+      border-top: 3px solid transparent;
     }
-    .feature-card::before {
-      content: '';
-      position: absolute;
-      top: 0; left: 0; right: 0;
-      height: 1px;
-      background: var(--grad);
-      opacity: 0;
-      transition: opacity 0.3s ease;
-    }
-    .feature-card:hover { border-color: var(--border-md); transform: translateY(-3px); }
-    .feature-card:hover::before { opacity: 1; }
+    .feature-card:hover { border-top-color: var(--teal); transform: translateY(-3px); box-shadow: 0 8px 24px rgba(26,122,110,0.08); }
     .feature-icon {
-      width: 48px; height: 48px;
-      border-radius: 12px;
+      width: 44px; height: 44px;
+      background: rgba(26,122,110,0.1);
+      border-radius: 8px;
       display: flex; align-items: center; justify-content: center;
-      font-size: 22px;
-      margin-bottom: 20px;
+      font-size: 20px;
+      margin-bottom: 18px;
     }
-    .feature-icon.blue { background: rgba(79,142,247,0.12); }
-    .feature-icon.purple { background: rgba(139,92,246,0.12); }
-    .feature-icon.green { background: rgba(16,185,129,0.12); }
-    .feature-title { font-size: 1.0625rem; font-weight: 700; margin-bottom: 10px; }
-    .feature-desc { font-size: 0.9rem; color: var(--text-2); line-height: 1.6; }
+    .feature-title { font-family: var(--font-head); font-size: 1rem; font-weight: 700; margin-bottom: 10px; }
+    .feature-desc  { font-size: 0.9rem; color: var(--text-2); line-height: 1.65; }
 
-    /* How it works */
-    .how-bg { background: var(--bg-1); }
+    /* Steps */
     .steps-grid {
+      max-width: 1200px; margin: 0 auto;
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      grid-template-columns: repeat(3, 1fr);
       gap: 32px;
-      max-width: 900px;
-      margin: 0 auto;
-      position: relative;
     }
-    .step-card { text-align: center; padding: 8px; }
-    .step-number {
-      width: 52px; height: 52px;
-      border-radius: 14px;
-      background: var(--grad);
-      display: flex; align-items: center; justify-content: center;
-      font-size: 1.25rem; font-weight: 900;
-      margin: 0 auto 20px;
-      box-shadow: 0 0 20px rgba(79,142,247,0.2);
+    .step-card { text-align: left; }
+    .step-num {
+      font-family: var(--font-head);
+      font-size: 2.5rem; font-weight: 700;
+      color: var(--teal-pale);
+      margin-bottom: 12px;
+      line-height: 1;
     }
-    .step-title { font-size: 1.0625rem; font-weight: 700; margin-bottom: 10px; }
-    .step-desc { font-size: 0.9rem; color: var(--text-2); line-height: 1.6; }
+    .step-title { font-family: var(--font-head); font-size: 1rem; font-weight: 700; margin-bottom: 10px; border-bottom: 2px solid var(--teal); padding-bottom: 8px; display: inline-block; }
+    .step-desc  { font-size: 0.9rem; color: var(--text-2); line-height: 1.65; margin-top: 12px; }
 
-    /* CTA section */
-    .cta-section {
-      padding: 100px 24px;
-      text-align: center;
-      position: relative;
-      overflow: hidden;
-    }
+    /* CTA */
+    .cta-section { padding: 100px 32px; }
     .cta-card {
+      max-width: 720px; margin: 0 auto;
       background: var(--bg-1);
-      border: 1px solid var(--border);
-      border-radius: 28px;
-      padding: 64px 48px;
-      max-width: 680px;
-      margin: 0 auto;
+      border: 1px solid var(--border-md);
+      border-radius: var(--radius-xl);
+      padding: 64px 56px;
+      text-align: center;
       position: relative;
       overflow: hidden;
     }
     .cta-card::before {
       content: '';
-      position: absolute;
-      inset: -1px;
-      border-radius: 29px;
-      background: var(--grad);
-      z-index: -1;
-      opacity: 0.3;
+      position: absolute; top: 0; left: 0; right: 0; height: 3px;
+      background: var(--teal);
     }
-    .cta-title { font-size: clamp(1.75rem, 4vw, 2.5rem); font-weight: 800; margin-bottom: 16px; letter-spacing: -0.025em; }
-    .cta-sub { color: var(--text-2); font-size: 1.0625rem; margin-bottom: 32px; line-height: 1.6; }
+    .cta-title { font-family: var(--font-head); font-size: clamp(1.75rem, 3vw, 2.5rem); font-weight: 700; margin-bottom: 14px; letter-spacing: -0.02em; }
+    .cta-sub { color: var(--text-2); font-size: 1.0625rem; margin-bottom: 32px; line-height: 1.65; }
 
     /* Footer */
     footer {
-      padding: 32px 24px;
+      padding: 28px 32px;
       border-top: 1px solid var(--border);
-      text-align: center;
-      color: var(--text-3);
-      font-size: 0.875rem;
+      display: flex; align-items: center; justify-content: space-between;
+      flex-wrap: wrap; gap: 12px;
     }
-    footer span { color: var(--text-2); }
+    .footer-logo { font-family: var(--font-head); font-size: 0.875rem; font-weight: 700; color: var(--text-2); }
+    .footer-copy { font-size: 0.8125rem; color: var(--text-3); }
 
-    /* Dashboard preview mock */
-    .hero-preview {
-      margin-top: 64px;
-      max-width: 800px;
-      margin-left: auto;
-      margin-right: auto;
-      border-radius: var(--radius-xl);
-      border: 1px solid var(--border-md);
-      overflow: hidden;
-      box-shadow: 0 32px 80px rgba(0,0,0,0.6);
-      animation: slideUp 0.6s ease 0.4s both;
-    }
-    .preview-bar {
-      padding: 12px 16px;
-      background: var(--bg-2);
-      border-bottom: 1px solid var(--border);
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-    .preview-dot {
-      width: 10px; height: 10px;
-      border-radius: 50%;
-    }
-    .preview-body {
-      background: var(--bg-1);
-      padding: 20px;
-      display: grid;
-      grid-template-columns: 1fr 1fr 1fr;
-      gap: 14px;
-    }
-    .preview-col-title { font-size: 0.6875rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-3); margin-bottom: 10px; }
-    .preview-node {
-      padding: 8px 10px;
-      border-radius: 8px;
-      font-size: 0.75rem;
-      font-weight: 500;
-      margin-bottom: 6px;
-    }
-    .preview-node.done { background: rgba(16,185,129,0.1); border: 1px solid rgba(16,185,129,0.2); color: #34D399; }
-    .preview-node.active { background: rgba(79,142,247,0.1); border: 1px solid rgba(79,142,247,0.2); color: #7EB3FA; }
-    .preview-node.locked { background: var(--bg-2); border: 1px solid var(--border); color: var(--text-3); opacity: 0.5; }
-    .preview-quest {
-      padding: 8px 10px;
-      border-radius: 8px;
-      background: var(--bg-2);
-      border: 1px solid var(--border);
-      border-left: 3px solid var(--blue);
-      font-size: 0.75rem;
-      margin-bottom: 6px;
-    }
-    .preview-quest.done { border-left-color: var(--green); opacity: 0.5; text-decoration: line-through; color: var(--text-2); }
-    .preview-phase {
-      margin-bottom: 8px;
-    }
-    .preview-phase-label { font-size: 0.7rem; color: var(--text-2); margin-bottom: 4px; }
-    .preview-phase-bar {
-      height: 4px;
-      border-radius: 2px;
-      background: var(--bg-3);
-    }
-    .preview-phase-fill {
-      height: 100%;
-      border-radius: 2px;
-      background: var(--grad);
-    }
-
-    @media (max-width: 640px) {
-      .preview-body { grid-template-columns: 1fr; }
-      .preview-body > div:not(:first-child) { display: none; }
-      .hero-actions { flex-direction: column; }
+    /* Responsive */
+    @media (max-width: 900px) {
+      .hero-inner { grid-template-columns: 1fr; padding-top: 0; }
+      .hero-right { display: none; }
+      .features-grid, .steps-grid { grid-template-columns: 1fr; }
+      .hero-stamp { display: none; }
+      .cta-card { padding: 40px 24px; }
     }
   </style>
 </head>
 <body>
 
   <!-- Navbar -->
-  <nav class="landing-navbar">
-    <div class="landing-navbar-inner">
-      <a href="/" class="nav-logo-land">
-        <div class="nav-logo-land-icon">🎯</div>
+  <nav class="land-nav">
+    <div class="land-nav-inner">
+      <a href="/" class="land-logo">
+        <div class="land-logo-mark">🎯</div>
         Career Copilot
       </a>
+      <div class="land-nav-links">
+        <a href="#features" class="land-nav-link">Features</a>
+        <a href="#how" class="land-nav-link">How It Works</a>
+      </div>
       <div style="display:flex;align-items:center;gap:8px">
-        <a href="/login.html" class="btn btn-ghost btn-sm">Sign in</a>
-        <a href="/signup.html" class="btn btn-primary btn-sm">Get Started Free</a>
+        <a href="/login.html" class="land-nav-link">Sign in</a>
+        <a href="/signup.html" class="btn btn-primary btn-sm" style="font-family:var(--font-head)">Get Started →</a>
       </div>
     </div>
   </nav>
 
   <!-- Hero -->
   <section class="hero">
-    <div class="hero-bg">
-      <div class="hero-orb orb-1"></div>
-      <div class="hero-orb orb-2"></div>
-      <div class="hero-orb orb-3"></div>
-    </div>
-
-    <div style="position:relative;z-index:1;width:100%">
-      <div class="hero-badge">
-        <div class="hero-badge-dot"></div>
-        Powered by Google Gemini AI
-      </div>
-
-      <h1 class="hero-title">
-        Level Up Your Career.<br>
-        <span class="gradient-text">Powered by AI.</span>
-      </h1>
-
-      <p class="hero-sub">
-        Pick your dream goal. Get a personalized roadmap. Complete daily quests.
-        Build your portfolio automatically. Get hired.
-      </p>
-
-      <div class="hero-actions">
-        <a href="/signup.html" class="hero-btn-primary">Get Started Free →</a>
-        <a href="/login.html" class="hero-btn-ghost">Already have an account</a>
-      </div>
-
-      <!-- Dashboard preview -->
-      <div class="hero-preview">
-        <div class="preview-bar">
-          <div class="preview-dot" style="background:#ef4444"></div>
-          <div class="preview-dot" style="background:#f59e0b"></div>
-          <div class="preview-dot" style="background:#10b981"></div>
-          <span style="margin-left:8px;font-size:0.75rem;color:var(--text-3)">Career Copilot — Dashboard</span>
+    <div class="hero-stamp">Est. 2025</div>
+    <div class="hero-inner">
+      <div class="hero-left">
+        <div class="hero-tag">AI-Powered Career Platform</div>
+        <h1 class="hero-title">
+          We didn't guess<br>
+          your career path.<br>
+          <span class="teal">AI mapped it.</span>
+        </h1>
+        <p class="hero-body">
+          Pick your dream goal. Gemini builds your personalized skill roadmap,
+          detects your gaps, and assigns fresh daily quests. Complete them.
+          <span class="hero-highlight">Get hired faster.</span>
+        </p>
+        <div class="hero-btns">
+          <a href="/signup.html" class="hero-btn-fill">Get Started Free</a>
+          <a href="#how" class="hero-btn-outline">How It Works</a>
         </div>
-        <div class="preview-body">
-          <div>
-            <div class="preview-col-title">Skill Tree</div>
-            <div class="preview-node done">✓ Python Basics</div>
-            <div class="preview-node done">✓ Git & GitHub</div>
-            <div class="preview-node active">→ NumPy & Pandas</div>
-            <div class="preview-node locked">🔒 Machine Learning</div>
-            <div class="preview-node locked">🔒 TensorFlow</div>
-          </div>
-          <div>
-            <div class="preview-col-title">Today's Quests</div>
-            <div class="preview-quest done">Read: Intro to ML chapter</div>
-            <div class="preview-quest" style="border-left-color:var(--purple)">Build: Linear regression model</div>
-            <div class="preview-quest" style="border-left-color:var(--green)">Practice: NumPy exercises</div>
-          </div>
-          <div>
-            <div class="preview-col-title">Roadmap</div>
-            <div class="preview-phase">
-              <div class="preview-phase-label">Foundation · 100%</div>
-              <div class="preview-phase-bar"><div class="preview-phase-fill" style="width:100%"></div></div>
-            </div>
-            <div class="preview-phase">
-              <div class="preview-phase-label">ML Core · 45%</div>
-              <div class="preview-phase-bar"><div class="preview-phase-fill" style="width:45%"></div></div>
-            </div>
-            <div class="preview-phase">
-              <div class="preview-phase-label">Advanced · 0%</div>
-              <div class="preview-phase-bar"><div class="preview-phase-fill" style="width:0%"></div></div>
-            </div>
-          </div>
-        </div>
+      </div>
+      <div class="hero-right">
+        <svg id="hex-grid" viewBox="0 0 440 380" xmlns="http://www.w3.org/2000/svg"></svg>
       </div>
     </div>
   </section>
 
-  <!-- Stats bar -->
-  <div class="stats-bar">
-    <div class="stat-item">
-      <div class="stat-value gradient-text">10K+</div>
-      <div class="stat-label">Active learners</div>
-    </div>
-    <div class="stat-item">
-      <div class="stat-value gradient-text">500K+</div>
-      <div class="stat-label">Quests completed</div>
-    </div>
-    <div class="stat-item">
-      <div class="stat-value gradient-text">94%</div>
-      <div class="stat-label">Report landing jobs</div>
-    </div>
-    <div class="stat-item">
-      <div class="stat-value gradient-text">∞</div>
-      <div class="stat-label">AI-powered roadmaps</div>
+  <!-- Proof bar -->
+  <div class="proof-bar">
+    <div class="proof-bar-inner">
+      <div class="proof-label">Trusted by learners</div>
+      <div class="proof-stats">
+        <div class="proof-stat">
+          <span class="proof-stat-val">10K+</span>
+          <span class="proof-stat-label">Active learners</span>
+        </div>
+        <div class="proof-stat">
+          <span class="proof-stat-val">500K+</span>
+          <span class="proof-stat-label">Quests completed</span>
+        </div>
+        <div class="proof-stat">
+          <span class="proof-stat-val">94%</span>
+          <span class="proof-stat-label">Report landing jobs</span>
+        </div>
+        <div class="proof-stat">
+          <span class="proof-stat-val">∞</span>
+          <span class="proof-stat-label">AI roadmaps generated</span>
+        </div>
+      </div>
     </div>
   </div>
 
   <!-- Features -->
-  <section class="section">
-    <div class="container">
-      <div class="section-header">
-        <div class="section-tag">How it works</div>
-        <h2 class="section-title">Everything you need to<br><span class="gradient-text">get hired, fast</span></h2>
-        <p class="section-sub">Stop watching random tutorials. Get a structured AI-powered path built exactly for your goal.</p>
+  <section class="section" id="features">
+    <div class="section-header">
+      <div class="section-kicker">What you get</div>
+      <h2 class="section-title">Everything to get hired,<br>nothing you don't need.</h2>
+      <p class="section-sub">Stop watching random tutorials. Get a structured, AI-powered path built for your exact goal — and a dashboard that makes it feel like a game.</p>
+    </div>
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon">🎯</div>
+        <div class="feature-title">Personalized AI Roadmap</div>
+        <p class="feature-desc">Tell us your dream role, your current level, and how much time you have. Gemini AI builds a custom roadmap with phases, skill milestones, and resource recommendations.</p>
       </div>
-      <div class="features-grid">
-        <div class="feature-card">
-          <div class="feature-icon blue">🎯</div>
-          <div class="feature-title">Personalized AI Roadmap</div>
-          <p class="feature-desc">Tell us your dream role, your current level, and how much time you have. Gemini AI builds a custom roadmap with phases, milestones, and real skill goals.</p>
-        </div>
-        <div class="feature-card">
-          <div class="feature-icon purple">⚔️</div>
-          <div class="feature-title">Daily Quests That Level You Up</div>
-          <p class="feature-desc">Every morning you get 3 fresh quests tailored to where you are in your journey. Complete them to earn XP, unlock skills, and level up your profile.</p>
-        </div>
-        <div class="feature-card">
-          <div class="feature-icon green">🏆</div>
-          <div class="feature-title">Auto-Generated Portfolio</div>
-          <p class="feature-desc">As you complete quests and unlock skills, Career Copilot automatically builds your portfolio — skill badges, XP charts, and a professional bio ready to share.</p>
-        </div>
+      <div class="feature-card">
+        <div class="feature-icon">⚔️</div>
+        <div class="feature-title">Daily Quests that Level You Up</div>
+        <p class="feature-desc">Every day you get 3 fresh quests tailored to where you are in your journey. Complete them to earn XP, unlock skills, and level up your profile like an RPG.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🏆</div>
+        <div class="feature-title">Auto-Generated Portfolio</div>
+        <p class="feature-desc">As you complete quests and unlock skills, Career Copilot automatically builds your portfolio — skill badges, XP growth charts, and an AI-written professional bio.</p>
       </div>
     </div>
   </section>
 
-  <!-- How it works steps -->
-  <section class="section how-bg">
-    <div class="container">
-      <div class="section-header">
-        <div class="section-tag">Get started in minutes</div>
-        <h2 class="section-title">Your career RPG<br><span class="gradient-text">in three steps</span></h2>
+  <!-- How it works -->
+  <section class="section section-bg" id="how">
+    <div class="section-header">
+      <div class="section-kicker">How it works</div>
+      <h2 class="section-title">Three steps to your<br>dream career.</h2>
+    </div>
+    <div class="steps-grid">
+      <div class="step-card">
+        <div class="step-num">01</div>
+        <div class="step-title">Set Your Dream Goal</div>
+        <p class="step-desc">Tell us exactly what you want to become — ML Engineer, UX Designer, Data Scientist, anything. The more specific, the better. Our AI tailors everything to that exact goal.</p>
       </div>
-      <div class="steps-grid">
-        <div class="step-card">
-          <div class="step-number">1</div>
-          <div class="step-title">Set Your Dream Goal</div>
-          <p class="step-desc">Tell us what you want to become — ML Engineer, UX Designer, Data Scientist, anything. Our AI tailors everything to your specific goal.</p>
-        </div>
-        <div class="step-card">
-          <div class="step-number">2</div>
-          <div class="step-title">Get Your Roadmap</div>
-          <p class="step-desc">Gemini analyzes your goal and skill level to build a personalized roadmap with a visual skill tree, phases, and learning resources.</p>
-        </div>
-        <div class="step-card">
-          <div class="step-number">3</div>
-          <div class="step-title">Complete Quests Daily</div>
-          <p class="step-desc">Show up every day, complete your quests, earn XP, level up. Watch your portfolio fill with verified skills that recruiters actually care about.</p>
-        </div>
+      <div class="step-card">
+        <div class="step-num">02</div>
+        <div class="step-title">Get Your Roadmap</div>
+        <p class="step-desc">Gemini analyzes your goal and current skill level to build a personalized roadmap with a visual skill tree, learning phases, and curated resources. Ready in seconds.</p>
+      </div>
+      <div class="step-card">
+        <div class="step-num">03</div>
+        <div class="step-title">Complete Quests Daily</div>
+        <p class="step-desc">Show up every day, complete your 3 quests, earn XP, level up. Watch your portfolio fill with verified skills that recruiters actually care about. Consistency wins.</p>
       </div>
     </div>
   </section>
 
   <!-- CTA -->
   <section class="cta-section">
-    <div class="container">
-      <div class="cta-card">
-        <div style="font-size:2.5rem;margin-bottom:16px">🚀</div>
-        <h2 class="cta-title">Ready to level up?</h2>
-        <p class="cta-sub">Join thousands of learners who are using AI to take the guesswork out of their career journey. Free to start, forever.</p>
-        <a href="/signup.html" class="hero-btn-primary" style="display:inline-flex;align-items:center;gap:8px;font-size:1.0625rem">
-          Start Your Journey Free →
-        </a>
-        <p style="margin-top:16px;font-size:0.8125rem;color:var(--text-3)">No credit card required · Free to use · Takes 2 minutes</p>
-      </div>
+    <div class="cta-card">
+      <div style="font-family:var(--font-head);font-size:0.75rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--teal);margin-bottom:16px">Ready to level up?</div>
+      <h2 class="cta-title">Start your career quest<br>today. It's free.</h2>
+      <p class="cta-sub">Join thousands of learners who stopped guessing and started building their dream careers with AI. No credit card required.</p>
+      <a href="/signup.html" class="hero-btn-fill" style="display:inline-flex;font-size:1rem">Get Started Free →</a>
+      <p style="margin-top:16px;font-size:0.8125rem;color:var(--text-3);font-family:var(--font-head)">Free to use · No credit card · 2 min setup</p>
     </div>
   </section>
 
   <footer>
-    <div class="nav-logo-land" style="justify-content:center;margin-bottom:12px">
-      <div class="nav-logo-land-icon">🎯</div>
+    <div class="land-logo">
+      <div class="land-logo-mark" style="width:24px;height:24px;font-size:11px">🎯</div>
       Career Copilot
     </div>
-    <p>Built with Gemini AI · © 2025 Career Copilot · <span>Made for ambitious learners</span></p>
+    <div class="footer-copy">© 2025 Career Copilot · Built with Gemini AI · Made for ambitious learners</div>
   </footer>
 
   <script>
-    // Redirect to dashboard if already logged in
+    // Redirect if already logged in
     const uid = localStorage.getItem('cc_current');
     if (uid) {
       const users = JSON.parse(localStorage.getItem('cc_users') || '[]');
-      if (users.find(u => u.id === uid)) {
-        window.location.href = '/dashboard.html';
-      }
+      if (users.find(u => u.id === uid)) window.location.href = '/dashboard.html';
     }
 
-    // Intersection observer for scroll animations
-    const observer = new IntersectionObserver((entries) => {
+    // ── Generate hex grid ──────────────────────────────────────────────────
+    (function() {
+      const svg = document.getElementById('hex-grid');
+      const ns = 'http://www.w3.org/2000/svg';
+      const r = 21;
+      const cols = 13, rows = 10;
+      const colSpacing = r * 1.5;
+      const rowSpacing = r * Math.sqrt(3);
+
+      // Teal palette (light → dark)
+      const pal = [
+        '#c8f0ea','#b0e8e0','#92e0d4','#7ed8c7',
+        '#5ac5b5','#4ab8a8','#3db5a0','#2d9b8a',
+        '#1a7a6e','#145f55','#0d4a42','#72d0c2'
+      ];
+
+      // Seeded LCG random
+      let seed = 42;
+      function rand() {
+        seed = ((seed * 1664525) + 1013904223) >>> 0;
+        return seed / 0xffffffff;
+      }
+
+      function hexPoints(cx, cy, radius) {
+        const pts = [];
+        for (let i = 0; i < 6; i++) {
+          const a = i * 60 * Math.PI / 180;
+          pts.push(`${(cx + radius * Math.cos(a)).toFixed(2)},${(cy + radius * Math.sin(a)).toFixed(2)}`);
+        }
+        return pts.join(' ');
+      }
+
+      // Draw grid back-to-front
+      const groups = [];
+      for (let col = 0; col < cols; col++) {
+        for (let row = 0; row < rows; row++) {
+          const cx = r + col * colSpacing;
+          const isOdd = col % 2 === 1;
+          const cy = r + row * rowSpacing + (isOdd ? rowSpacing / 2 : 0) + (rowSpacing * 0.15);
+
+          // Skip some for visual depth
+          if (rand() < 0.07) continue;
+
+          const isPink    = (col === 1 && row === 2);
+          const isOutline = (col === 9 && row === 5);
+
+          const poly = document.createElementNS(ns, 'polygon');
+
+          if (isPink) {
+            poly.setAttribute('points', hexPoints(cx, cy, r - 1.5));
+            poly.setAttribute('fill', '#e85d8a');
+          } else if (isOutline) {
+            // Large gray outline hex
+            poly.setAttribute('points', hexPoints(cx, cy, r * 1.65));
+            poly.setAttribute('fill', 'rgba(200,240,234,0.15)');
+            poly.setAttribute('stroke', '#9eada8');
+            poly.setAttribute('stroke-width', '2.5');
+          } else {
+            const ci = Math.floor(rand() * pal.length);
+            poly.setAttribute('points', hexPoints(cx, cy, r - 1.5));
+            poly.setAttribute('fill', pal[ci]);
+            // Add subtle opacity variation
+            poly.setAttribute('opacity', (0.7 + rand() * 0.3).toFixed(2));
+          }
+
+          svg.appendChild(poly);
+        }
+      }
+    })();
+
+    // ── Scroll reveal ──────────────────────────────────────────────────────
+    const obs = new IntersectionObserver(entries => {
       entries.forEach(e => {
         if (e.isIntersecting) {
-          e.target.style.animation = 'slideUp 0.6s ease forwards';
-          observer.unobserve(e.target);
+          e.target.style.animation = 'slideUp 0.55s ease forwards';
+          obs.unobserve(e.target);
         }
       });
     }, { threshold: 0.1 });
-
     document.querySelectorAll('.feature-card, .step-card').forEach(el => {
       el.style.opacity = '0';
-      observer.observe(el);
+      obs.observe(el);
     });
   </script>
 </body>
