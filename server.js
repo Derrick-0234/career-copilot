@@ -91,7 +91,7 @@ const MOCK_QUESTS = [
 
 // ─── Routes ────────────────────────────────────────────────────────────────
 app.post('/api/generate-roadmap', async (req, res) => {
-  const { goal, timePerDay, skillLevel } = req.body;
+  const { goal, timePerDay, skillLevel, situation, enjoyment } = req.body;
 
   if (!genAI) {
     return res.json({ success: true, data: MOCK_ROADMAP, mock: true });
@@ -103,6 +103,8 @@ Generate a personalized learning roadmap for this user:
 - Dream career goal: ${goal}
 - Daily time available: ${timePerDay}
 - Current skill level: ${skillLevel}
+- Current life situation: ${situation || 'Not specified'}
+- What they enjoy: ${Array.isArray(enjoyment) ? enjoyment.join(', ') : (enjoyment || 'Not specified')}
 
 Return ONLY a valid JSON object (no markdown, no extra text) with this exact structure:
 {
@@ -158,7 +160,8 @@ Rules:
 - Prerequisites are arrays of node "id" strings from level 1 nodes
 - Exactly 3 daily quests. Types: "learn", "practice", "build", or "review". XP: 20-50
 - Exactly 3 learning resources
-- Make everything specific to: "${goal}"`;
+- Make everything specific to: "${goal}"
+- Tailor quests and pacing to their situation and enjoyment preferences`;
 
     const data = await callGemini(prompt);
     res.json({ success: true, data });

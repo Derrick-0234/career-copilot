@@ -9,25 +9,25 @@
     body { min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 24px; background: var(--bg); }
     .ob-wrap { max-width: 620px; width: 100%; animation: slideUp 0.5s ease; }
 
-    .ob-logo { display: flex; align-items: center; justify-content: center; gap: 10px; font-family: var(--font-head); font-size: 1rem; font-weight: 700; margin-bottom: 36px; color: var(--text); }
+    .ob-logo { display: flex; align-items: center; justify-content: center; gap: 10px; font-family: var(--font-head); font-size: 1rem; font-weight: 700; margin-bottom: 32px; color: var(--text); }
     .ob-logo-icon { width: 32px; height: 32px; background: var(--teal); border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 15px; }
 
     /* Steps indicator */
-    .ob-steps { display: flex; align-items: center; justify-content: center; margin-bottom: 36px; }
+    .ob-steps { display: flex; align-items: center; justify-content: center; margin-bottom: 28px; }
     .ob-step  { display: flex; flex-direction: column; align-items: center; gap: 6px; }
     .ob-step-circle {
-      width: 36px; height: 36px; border-radius: 50%;
+      width: 32px; height: 32px; border-radius: 50%;
       border: 2px solid var(--border-md);
       display: flex; align-items: center; justify-content: center;
-      font-family: var(--font-head); font-size: 0.875rem; font-weight: 700;
+      font-family: var(--font-head); font-size: 0.8125rem; font-weight: 700;
       color: var(--text-3); background: var(--bg-1);
       transition: all 0.3s ease; z-index: 1;
     }
     .ob-step-circle.active { border-color: var(--teal); color: var(--teal); background: rgba(26,122,110,0.05); }
     .ob-step-circle.done   { background: var(--teal); border-color: var(--teal); color: #fff; }
-    .ob-step-label { font-size: 0.75rem; color: var(--text-3); font-weight: 500; }
+    .ob-step-label { font-size: 0.6875rem; color: var(--text-3); font-weight: 500; }
     .ob-step-label.active { color: var(--teal); }
-    .ob-connector { width: 80px; height: 2px; background: var(--border-md); margin: 0 8px; margin-bottom: 22px; transition: background 0.3s ease; }
+    .ob-connector { width: 44px; height: 2px; background: var(--border-md); margin: 0 5px; margin-bottom: 20px; transition: background 0.3s ease; }
     .ob-connector.done { background: var(--teal); }
 
     /* Card */
@@ -72,6 +72,21 @@
     .radio-desc  { font-size: 0.8125rem; color: var(--text-2); margin-top: 2px; }
     .radio-badge { margin-left: auto; }
 
+    /* Enjoy chips (multi-select) */
+    .enjoy-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .enjoy-chip {
+      display: flex; align-items: center; gap: 10px;
+      padding: 12px 14px;
+      background: var(--bg-2); border: 1.5px solid var(--border-md);
+      border-radius: var(--radius); cursor: pointer; transition: var(--t);
+      font-size: 0.875rem; font-weight: 500; color: var(--text-2);
+    }
+    .enjoy-chip:hover { border-color: var(--border-hi); color: var(--text); }
+    .enjoy-chip.selected { border-color: var(--teal); background: rgba(26,122,110,0.06); color: var(--teal); }
+    .enjoy-chip-icon { font-size: 1.1rem; flex-shrink: 0; }
+    .enjoy-check { margin-left: auto; width: 18px; height: 18px; border-radius: 50%; border: 2px solid var(--border-hi); flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 10px; transition: var(--t); }
+    .enjoy-chip.selected .enjoy-check { background: var(--teal); border-color: var(--teal); color: #fff; }
+
     /* Nav */
     .ob-nav { display: flex; align-items: center; justify-content: space-between; margin-top: 28px; gap: 12px; }
 
@@ -105,7 +120,7 @@
       Career Copilot
     </a>
 
-    <!-- Step indicator -->
+    <!-- Step indicator (5 steps) -->
     <div class="ob-steps">
       <div class="ob-step">
         <div class="ob-step-circle active" id="sc-1">1</div>
@@ -114,18 +129,28 @@
       <div class="ob-connector" id="con-1"></div>
       <div class="ob-step">
         <div class="ob-step-circle" id="sc-2">2</div>
-        <div class="ob-step-label" id="sl-2">Time</div>
+        <div class="ob-step-label" id="sl-2">Life</div>
       </div>
       <div class="ob-connector" id="con-2"></div>
       <div class="ob-step">
         <div class="ob-step-circle" id="sc-3">3</div>
-        <div class="ob-step-label" id="sl-3">Level</div>
+        <div class="ob-step-label" id="sl-3">Enjoy</div>
+      </div>
+      <div class="ob-connector" id="con-3"></div>
+      <div class="ob-step">
+        <div class="ob-step-circle" id="sc-4">4</div>
+        <div class="ob-step-label" id="sl-4">Time</div>
+      </div>
+      <div class="ob-connector" id="con-4"></div>
+      <div class="ob-step">
+        <div class="ob-step-circle" id="sc-5">5</div>
+        <div class="ob-step-label" id="sl-5">Level</div>
       </div>
     </div>
 
     <div class="ob-card">
 
-      <!-- Step 1 -->
+      <!-- Step 1: Goal -->
       <div id="step-1">
         <h2 class="ob-step-title">What's your dream career goal?</h2>
         <p class="ob-step-sub">Be specific. The more detail you give, the better your personalized roadmap will be.</p>
@@ -147,8 +172,102 @@
         </div>
       </div>
 
-      <!-- Step 2 -->
+      <!-- Step 2: Life Situation -->
       <div id="step-2" style="display:none">
+        <h2 class="ob-step-title">What's your current situation?</h2>
+        <p class="ob-step-sub">The AI will design your roadmap around your real life — not a generic plan.</p>
+        <div class="radio-group" id="situation-options">
+          <div class="radio-option" data-val="Full-time student" onclick="selectOption(this,'situation-options')">
+            <div class="radio-dot"></div>
+            <div>
+              <div class="radio-label">Student 🎓</div>
+              <div class="radio-desc">In school, university, or bootcamp full-time.</div>
+            </div>
+          </div>
+          <div class="radio-option" data-val="Employed full-time, learning on the side" onclick="selectOption(this,'situation-options')">
+            <div class="radio-dot"></div>
+            <div>
+              <div class="radio-label">Employed 💼</div>
+              <div class="radio-desc">Working a job and learning during spare time.</div>
+            </div>
+          </div>
+          <div class="radio-option" data-val="Career changer with more free time" onclick="selectOption(this,'situation-options')">
+            <div class="radio-dot"></div>
+            <div>
+              <div class="radio-label">Career changer 🔄</div>
+              <div class="radio-desc">Actively switching, more free time to dedicate.</div>
+            </div>
+          </div>
+          <div class="radio-option" data-val="Self-employed or freelancer" onclick="selectOption(this,'situation-options')">
+            <div class="radio-dot"></div>
+            <div>
+              <div class="radio-label">Self-employed 🚀</div>
+              <div class="radio-desc">Running my own thing, flexible schedule.</div>
+            </div>
+          </div>
+        </div>
+        <div id="situation-error" class="form-error" style="margin-top:10px"></div>
+        <div class="ob-nav">
+          <button class="btn btn-secondary" onclick="prevStep(2)">← Back</button>
+          <button class="btn btn-primary" style="font-family:var(--font-head)" onclick="nextStep(2)">Continue →</button>
+        </div>
+      </div>
+
+      <!-- Step 3: What You Enjoy -->
+      <div id="step-3" style="display:none">
+        <h2 class="ob-step-title">What do you enjoy doing?</h2>
+        <p class="ob-step-sub">Pick everything that resonates — this shapes your quests and learning style.</p>
+        <div class="enjoy-grid" id="enjoy-options">
+          <div class="enjoy-chip" data-val="Building projects and making things" onclick="toggleEnjoy(this)">
+            <span class="enjoy-chip-icon">🔨</span>
+            <span>Building things</span>
+            <div class="enjoy-check">✓</div>
+          </div>
+          <div class="enjoy-chip" data-val="Solving hard problems and debugging" onclick="toggleEnjoy(this)">
+            <span class="enjoy-chip-icon">🧩</span>
+            <span>Problem solving</span>
+            <div class="enjoy-check">✓</div>
+          </div>
+          <div class="enjoy-chip" data-val="Design, visuals, and creativity" onclick="toggleEnjoy(this)">
+            <span class="enjoy-chip-icon">🎨</span>
+            <span>Design & creativity</span>
+            <div class="enjoy-check">✓</div>
+          </div>
+          <div class="enjoy-chip" data-val="Working with data and finding patterns" onclick="toggleEnjoy(this)">
+            <span class="enjoy-chip-icon">📊</span>
+            <span>Data & analysis</span>
+            <div class="enjoy-check">✓</div>
+          </div>
+          <div class="enjoy-chip" data-val="Writing, teaching, and explaining things" onclick="toggleEnjoy(this)">
+            <span class="enjoy-chip-icon">✍️</span>
+            <span>Writing & teaching</span>
+            <div class="enjoy-check">✓</div>
+          </div>
+          <div class="enjoy-chip" data-val="Automation and making systems more efficient" onclick="toggleEnjoy(this)">
+            <span class="enjoy-chip-icon">⚙️</span>
+            <span>Automation & systems</span>
+            <div class="enjoy-check">✓</div>
+          </div>
+          <div class="enjoy-chip" data-val="Leading teams and strategy" onclick="toggleEnjoy(this)">
+            <span class="enjoy-chip-icon">🎯</span>
+            <span>Strategy & leadership</span>
+            <div class="enjoy-check">✓</div>
+          </div>
+          <div class="enjoy-chip" data-val="Learning new technologies and staying current" onclick="toggleEnjoy(this)">
+            <span class="enjoy-chip-icon">🧠</span>
+            <span>Exploring new tech</span>
+            <div class="enjoy-check">✓</div>
+          </div>
+        </div>
+        <div id="enjoy-error" class="form-error" style="margin-top:10px"></div>
+        <div class="ob-nav">
+          <button class="btn btn-secondary" onclick="prevStep(3)">← Back</button>
+          <button class="btn btn-primary" style="font-family:var(--font-head)" onclick="nextStep(3)">Continue →</button>
+        </div>
+      </div>
+
+      <!-- Step 4: Time -->
+      <div id="step-4" style="display:none">
         <h2 class="ob-step-title">How much time can you dedicate daily?</h2>
         <p class="ob-step-sub">Your roadmap will be paced to fit your schedule. Consistency beats intensity.</p>
         <div class="radio-group" id="time-options">
@@ -175,13 +294,13 @@
         </div>
         <div id="time-error" class="form-error" style="margin-top:10px"></div>
         <div class="ob-nav">
-          <button class="btn btn-secondary" onclick="prevStep(2)">← Back</button>
-          <button class="btn btn-primary" style="font-family:var(--font-head)" onclick="nextStep(2)">Continue →</button>
+          <button class="btn btn-secondary" onclick="prevStep(4)">← Back</button>
+          <button class="btn btn-primary" style="font-family:var(--font-head)" onclick="nextStep(4)">Continue →</button>
         </div>
       </div>
 
-      <!-- Step 3 -->
-      <div id="step-3" style="display:none">
+      <!-- Step 5: Skill Level -->
+      <div id="step-5" style="display:none">
         <h2 class="ob-step-title">What's your current skill level?</h2>
         <p class="ob-step-sub">Be honest — this sets where your roadmap starts so you're not bored or overwhelmed.</p>
         <div class="radio-group" id="level-options">
@@ -200,7 +319,7 @@
         </div>
         <div id="level-error" class="form-error" style="margin-top:10px"></div>
         <div class="ob-nav">
-          <button class="btn btn-secondary" onclick="prevStep(3)">← Back</button>
+          <button class="btn btn-secondary" onclick="prevStep(5)">← Back</button>
           <button class="btn btn-primary" style="font-family:var(--font-head)" id="generate-btn" onclick="generate()">Build My Roadmap 🚀</button>
         </div>
       </div>
@@ -226,7 +345,7 @@
   <script>
     if (!CC.requireAuth()) throw new Error('Not auth');
 
-    const answers = { goal: '', timePerDay: '', skillLevel: '' };
+    const answers = { goal: '', situation: '', enjoyment: [], timePerDay: '', skillLevel: '' };
 
     document.querySelectorAll('.suggestion').forEach(chip => {
       chip.addEventListener('click', () => {
@@ -243,13 +362,20 @@
       document.querySelectorAll(`#${gid} .radio-option`).forEach(o => o.classList.remove('selected'));
       el.classList.add('selected');
     }
+
+    function toggleEnjoy(el) {
+      el.classList.toggle('selected');
+    }
+
     function setStep(n, state) {
       const c = document.getElementById(`sc-${n}`);
       const l = document.getElementById(`sl-${n}`);
       c.className = `ob-step-circle ${state}`;
       l.className = `ob-step-label ${state === 'active' ? 'active' : ''}`;
       if (state === 'done') c.textContent = '✓';
+      else c.textContent = n;
     }
+
     function nextStep(from) {
       if (from === 1) {
         const g = document.getElementById('goal-input').value.trim();
@@ -259,20 +385,37 @@
         setStep(1,'done'); setStep(2,'active');
         document.getElementById('con-1').classList.add('done');
       } else if (from === 2) {
+        const s = document.querySelector('#situation-options .radio-option.selected');
+        if (!s) { document.getElementById('situation-error').textContent = 'Please select your current situation'; return; }
+        document.getElementById('situation-error').textContent = '';
+        answers.situation = s.dataset.val;
+        setStep(2,'done'); setStep(3,'active');
+        document.getElementById('con-2').classList.add('done');
+      } else if (from === 3) {
+        const selected = document.querySelectorAll('#enjoy-options .enjoy-chip.selected');
+        if (!selected.length) { document.getElementById('enjoy-error').textContent = 'Pick at least one thing you enjoy'; return; }
+        document.getElementById('enjoy-error').textContent = '';
+        answers.enjoyment = Array.from(selected).map(el => el.dataset.val);
+        setStep(3,'done'); setStep(4,'active');
+        document.getElementById('con-3').classList.add('done');
+      } else if (from === 4) {
         const s = document.querySelector('#time-options .radio-option.selected');
         if (!s) { document.getElementById('time-error').textContent = 'Please select a time commitment'; return; }
         document.getElementById('time-error').textContent = '';
         answers.timePerDay = s.dataset.val;
-        setStep(2,'done'); setStep(3,'active');
-        document.getElementById('con-2').classList.add('done');
+        setStep(4,'done'); setStep(5,'active');
+        document.getElementById('con-4').classList.add('done');
       }
       document.getElementById(`step-${from}`).style.display = 'none';
       document.getElementById(`step-${from+1}`).style.display = 'block';
     }
+
     function prevStep(from) {
       document.getElementById(`step-${from}`).style.display = 'none';
       document.getElementById(`step-${from-1}`).style.display = 'block';
       setStep(from,''); setStep(from-1,'active');
+      if (from===5) document.getElementById('con-4').classList.remove('done');
+      if (from===4) document.getElementById('con-3').classList.remove('done');
       if (from===3) document.getElementById('con-2').classList.remove('done');
       if (from===2) document.getElementById('con-1').classList.remove('done');
     }
@@ -282,7 +425,7 @@
       if (!s) { document.getElementById('level-error').textContent = 'Please select your skill level'; return; }
       answers.skillLevel = s.dataset.val;
 
-      document.getElementById('step-3').style.display = 'none';
+      document.getElementById('step-5').style.display = 'none';
       document.getElementById('loading-screen').style.display = 'block';
 
       const steps = ['ls-1','ls-2','ls-3','ls-4','ls-5'];
@@ -316,7 +459,9 @@
         }, 4 * 950);
 
         const progress = CC.getProgress() || CC.defaultProgress();
-        progress.goal = answers.goal;
+        progress.goal       = answers.goal;
+        progress.situation  = answers.situation;
+        progress.enjoyment  = answers.enjoyment;
         progress.timePerDay = answers.timePerDay;
         progress.skillLevel = answers.skillLevel;
         progress.roadmap    = data.roadmap;
@@ -329,8 +474,8 @@
         setTimeout(() => { window.location.href = '/dashboard.html'; }, 5300);
       } catch (err) {
         document.getElementById('loading-screen').style.display = 'none';
-        document.getElementById('step-3').style.display = 'block';
-        setStep(3,'active');
+        document.getElementById('step-5').style.display = 'block';
+        setStep(5,'active');
         document.getElementById('level-error').textContent = 'Something went wrong. Please try again.';
       }
     }

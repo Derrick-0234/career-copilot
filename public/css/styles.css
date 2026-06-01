@@ -497,6 +497,19 @@ ul { list-style: none; }
 ::-webkit-scrollbar-thumb { background: var(--bg-3); border-radius: 3px; }
 ::-webkit-scrollbar-thumb:hover { background: var(--border-hi); }
 
+/* ─── Leaderboard ────────────────────────────────────────────────────────── */
+.streak-badge {
+  display: inline-flex; align-items: center; gap: 5px;
+  padding: 5px 12px;
+  background: var(--yellow-bg);
+  border: 1px solid rgba(245,208,32,0.4);
+  border-radius: 99px;
+  font-family: var(--font-head);
+  font-size: 0.8125rem;
+  font-weight: 700;
+  color: #92720a;
+}
+
 /* ─── Responsive ─────────────────────────────────────────────────────────── */
 @media (max-width: 768px) {
   .container { padding: 0 16px; }

@@ -53,6 +53,17 @@
     .q-hist-title  { flex: 1; font-weight: 500; color: var(--text); }
     .q-hist-xp     { font-family: var(--font-head); font-size: 0.75rem; font-weight: 700; color: #92720a; background: var(--yellow-bg); padding: 2px 8px; border-radius: 4px; }
 
+    /* Verified achievements */
+    .verified-card { background: var(--bg-2); border: 1px solid rgba(26,122,110,0.2); border-radius: var(--radius); padding: 14px; display: flex; align-items: flex-start; gap: 12px; margin-bottom: 10px; }
+    .verified-icon { width: 36px; height: 36px; border-radius: 50%; background: rgba(26,122,110,0.1); border: 1.5px solid rgba(26,122,110,0.25); display: flex; align-items: center; justify-content: center; font-size: 14px; flex-shrink: 0; }
+    .verified-title { font-weight: 600; font-size: 0.875rem; color: var(--text); margin-bottom: 4px; }
+    .verified-feedback { font-size: 0.8125rem; color: var(--text-2); line-height: 1.55; font-style: italic; }
+    .verified-meta { display: flex; align-items: center; gap: 8px; margin-top: 6px; }
+    .verified-xp-tag { font-family: var(--font-head); font-size: 0.75rem; font-weight: 700; color: #92720a; background: var(--yellow-bg); padding: 2px 8px; border-radius: 4px; }
+    .verified-date { font-size: 0.75rem; color: var(--text-3); }
+    .ai-shield { display: inline-flex; align-items: center; gap: 4px; font-size: 0.6875rem; font-weight: 700; padding: 2px 8px; background: rgba(26,122,110,0.1); border: 1px solid rgba(26,122,110,0.2); border-radius: 99px; color: var(--teal); font-family: var(--font-head); letter-spacing: 0.04em; }
+    .skill-badge-verified-tag { position: absolute; bottom: 4px; left: 50%; transform: translateX(-50%); font-size: 0.6rem; font-weight: 700; padding: 1px 6px; background: var(--teal); color: #fff; border-radius: 99px; white-space: nowrap; font-family: var(--font-head); letter-spacing: 0.04em; }
+
     /* Share */
     .share-card { background: rgba(26,122,110,0.06); border: 1px solid var(--border-md); border-radius: var(--radius-lg); padding: 24px; display: flex; align-items: center; justify-content: space-between; gap: 20px; flex-wrap: wrap; }
     .share-title { font-family: var(--font-head); font-size: 1rem; font-weight: 700; margin-bottom: 4px; color: var(--text); }
@@ -74,6 +85,7 @@
       <a href="/" class="nav-logo"><div class="nav-logo-icon">🎯</div>Career Copilot</a>
       <div class="nav-links">
         <a href="/dashboard.html" class="nav-link">For You</a>
+        <a href="/leaderboard.html" class="nav-link">Leaderboard</a>
         <a href="/portfolio.html" class="nav-link active">Portfolio</a>
       </div>
       <div class="nav-actions">
@@ -126,6 +138,18 @@
       </div>
     </div>
 
+    <!-- Verified Achievements -->
+    <div class="section-card" id="verified-section" style="display:none">
+      <div class="sc-header">
+        <div>
+          <div class="panel-title">Verified Achievements</div>
+          <div style="font-size:0.8125rem;color:var(--text-3);margin-top:2px">AI-verified quest completions — proof on record</div>
+        </div>
+        <span class="ai-shield">🤖 AI Verified</span>
+      </div>
+      <div id="verified-list"></div>
+    </div>
+
     <!-- XP Chart -->
     <div class="section-card">
       <div class="panel-title" style="margin-bottom:4px">XP Growth</div>
@@ -166,6 +190,7 @@
       document.getElementById('streak-count').textContent = progress.streak || 0;
       renderProfile(); renderStats(); renderBadges(); drawChart(); renderHistory();
       document.getElementById('share-link').value = `${location.origin}/portfolio.html?user=${CC.getCurrentUserId()}`;
+      renderVerifiedProofs();
       generateBio();
     }
 
@@ -188,9 +213,10 @@
     }
 
     function renderBadges() {
-      const skills = progress.skillTree || [];
-      const done   = new Set(progress.completedSkills || []);
-      const earned = skills.filter(s => done.has(s.id));
+      const skills   = progress.skillTree || [];
+      const done     = new Set(progress.completedSkills || []);
+      const earned   = skills.filter(s => done.has(s.id));
+      const verified = new Set((progress.verifiedProofs || []).map(v => v.questTitle));
       document.getElementById('skills-earned-badge').textContent = `${earned.length} earned`;
       if (!skills.length) return;
 
@@ -202,12 +228,35 @@
       document.getElementById('badges-grid').innerHTML = skills.map(skill => {
         const isE = done.has(skill.id);
         const isU = ul.has(skill.id);
+        const isV = isE && (progress.verifiedProofs||[]).length > 0;
         return `<div class="skill-badge ${isE?'earned':''}" title="${skill.description||skill.name}">
           <div class="badge-icon-lg">${isU ? CC.getSkillIcon(skill.name) : '🔒'}</div>
           <div class="badge-name-sm">${skill.name}</div>
           ${isE ? '<div class="badge-check">✓</div>' : ''}
+          ${isV ? '<div class="skill-badge-verified-tag">AI VERIFIED</div>' : ''}
         </div>`;
       }).join('');
+    }
+
+    function renderVerifiedProofs() {
+      const proofs = progress.verifiedProofs || [];
+      const section = document.getElementById('verified-section');
+      if (!proofs.length) { section.style.display = 'none'; return; }
+      section.style.display = 'block';
+      const ICONS = {learn:'📚',practice:'💪',build:'🔨',review:'🔍'};
+      document.getElementById('verified-list').innerHTML = [...proofs].reverse().map(p => `
+        <div class="verified-card">
+          <div class="verified-icon">${ICONS[p.questType] || '⚡'}</div>
+          <div style="flex:1;min-width:0">
+            <div class="verified-title">${p.questTitle}</div>
+            <div class="verified-feedback">"${p.feedback}"</div>
+            <div class="verified-meta">
+              <span class="verified-xp-tag">+${p.xp} XP</span>
+              <span class="ai-shield">🤖 AI Verified</span>
+              <span class="verified-date">${p.date}</span>
+            </div>
+          </div>
+        </div>`).join('');
     }
 
     function drawChart() {
@@ -272,6 +321,7 @@
     function renderHistory() {
       const tq  = progress.todayQuests;
       const all = [];
+      const verifiedIds = new Set((progress.verifiedProofs||[]).map(v=>v.questId));
       if (tq && tq.items) {
         const doneSet = new Set(tq.completed||[]);
         tq.items.filter(q=>doneSet.has(q.id)).forEach(q=>all.push({...q,date:tq.date}));
@@ -279,9 +329,15 @@
       document.getElementById('quests-badge').textContent = `${all.length} done`;
       if (!all.length) return;
       const ICONS = {learn:'📚',practice:'💪',build:'🔨',review:'🔍'};
-      document.getElementById('quest-history').innerHTML = all.map(q=>
-        `<div class="q-hist-item"><div class="q-hist-icon">${ICONS[q.type]||'⚡'}</div><div class="q-hist-title">${q.title}</div><div class="q-hist-xp">+${q.xp} XP</div></div>`
-      ).join('');
+      document.getElementById('quest-history').innerHTML = all.map(q=> {
+        const isV = verifiedIds.has(q.id);
+        return `<div class="q-hist-item">
+          <div class="q-hist-icon">${ICONS[q.type]||'⚡'}</div>
+          <div class="q-hist-title">${q.title}</div>
+          ${isV ? '<span class="ai-shield">🤖 AI Verified</span>' : ''}
+          <div class="q-hist-xp">+${q.xp} XP</div>
+        </div>`;
+      }).join('');
     }
 
     async function generateBio() {

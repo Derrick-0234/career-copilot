@@ -92,6 +92,8 @@ const CC = (() => {
       goal: '',
       timePerDay: '',
       skillLevel: '',
+      situation: '',
+      enjoyment: [],
       onboardingComplete: false,
       roadmap: null,
       skillTree: [],
@@ -102,6 +104,7 @@ const CC = (() => {
       lastActiveDate: null,
       resources: [],
       portfolioBio: null,
+      verifiedProofs: [],
       createdAt: Date.now()
     };
   }

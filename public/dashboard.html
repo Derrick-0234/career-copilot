@@ -149,6 +149,7 @@
       <a href="/" class="nav-logo"><div class="nav-logo-icon">🎯</div>Career Copilot</a>
       <div class="nav-links">
         <a href="/dashboard.html" class="nav-link active">For You</a>
+        <a href="/leaderboard.html" class="nav-link">Leaderboard</a>
         <a href="/portfolio.html" class="nav-link">Portfolio</a>
       </div>
       <div class="nav-actions">
@@ -544,6 +545,15 @@
           tq.completed.push(quest.id);
           const {progress:p, leveledUp, newLevel} = CC.awardXP(progress, totalXP);
           progress = p;
+          progress.verifiedProofs = progress.verifiedProofs || [];
+          progress.verifiedProofs.push({
+            questId: quest.id,
+            questTitle: quest.title,
+            questType: quest.type,
+            xp: totalXP,
+            date: CC.today(),
+            feedback: feedback.slice(0, 240)
+          });
           CC.saveProgress(progress);
           renderStats();
           if (leveledUp) setTimeout(()=>CC.showLevelUpModal(newLevel), 1200);

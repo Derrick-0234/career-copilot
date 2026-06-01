@@ -33,6 +33,10 @@
         <div class="form-error" id="email-error"></div>
       </div>
       <div class="form-group">
+        <label class="form-label" for="school">School / University <span style="color:var(--text-3);font-weight:400;text-transform:none;letter-spacing:0">(optional — for league rankings)</span></label>
+        <input class="form-input" type="text" id="school" placeholder="e.g. UC Berkeley, Self-Taught, Bootcamp..." autocomplete="organization">
+      </div>
+      <div class="form-group">
         <label class="form-label" for="password">Password</label>
         <input class="form-input" type="password" id="password" placeholder="8+ characters" autocomplete="new-password" required>
         <div class="form-error" id="password-error"></div>
@@ -82,9 +86,10 @@
       btn.disabled = true;
       btn.textContent = 'Creating account...';
 
+      const school = document.getElementById('school').value.trim();
       const user = {
         id: `user_${Date.now()}_${Math.random().toString(36).slice(2,7)}`,
-        name, email, password, createdAt: Date.now()
+        name, email, password, school, createdAt: Date.now()
       };
       users.push(user);
       CC.saveUsers(users);
