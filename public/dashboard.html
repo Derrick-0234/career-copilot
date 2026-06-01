@@ -7,48 +7,25 @@
   <link rel="stylesheet" href="/css/styles.css">
   <style>
     body { background: var(--bg); padding-top: 60px; min-height: 100vh; }
-
     .dash-layout { max-width: 1280px; margin: 0 auto; padding: 24px 20px; display: flex; flex-direction: column; gap: 18px; }
 
     /* Stats bar */
-    .stats-bar {
-      background: var(--bg-1); border: 1px solid var(--border);
-      border-radius: var(--radius-lg); padding: 18px 24px;
-      display: flex; align-items: center; gap: 20px; flex-wrap: wrap;
-      box-shadow: 0 2px 12px rgba(26,122,110,0.06);
-    }
+    .stats-bar { background: var(--bg-1); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 18px 24px; display: flex; align-items: center; gap: 20px; flex-wrap: wrap; box-shadow: 0 2px 12px rgba(26,122,110,0.06); }
     .xp-section { flex: 1; min-width: 180px; max-width: 340px; }
     .xp-labels  { display: flex; justify-content: space-between; margin-bottom: 6px; font-size: 0.75rem; }
     .xp-val-txt { font-weight: 700; color: var(--teal); font-family: var(--font-head); }
-    .goal-pill {
-      display: flex; align-items: center; gap: 8px;
-      padding: 8px 14px; background: var(--bg-2);
-      border: 1px solid var(--border); border-radius: var(--radius-sm);
-      font-size: 0.8125rem; color: var(--text-2);
-      max-width: 280px; overflow: hidden;
-    }
+    .goal-pill  { display: flex; align-items: center; gap: 8px; padding: 8px 14px; background: var(--bg-2); border: 1px solid var(--border); border-radius: var(--radius-sm); font-size: 0.8125rem; color: var(--text-2); max-width: 280px; overflow: hidden; }
     .goal-pill-text { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
     /* Columns */
     .dash-columns { display: grid; grid-template-columns: 280px 1fr 260px; gap: 16px; align-items: start; }
-
-    /* Panels */
-    .panel {
-      background: var(--bg-1); border: 1px solid var(--border);
-      border-radius: var(--radius-lg); padding: 20px;
-      box-shadow: 0 2px 12px rgba(26,122,110,0.05);
-    }
+    .panel { background: var(--bg-1); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 20px; box-shadow: 0 2px 12px rgba(26,122,110,0.05); }
     .panel-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
 
     /* Skill tree */
     .skill-panel { position: sticky; top: 80px; max-height: calc(100vh - 100px); overflow-y: auto; }
     .skill-level-group { margin-bottom: 20px; }
-    .skill-level-header {
-      display: flex; align-items: center; gap: 8px;
-      margin-bottom: 10px;
-      font-family: var(--font-head); font-size: 0.6875rem; font-weight: 700;
-      letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-3);
-    }
+    .skill-level-header { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; font-family: var(--font-head); font-size: 0.6875rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-3); }
     .skill-level-header::after { content: ''; flex: 1; height: 1px; background: var(--border); }
     .skill-nodes-list { display: flex; flex-direction: column; gap: 6px; }
     .skill-node-wrap { display: flex; align-items: center; gap: 8px; }
@@ -61,69 +38,122 @@
     /* Center */
     .center-col { display: flex; flex-direction: column; gap: 16px; }
 
-    /* Quest progress mini bar */
+    /* Quest progress */
     .quest-prog { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
-    .quest-prog-bar { flex: 1; height: 4px; background: var(--bg-3); border-radius: 99px; overflow: hidden; }
+    .quest-prog-bar  { flex: 1; height: 4px; background: var(--bg-3); border-radius: 99px; overflow: hidden; }
     .quest-prog-fill { height: 100%; background: var(--teal); border-radius: 99px; transition: width 0.6s ease; }
-    .quest-prog-txt { font-family: var(--font-head); font-size: 0.75rem; font-weight: 700; color: var(--text-2); white-space: nowrap; }
+    .quest-prog-txt  { font-family: var(--font-head); font-size: 0.75rem; font-weight: 700; color: var(--text-2); white-space: nowrap; }
     .quest-list { display: flex; flex-direction: column; gap: 12px; }
 
+    /* Quest card — proof layout */
+    .quest-card-footer { display: flex; align-items: center; justify-content: space-between; margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--border); }
+    .proof-submit-btn {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 7px 16px;
+      background: var(--teal); color: #fff;
+      border-radius: var(--radius-sm);
+      font-family: var(--font-head); font-size: 0.8125rem; font-weight: 700;
+      transition: var(--t); cursor: pointer;
+    }
+    .proof-submit-btn:hover { background: var(--teal-dark); transform: translateY(-1px); }
+    .proof-verified-pill {
+      display: inline-flex; align-items: center; gap: 5px;
+      padding: 5px 12px;
+      background: rgba(26,122,110,0.1); border: 1px solid rgba(26,122,110,0.2);
+      border-radius: 99px;
+      font-family: var(--font-head); font-size: 0.75rem; font-weight: 700;
+      color: var(--teal);
+    }
+
     /* Resources */
-    .resources-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+    .resources-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; }
     .resource-card { background: var(--bg-2); border: 1px solid var(--border); border-radius: var(--radius); padding: 14px; transition: var(--t); }
     .resource-card:hover { border-color: var(--border-md); transform: translateY(-1px); }
     .resource-icon { font-size: 1.25rem; margin-bottom: 8px; }
-    .resource-title { font-family: var(--font-head); font-size: 0.8125rem; font-weight: 700; margin-bottom: 4px; line-height: 1.3; color: var(--text); }
+    .resource-title { font-family: var(--font-head); font-size: 0.8125rem; font-weight: 700; margin-bottom: 4px; color: var(--text); line-height: 1.3; }
     .resource-provider { font-size: 0.75rem; color: var(--text-3); margin-bottom: 6px; }
     .resource-desc { font-size: 0.75rem; color: var(--text-2); line-height: 1.5; }
 
-    /* Roadmap panel */
+    /* Roadmap */
     .roadmap-panel { position: sticky; top: 80px; }
     .phase-item { background: var(--bg-2); border: 1px solid var(--border); border-radius: var(--radius); padding: 14px; margin-bottom: 10px; }
     .phase-header-row { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
-    .phase-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+    .phase-dot      { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
     .phase-name-txt { font-family: var(--font-head); font-size: 0.8125rem; font-weight: 700; flex: 1; }
     .phase-pct-txt  { font-family: var(--font-head); font-size: 0.75rem; font-weight: 700; }
     .phase-desc-txt { font-size: 0.75rem; color: var(--text-2); line-height: 1.5; margin-top: 6px; }
-    .phase-chips { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 8px; }
-    .phase-chip { font-size: 0.6875rem; padding: 2px 8px; background: var(--bg-3); border-radius: 4px; color: var(--text-3); }
+    .phase-chips    { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 8px; }
+    .phase-chip     { font-size: 0.6875rem; padding: 2px 8px; background: var(--bg-3); border-radius: 4px; color: var(--text-3); }
     .total-prog-wrap { margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--border); }
-    .total-prog-lbl { display: flex; justify-content: space-between; font-size: 0.75rem; color: var(--text-2); margin-bottom: 6px; font-family: var(--font-head); }
-
+    .total-prog-lbl  { display: flex; justify-content: space-between; font-size: 0.75rem; color: var(--text-2); margin-bottom: 6px; font-family: var(--font-head); }
     .date-label { font-size: 0.8125rem; color: var(--text-3); margin-top: 2px; }
 
-    @media (max-width: 1024px) {
-      .dash-columns { grid-template-columns: 1fr 1fr; }
-      .roadmap-panel { grid-column: 1/-1; position: static; }
-      .resources-grid { grid-template-columns: 1fr 1fr; }
+    /* ── Proof Modal ─────────────────────────────────────────────────────── */
+    .proof-modal {
+      max-width: 520px; width: 100%;
+      text-align: left;
+      border-top: 3px solid var(--teal);
+      animation: modalIn 0.3s var(--ease);
     }
-    @media (max-width: 640px) {
-      .dash-columns { grid-template-columns: 1fr; }
-      .skill-panel  { position: static; max-height: none; }
-      .resources-grid { grid-template-columns: 1fr; }
-      .stats-bar { flex-direction: column; align-items: flex-start; }
-      .xp-section { max-width: none; width: 100%; }
+    .proof-kicker {
+      font-family: var(--font-head); font-size: 0.6875rem; font-weight: 700;
+      letter-spacing: 0.12em; text-transform: uppercase;
+      color: var(--teal); margin-bottom: 6px;
     }
+    .proof-modal-title { font-family: var(--font-head); font-size: 1.125rem; font-weight: 700; color: var(--text); margin-bottom: 4px; }
+    .proof-quest-ref { font-size: 0.875rem; color: var(--text-2); line-height: 1.55; margin-bottom: 22px; padding: 10px 14px; background: var(--bg-2); border-radius: var(--radius-sm); border-left: 3px solid var(--teal); }
+    .proof-label { font-family: var(--font-head); font-size: 0.75rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--text-2); margin-bottom: 6px; display: block; }
+    .proof-textarea { width: 100%; padding: 12px 14px; background: var(--bg-2); border: 1.5px solid var(--border-md); border-radius: var(--radius); color: var(--text); font-size: 0.9375rem; line-height: 1.6; outline: none; resize: vertical; min-height: 110px; font-family: var(--font-body); transition: var(--t); }
+    .proof-textarea:focus { border-color: var(--teal); box-shadow: 0 0 0 3px rgba(26,122,110,0.1); }
+    .proof-textarea::placeholder { color: var(--text-3); }
+    .proof-url-input { width: 100%; padding: 10px 14px; background: var(--bg-2); border: 1.5px solid var(--border-md); border-radius: var(--radius); color: var(--text); font-size: 0.875rem; outline: none; font-family: var(--font-body); transition: var(--t); }
+    .proof-url-input:focus { border-color: var(--teal); box-shadow: 0 0 0 3px rgba(26,122,110,0.1); }
+    .proof-url-input::placeholder { color: var(--text-3); }
+    .proof-tips { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px; }
+    .proof-tip { font-size: 0.75rem; color: var(--text-3); padding: 3px 10px; background: var(--bg-3); border-radius: 99px; }
+
+    /* Loading state */
+    .verify-bot { width: 64px; height: 64px; background: var(--teal); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; margin: 0 auto 20px; animation: verifyPulse 2s ease infinite; }
+    .verify-steps { display: flex; flex-direction: column; gap: 8px; text-align: left; max-width: 280px; margin: 20px auto 0; }
+    .verify-step { display: flex; align-items: center; gap: 10px; font-size: 0.8125rem; color: var(--text-3); transition: color 0.4s ease; }
+    .verify-step.active { color: var(--text); }
+    .verify-step.done   { color: var(--teal); }
+    .verify-step-dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; flex-shrink: 0; }
+
+    /* Result state */
+    .result-approved { background: rgba(26,122,110,0.06); border: 1px solid rgba(26,122,110,0.2); border-radius: var(--radius-lg); padding: 20px; margin-bottom: 20px; }
+    .result-rejected { background: rgba(245,158,11,0.06); border: 1px solid rgba(245,158,11,0.2); border-radius: var(--radius-lg); padding: 20px; margin-bottom: 20px; }
+    .result-xp-pill { display: inline-flex; align-items: center; gap: 8px; padding: 8px 20px; background: var(--yellow-bg); border: 1px solid rgba(245,208,32,0.4); border-radius: 99px; font-family: var(--font-head); font-size: 1.125rem; font-weight: 700; color: #92720a; margin-bottom: 16px; }
+    .result-bonus { font-size: 0.875rem; color: var(--teal); font-weight: 600; }
+
+    @keyframes verifyPulse {
+      0%,100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(26,122,110,0.3); }
+      50%      { transform: scale(1.06); box-shadow: 0 0 0 14px rgba(26,122,110,0); }
+    }
+    @keyframes checkPop {
+      0%   { transform: scale(0); opacity: 0; }
+      70%  { transform: scale(1.15); }
+      100% { transform: scale(1); opacity: 1; }
+    }
+    .check-pop { animation: checkPop 0.5s var(--ease) forwards; }
+
+    /* Responsive */
+    @media (max-width: 1024px) { .dash-columns { grid-template-columns: 1fr 1fr; } .roadmap-panel { grid-column: 1/-1; position: static; } .resources-grid { grid-template-columns: 1fr 1fr; } }
+    @media (max-width: 640px)  { .dash-columns { grid-template-columns: 1fr; } .skill-panel { position: static; max-height: none; } .resources-grid { grid-template-columns: 1fr; } .stats-bar { flex-direction: column; align-items: flex-start; } .xp-section { max-width: none; width: 100%; } }
   </style>
 </head>
 <body>
 
   <nav class="navbar">
     <div class="navbar-inner">
-      <a href="/" class="nav-logo">
-        <div class="nav-logo-icon">🎯</div>
-        Career Copilot
-      </a>
+      <a href="/" class="nav-logo"><div class="nav-logo-icon">🎯</div>Career Copilot</a>
       <div class="nav-links">
         <a href="/dashboard.html" class="nav-link active">For You</a>
         <a href="/portfolio.html" class="nav-link">Portfolio</a>
       </div>
       <div class="nav-actions">
         <div class="streak-badge">🔥 <span id="streak-count">0</span></div>
-        <div class="nav-user">
-          <div class="nav-avatar" data-nav-avatar>U</div>
-          <span data-nav-user>User</span>
-        </div>
+        <div class="nav-user"><div class="nav-avatar" data-nav-avatar>U</div><span data-nav-user>User</span></div>
         <button class="btn btn-ghost btn-sm" onclick="CC.logout()">Sign out</button>
       </div>
     </div>
@@ -143,9 +173,7 @@
           <span class="text-3 text-sm">XP Progress</span>
           <span class="xp-val-txt" id="xp-label-val">0 / 100 XP</span>
         </div>
-        <div class="xp-bar-track">
-          <div class="xp-bar-fill" id="xp-fill" style="width:0%"></div>
-        </div>
+        <div class="xp-bar-track"><div class="xp-bar-fill" id="xp-fill" style="width:0%"></div></div>
       </div>
       <div style="margin-left:auto;display:flex;align-items:center;gap:12px;flex-wrap:wrap">
         <div class="goal-pill"><span>🎯</span><span class="goal-pill-text" id="goal-display">Loading...</span></div>
@@ -153,7 +181,7 @@
       </div>
     </div>
 
-    <!-- Columns -->
+    <!-- Three columns -->
     <div class="dash-columns">
 
       <!-- LEFT: Skill Tree -->
@@ -167,10 +195,8 @@
         </div>
       </div>
 
-      <!-- CENTER -->
+      <!-- CENTER: Quests + Resources -->
       <div class="center-col">
-
-        <!-- Quests -->
         <div class="panel">
           <div class="panel-header">
             <div>
@@ -190,16 +216,12 @@
           </div>
         </div>
 
-        <!-- Resources -->
         <div class="panel">
-          <div class="panel-header" style="margin-bottom:14px">
-            <div class="panel-title">Recommended Resources</div>
-          </div>
+          <div class="panel-header" style="margin-bottom:14px"><div class="panel-title">Recommended Resources</div></div>
           <div class="resources-grid" id="resources-grid">
             <div style="grid-column:1/-1;text-align:center;padding:16px;color:var(--text-3)">Loading...</div>
           </div>
         </div>
-
       </div>
 
       <!-- RIGHT: Roadmap -->
@@ -220,13 +242,106 @@
     </div>
   </div>
 
+  <!-- ── Proof Verification Modal ──────────────────────────────────────── -->
+  <div class="modal-overlay" id="proof-modal" style="display:none" onclick="if(event.target===this)closeProofModal()">
+    <div class="modal proof-modal">
+      <button class="modal-close" onclick="closeProofModal()">✕</button>
+
+      <!-- STATE 1: Form -->
+      <div id="proof-form">
+        <div class="proof-kicker">🤖 Prove It to the AI</div>
+        <div class="proof-modal-title">Submit Your Proof</div>
+
+        <div class="proof-quest-ref" id="proof-quest-ref">Quest details will appear here.</div>
+
+        <div style="display:flex;flex-direction:column;gap:16px">
+          <div>
+            <label class="proof-label">What did you do? <span style="color:var(--red);font-family:var(--font-body)">*</span></label>
+            <textarea id="proof-text" class="proof-textarea"
+              placeholder="Describe specifically what you built, learned, or practiced. Include what you struggled with, what you understood, or what you created. The more detail, the higher your XP bonus..."></textarea>
+            <div class="proof-tips">
+              <span class="proof-tip">💡 Mention specific tools or concepts</span>
+              <span class="proof-tip">💡 Describe what you learned</span>
+              <span class="proof-tip">💡 Share what was hard</span>
+            </div>
+            <div class="form-error" id="proof-text-error" style="margin-top:6px"></div>
+          </div>
+
+          <div>
+            <label class="proof-label">Link to your work <span style="color:var(--text-3);font-family:var(--font-body);text-transform:none;letter-spacing:0;font-size:0.75rem">(optional — GitHub, CodePen, deployed site...)</span></label>
+            <input id="proof-url" class="proof-url-input" type="url" placeholder="https://github.com/you/project-name">
+          </div>
+        </div>
+
+        <div style="margin-top:24px;display:flex;gap:10px">
+          <button class="btn btn-secondary" onclick="closeProofModal()" style="font-family:var(--font-head)">Cancel</button>
+          <button class="btn btn-primary" style="flex:1;padding:13px;font-family:var(--font-head)" onclick="submitProof()">
+            Submit to AI →
+          </button>
+        </div>
+      </div>
+
+      <!-- STATE 2: Verifying -->
+      <div id="proof-loading" style="display:none;text-align:center;padding:16px 0">
+        <div class="verify-bot">🤖</div>
+        <h3 style="font-family:var(--font-head);font-size:1rem;font-weight:700;margin-bottom:8px;color:var(--text)">AI is reviewing your proof...</h3>
+        <p style="font-size:0.875rem;color:var(--text-2);margin-bottom:20px">Gemini is reading your submission and verifying your work.</p>
+        <div class="progress-bar" style="height:6px">
+          <div id="verify-bar" style="height:100%;border-radius:999px;background:var(--teal);width:0%;transition:width 3s ease"></div>
+        </div>
+        <div class="verify-steps">
+          <div class="verify-step" id="vs-1"><div class="verify-step-dot"></div>Reading your proof...</div>
+          <div class="verify-step" id="vs-2"><div class="verify-step-dot"></div>Matching against quest requirements...</div>
+          <div class="verify-step" id="vs-3"><div class="verify-step-dot"></div>Calculating XP reward...</div>
+        </div>
+      </div>
+
+      <!-- STATE 3: Result -->
+      <div id="proof-result" style="display:none;text-align:center">
+        <!-- Approved -->
+        <div id="result-approved-view" style="display:none">
+          <div class="check-pop" style="font-size:3.5rem;margin-bottom:12px">✅</div>
+          <h2 style="font-family:var(--font-head);font-size:1.5rem;font-weight:700;color:var(--teal);margin-bottom:4px">Proof Verified!</h2>
+          <p style="font-size:0.875rem;color:var(--text-3);margin-bottom:16px;font-family:var(--font-head)">Gemini reviewed your submission</p>
+          <div class="result-approved">
+            <p id="result-feedback-text" style="font-size:0.9375rem;color:var(--text);line-height:1.65;font-style:italic">"..."</p>
+          </div>
+          <div class="result-xp-pill" id="result-xp-display">+0 XP</div>
+          <div id="result-bonus-note" class="result-bonus" style="margin-bottom:16px;display:none"></div>
+          <button class="btn btn-primary" style="width:100%;font-family:var(--font-head);padding:13px" onclick="closeProofModal()">
+            Continue Questing →
+          </button>
+        </div>
+
+        <!-- Rejected -->
+        <div id="result-rejected-view" style="display:none">
+          <div style="font-size:3rem;margin-bottom:12px">⚠️</div>
+          <h2 style="font-family:var(--font-head);font-size:1.375rem;font-weight:700;color:var(--text);margin-bottom:4px">Almost There!</h2>
+          <p style="font-size:0.875rem;color:var(--text-3);margin-bottom:16px;font-family:var(--font-head)">The AI needs a bit more detail</p>
+          <div class="result-rejected">
+            <p id="result-reject-text" style="font-size:0.9375rem;color:var(--text);line-height:1.65">"..."</p>
+          </div>
+          <div style="display:flex;gap:10px;justify-content:center;margin-top:4px">
+            <button class="btn btn-secondary" style="font-family:var(--font-head)" onclick="closeProofModal()">Skip for Now</button>
+            <button class="btn btn-primary" style="font-family:var(--font-head)" onclick="showProofState('form')">← Try Again</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
   <script src="/js/app.js"></script>
   <script>
     if (!CC.requireAuth()) throw new Error('Not auth');
     CC.renderNavUser();
 
-    let progress = null, refreshing = false;
+    let progress = null;
+    let refreshing = false;
+    const questMap = {};   // id → quest object, populated in renderQuests
+    let activeQuestId = null;
 
+    // ── Init ──────────────────────────────────────────────────────────────
     async function init() {
       progress = CC.getProgress();
       if (!progress || !progress.onboardingComplete) { window.location.href = '/onboarding.html'; return; }
@@ -239,97 +354,86 @@
       }
     }
 
-    function render() {
-      renderStats(); renderSkillTree(); renderQuests(); renderRoadmap(); renderResources();
-    }
+    function render() { renderStats(); renderSkillTree(); renderQuests(); renderRoadmap(); renderResources(); }
 
+    // ── Stats ─────────────────────────────────────────────────────────────
     function renderStats() {
       const info = CC.levelInfo(progress.xp);
-      document.getElementById('level-badge').textContent   = info.level;
-      document.getElementById('level-num').textContent     = `Level ${info.level}`;
-      document.getElementById('xp-label-val').textContent  = `${info.xpInLevel} / ${info.xpForNext} XP`;
-      document.getElementById('total-xp-display').textContent = `${progress.xp} XP`;
-      document.getElementById('goal-display').textContent  = progress.goal || 'Your career goal';
-      document.getElementById('streak-count').textContent  = progress.streak || 0;
+      document.getElementById('level-badge').textContent     = info.level;
+      document.getElementById('level-num').textContent       = `Level ${info.level}`;
+      document.getElementById('xp-label-val').textContent    = `${info.xpInLevel} / ${info.xpForNext} XP`;
+      document.getElementById('total-xp-display').textContent= `${progress.xp} XP`;
+      document.getElementById('goal-display').textContent    = progress.goal || 'Your career goal';
+      document.getElementById('streak-count').textContent    = progress.streak || 0;
       requestAnimationFrame(() => { document.getElementById('xp-fill').style.width = `${info.pct}%`; });
     }
 
-    function unlocked(skills, xp) {
+    // ── Skill tree ────────────────────────────────────────────────────────
+    function unlockedSet(skills, xp) {
       const s = new Set();
-      skills.filter(k => k.level === 1 || k.unlocked).forEach(k => s.add(k.id));
-      if (xp >= 100) skills.filter(k => k.level === 2).forEach(k => s.add(k.id));
-      if (xp >= 300) skills.filter(k => k.level === 3).forEach(k => s.add(k.id));
+      skills.filter(k => k.level===1||k.unlocked).forEach(k=>s.add(k.id));
+      if (xp>=100) skills.filter(k=>k.level===2).forEach(k=>s.add(k.id));
+      if (xp>=300) skills.filter(k=>k.level===3).forEach(k=>s.add(k.id));
       return s;
     }
 
     function renderSkillTree() {
       const container = document.getElementById('skill-tree-container');
       const skills    = progress.skillTree || [];
-      if (!skills.length) { container.innerHTML = '<div style="text-align:center;padding:20px;color:var(--text-3);font-size:0.875rem">No skills yet</div>'; return; }
-
-      const ul = unlocked(skills, progress.xp);
-      const done = new Set(progress.completedSkills || []);
+      if (!skills.length) { container.innerHTML='<div style="text-align:center;padding:20px;color:var(--text-3);font-size:0.875rem">No skills yet</div>'; return; }
+      const ul   = unlockedSet(skills, progress.xp);
+      const done = new Set(progress.completedSkills||[]);
       document.getElementById('skills-badge').textContent = `${done.size} / ${skills.length}`;
-
       const levels = {};
-      skills.forEach(s => { (levels[s.level] = levels[s.level] || []).push(s); });
-      const levelNames = { 1: 'Foundation', 2: 'Core Skills', 3: 'Advanced' };
-
+      skills.forEach(s => { (levels[s.level]=levels[s.level]||[]).push(s); });
+      const levelNames = {1:'Foundation',2:'Core Skills',3:'Advanced'};
       let html = '';
-      Object.keys(levels).sort((a,b)=>a-b).forEach((lvl, li) => {
-        if (li > 0) html += `<div class="skill-divider"><div class="skill-divider-line"></div></div>`;
-        html += `<div class="skill-level-group"><div class="skill-level-header">${levelNames[lvl] || 'Skills'}</div><div class="skill-nodes-list">`;
+      Object.keys(levels).sort((a,b)=>a-b).forEach((lvl,li) => {
+        if (li>0) html+=`<div class="skill-divider"><div class="skill-divider-line"></div></div>`;
+        html+=`<div class="skill-level-group"><div class="skill-level-header">${levelNames[lvl]||'Skills'}</div><div class="skill-nodes-list">`;
         levels[lvl].forEach(skill => {
-          const isComp = done.has(skill.id);
-          const isUnl  = ul.has(skill.id);
-          const icon   = CC.getSkillIcon(skill.name);
-          let cls = 'skill-node ' + (isComp ? 'completed' : isUnl ? 'unlocked' : 'locked');
-          const click = isUnl && !isComp ? `onclick="completeSkill('${skill.id}')" style="cursor:pointer"` : '';
-          const tip   = skill.description ? `title="${skill.description}"` : '';
-          html += `<div class="${cls}" data-id="${skill.id}" ${click} ${tip}>
-            <div class="skill-node-wrap">
-              <span class="skill-node-icon">${isUnl ? icon : '🔒'}</span>
-              <span class="skill-node-name">${skill.name}</span>
-              ${isComp ? '<span class="skill-node-check">✓</span>' : ''}
-            </div>
-          </div>`;
+          const isC=done.has(skill.id), isU=ul.has(skill.id);
+          const cls='skill-node '+(isC?'completed':isU?'unlocked':'locked');
+          const click=isU&&!isC?`onclick="completeSkill('${skill.id}')" style="cursor:pointer"`:'';
+          html+=`<div class="${cls}" data-id="${skill.id}" ${click} ${skill.description?`title="${skill.description}"`:''}><div class="skill-node-wrap"><span class="skill-node-icon">${isU?CC.getSkillIcon(skill.name):'🔒'}</span><span class="skill-node-name">${skill.name}</span>${isC?'<span class="skill-node-check">✓</span>':''}</div></div>`;
         });
-        html += '</div></div>';
+        html+='</div></div>';
       });
-      container.innerHTML = html;
+      container.innerHTML=html;
     }
 
     function completeSkill(id) {
-      if (!progress.completedSkills) progress.completedSkills = [];
+      if (!progress.completedSkills) progress.completedSkills=[];
       if (progress.completedSkills.includes(id)) return;
-      const { progress: p, leveledUp, newLevel } = CC.awardXP(progress, 15);
-      progress = p;
-      progress.completedSkills.push(id);
-      CC.saveProgress(progress);
-      const el = document.querySelector(`[data-id="${id}"]`);
-      if (el) CC.showXPPopup(15, el);
-      CC.toast('Skill complete! +15 XP', 'success');
-      if (leveledUp) setTimeout(() => CC.showLevelUpModal(newLevel), 600);
+      const {progress:p,leveledUp,newLevel}=CC.awardXP(progress,15);
+      progress=p; progress.completedSkills.push(id); CC.saveProgress(progress);
+      const el=document.querySelector(`[data-id="${id}"]`);
+      if(el) CC.showXPPopup(15,el);
+      CC.toast('Skill complete! +15 XP','success');
+      if(leveledUp) setTimeout(()=>CC.showLevelUpModal(newLevel),600);
       renderStats(); renderSkillTree(); renderRoadmap();
     }
 
+    // ── Quests ────────────────────────────────────────────────────────────
     function renderQuests() {
-      const tq = progress.todayQuests;
-      if (!tq || !tq.items || !tq.items.length) {
-        document.getElementById('quest-list').innerHTML = '<div style="text-align:center;padding:24px;color:var(--text-3)">No quests — click "New Quests" to generate!</div>';
+      const tq=progress.todayQuests;
+      if (!tq||!tq.items||!tq.items.length) {
+        document.getElementById('quest-list').innerHTML='<div style="text-align:center;padding:24px;color:var(--text-3)">No quests — click "New Quests" to generate!</div>';
         return;
       }
-      const done = new Set(tq.completed || []);
-      const total = tq.items.length;
-      document.getElementById('quest-date-label').textContent = new Date().toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric'});
-      document.getElementById('qpf').style.width  = `${(done.size/total)*100}%`;
-      document.getElementById('qpt').textContent  = `${done.size} / ${total}`;
+      // Populate quest map
+      tq.items.forEach(q=>{ questMap[q.id]=q; });
 
-      const ICONS = { learn:'📚', practice:'💪', build:'🔨', review:'🔍' };
-      document.getElementById('quest-list').innerHTML = tq.items.map(q => {
-        const isDone = done.has(q.id);
+      const done=new Set(tq.completed||[]);
+      const total=tq.items.length;
+      document.getElementById('quest-date-label').textContent=new Date().toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric'});
+      document.getElementById('qpf').style.width=`${(done.size/total)*100}%`;
+      document.getElementById('qpt').textContent=`${done.size} / ${total}`;
+
+      const ICONS={learn:'📚',practice:'💪',build:'🔨',review:'🔍'};
+      document.getElementById('quest-list').innerHTML=tq.items.map(q=>{
+        const isDone=done.has(q.id);
         return `<div class="quest-card ${isDone?'completed':''}" data-type="${q.type}">
-          <div class="quest-checkbox ${isDone?'checked':''}" onclick="completeQuest('${q.id}',${q.xp},this)">${isDone?'✓':''}</div>
           <div style="flex:1;min-width:0">
             <div class="quest-meta" style="margin-bottom:6px">
               <span class="badge badge-teal">${ICONS[q.type]||'⚡'} ${q.type}</span>
@@ -337,113 +441,191 @@
             </div>
             <div class="quest-title">${q.title}</div>
             <div class="quest-desc">${q.description}</div>
-            <div class="quest-meta"><span class="quest-duration">⏱ ${q.duration}</span></div>
+            <div class="quest-card-footer">
+              <span class="quest-duration">⏱ ${q.duration}</span>
+              ${isDone
+                ? `<span class="proof-verified-pill">✓ AI Verified</span>`
+                : `<button class="proof-submit-btn" onclick="openProof('${q.id}')">Submit Proof →</button>`
+              }
+            </div>
           </div>
         </div>`;
       }).join('');
     }
 
-    function completeQuest(id, xp, cbEl) {
-      const tq = progress.todayQuests;
-      if (!tq || tq.completed.includes(id)) return;
-      tq.completed.push(id);
-      const { progress: p, leveledUp, newLevel } = CC.awardXP(progress, xp);
-      progress = p;
-      CC.saveProgress(progress);
-      cbEl.classList.add('checked'); cbEl.textContent = '✓';
-      const card = cbEl.closest('.quest-card');
-      card.style.animation = 'questComplete 0.4s ease';
-      setTimeout(() => card.classList.add('completed'), 400);
-      CC.showXPPopup(xp, card);
-      CC.toast(`Quest complete! +${xp} XP 🎉`, 'success');
-      if (leveledUp) setTimeout(() => CC.showLevelUpModal(newLevel), 800);
-      if (tq.completed.length === tq.items.length) setTimeout(() => CC.toast('All quests done! 🏆 Come back tomorrow.','success',5000), 1200);
-      renderStats(); renderQuests(); renderRoadmap();
+    // ── Proof modal ───────────────────────────────────────────────────────
+    function openProof(questId) {
+      activeQuestId = questId;
+      const q = questMap[questId];
+      if (!q) return;
+      // Reset form
+      document.getElementById('proof-text').value='';
+      document.getElementById('proof-url').value='';
+      document.getElementById('proof-text-error').textContent='';
+      document.getElementById('proof-quest-ref').textContent=q.title+' — '+q.description;
+      showProofState('form');
+      document.getElementById('proof-modal').style.display='flex';
+      setTimeout(()=>document.getElementById('proof-text').focus(),100);
     }
 
-    async function refreshQuests() {
-      if (refreshing) return; refreshing = true;
-      document.getElementById('refresh-btn').disabled = true;
-      document.getElementById('refresh-icon').style.animation = 'spin 0.7s linear infinite';
+    function showProofState(state) {
+      document.getElementById('proof-form').style.display    = state==='form'    ? 'block' : 'none';
+      document.getElementById('proof-loading').style.display = state==='loading' ? 'block' : 'none';
+      document.getElementById('proof-result').style.display  = state==='result'  ? 'block' : 'none';
+    }
+
+    async function submitProof() {
+      const proofText = document.getElementById('proof-text').value.trim();
+      const proofURL  = document.getElementById('proof-url').value.trim();
+      const errEl     = document.getElementById('proof-text-error');
+
+      if (!proofText || proofText.length < 20) {
+        errEl.textContent='Please describe what you did in at least a sentence (20+ characters).';
+        document.getElementById('proof-text').focus();
+        return;
+      }
+      errEl.textContent='';
+
+      const q = questMap[activeQuestId];
+      const fullProof = proofURL ? `${proofText}\n\nWork link: ${proofURL}` : proofText;
+
+      // Show loading
+      showProofState('loading');
+
+      // Animate verify bar + steps
+      const bar = document.getElementById('verify-bar');
+      bar.style.width = '0%';
+      setTimeout(()=>{ bar.style.width='45%'; },100);
+      setTimeout(()=>{ bar.style.width='75%'; },1200);
+
+      const vsteps = ['vs-1','vs-2','vs-3'];
+      vsteps.forEach((id,i)=>{
+        setTimeout(()=>{
+          document.getElementById(id).classList.add('active');
+          if(i>0) { document.getElementById(vsteps[i-1]).classList.remove('active'); document.getElementById(vsteps[i-1]).classList.add('done'); }
+        }, i*900);
+      });
+
       try {
-        const info = CC.levelInfo(progress.xp);
-        const res  = await fetch('/api/generate-quests', {
-          method:'POST', headers:{'Content-Type':'application/json'},
-          body: JSON.stringify({ goal: progress.goal, completedSkills: progress.completedSkills||[], currentPhase: progress.roadmap?.phases?.[0]?.name||'Foundation', level: info.level })
+        const res  = await fetch('/api/verify-proof', {
+          method:'POST',
+          headers:{'Content-Type':'application/json'},
+          body: JSON.stringify({ questTitle:q.title, questDescription:q.description, proof:fullProof, questXP:q.xp })
         });
         const json = await res.json();
-        if (json.success && json.data?.quests) {
-          progress.todayQuests = { date: CC.today(), items: json.data.quests, completed: [] };
-          CC.saveProgress(progress);
-          renderQuests();
-          CC.toast('Fresh quests generated! 🗡️', 'success');
-        }
-      } catch(e) { CC.toast('Failed to generate quests. Try again.','error'); }
-      document.getElementById('refresh-icon').style.animation = '';
-      document.getElementById('refresh-btn').disabled = false;
-      refreshing = false;
+
+        bar.style.transition='width 0.4s ease'; bar.style.width='100%';
+        setTimeout(()=>showResult(json.data, q), 400);
+      } catch(err) {
+        showResult({ approved:true, feedback:'Great effort! Your commitment to proving your work shows real dedication.', xpBonus:5 }, q);
+      }
     }
 
+    function showResult(data, quest) {
+      const { approved, feedback, xpBonus } = data;
+      showProofState('result');
+
+      if (approved) {
+        document.getElementById('result-approved-view').style.display='block';
+        document.getElementById('result-rejected-view').style.display='none';
+        document.getElementById('result-feedback-text').textContent=`"${feedback}"`;
+
+        const totalXP = quest.xp + (xpBonus || 0);
+        document.getElementById('result-xp-display').textContent=`+${quest.xp} XP`;
+        if (xpBonus > 0) {
+          document.getElementById('result-bonus-note').textContent=`+${xpBonus} bonus XP for detailed proof!`;
+          document.getElementById('result-bonus-note').style.display='block';
+          document.getElementById('result-xp-display').textContent=`+${totalXP} XP`;
+        }
+
+        // Award XP and mark complete
+        const tq = progress.todayQuests;
+        if (tq && !tq.completed.includes(quest.id)) {
+          tq.completed.push(quest.id);
+          const {progress:p, leveledUp, newLevel} = CC.awardXP(progress, totalXP);
+          progress = p;
+          CC.saveProgress(progress);
+          renderStats();
+          if (leveledUp) setTimeout(()=>CC.showLevelUpModal(newLevel), 1200);
+        }
+
+        // Animate the check icon
+        const checkEl = document.querySelector('#result-approved-view .check-pop');
+        if (checkEl) { checkEl.style.animation='none'; requestAnimationFrame(()=>{ checkEl.style.animation=''; }); }
+
+        CC.confetti();
+
+      } else {
+        document.getElementById('result-approved-view').style.display='none';
+        document.getElementById('result-rejected-view').style.display='block';
+        document.getElementById('result-reject-text').textContent=`"${feedback}"`;
+      }
+    }
+
+    function closeProofModal() {
+      document.getElementById('proof-modal').style.display='none';
+      // Reset verify step classes
+      ['vs-1','vs-2','vs-3'].forEach(id=>{
+        const el=document.getElementById(id);
+        el.classList.remove('active','done');
+      });
+      document.getElementById('result-bonus-note').style.display='none';
+      renderQuests();
+    }
+
+    // ── New quests ────────────────────────────────────────────────────────
     async function fetchNewQuests() {
       try {
-        const info = CC.levelInfo(progress.xp);
-        const res  = await fetch('/api/generate-quests', {
-          method:'POST', headers:{'Content-Type':'application/json'},
-          body: JSON.stringify({ goal: progress.goal, completedSkills: progress.completedSkills||[], currentPhase: progress.roadmap?.phases?.[0]?.name||'Foundation', level: info.level })
-        });
-        const json = await res.json();
-        if (json.success && json.data?.quests) {
-          progress.todayQuests = { date: CC.today(), items: json.data.quests, completed: [] };
-        }
-      } catch(e) { console.error(e); }
+        const info=CC.levelInfo(progress.xp);
+        const res=await fetch('/api/generate-quests',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({goal:progress.goal,completedSkills:progress.completedSkills||[],currentPhase:progress.roadmap?.phases?.[0]?.name||'Foundation',level:info.level})});
+        const json=await res.json();
+        if(json.success&&json.data?.quests){ progress.todayQuests={date:CC.today(),items:json.data.quests,completed:[]}; }
+      } catch(e){ console.error(e); }
       CC.saveProgress(progress); render();
     }
 
-    function renderRoadmap() {
-      const rm = progress.roadmap;
-      if (!rm) { document.getElementById('roadmap-phases').innerHTML = '<div style="text-align:center;padding:20px;color:var(--text-3)">No roadmap data</div>'; return; }
-      document.getElementById('roadmap-badge').textContent = `${rm.totalWeeks} wks`;
-      const skills = progress.skillTree || [];
-      const done   = new Set(progress.completedSkills || []);
-      let totalS = 0, totalD = 0;
-
-      const html = (rm.phases||[]).map((ph, pi) => {
-        const ps    = skills.filter(s => s.level === pi+1);
-        const pd    = ps.filter(s => done.has(s.id)).length;
-        const pct   = ps.length ? Math.round(pd/ps.length*100) : 0;
-        totalS += ps.length; totalD += pd;
-        const color = ph.color || 'var(--teal)';
-        const chips = (ph.skills||[]).slice(0,4).map(s=>`<span class="phase-chip">${s}</span>`).join('');
-        return `<div class="phase-item">
-          <div class="phase-header-row">
-            <div class="phase-dot" style="background:${color}"></div>
-            <div class="phase-name-txt">${ph.name}</div>
-            <div class="phase-pct-txt" style="color:${color}">${pct}%</div>
-          </div>
-          <div class="progress-bar"><div class="progress-fill" style="background:${color};width:${pct}%"></div></div>
-          <div class="phase-desc-txt">${ph.description}</div>
-          ${chips?`<div class="phase-chips">${chips}</div>`:''}
-        </div>`;
-      }).join('');
-
-      document.getElementById('roadmap-phases').innerHTML = html;
-      const op = totalS ? Math.round(totalD/totalS*100) : 0;
-      document.getElementById('total-pct').textContent  = `${op}%`;
-      document.getElementById('total-fill').style.width = `${op}%`;
+    async function refreshQuests() {
+      if(refreshing) return; refreshing=true;
+      document.getElementById('refresh-btn').disabled=true;
+      document.getElementById('refresh-icon').style.animation='spin 0.7s linear infinite';
+      try {
+        const info=CC.levelInfo(progress.xp);
+        const res=await fetch('/api/generate-quests',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({goal:progress.goal,completedSkills:progress.completedSkills||[],currentPhase:progress.roadmap?.phases?.[0]?.name||'Foundation',level:info.level})});
+        const json=await res.json();
+        if(json.success&&json.data?.quests){ progress.todayQuests={date:CC.today(),items:json.data.quests,completed:[]}; CC.saveProgress(progress); renderQuests(); CC.toast('Fresh quests generated! 🗡️','success'); }
+      } catch(e){ CC.toast('Failed to generate quests.','error'); }
+      document.getElementById('refresh-icon').style.animation='';
+      document.getElementById('refresh-btn').disabled=false;
+      refreshing=false;
     }
 
+    // ── Roadmap ───────────────────────────────────────────────────────────
+    function renderRoadmap() {
+      const rm=progress.roadmap;
+      if(!rm){ document.getElementById('roadmap-phases').innerHTML='<div style="text-align:center;padding:20px;color:var(--text-3)">No roadmap data</div>'; return; }
+      document.getElementById('roadmap-badge').textContent=`${rm.totalWeeks} wks`;
+      const skills=progress.skillTree||[], done=new Set(progress.completedSkills||[]);
+      let totalS=0,totalD=0;
+      const html=(rm.phases||[]).map((ph,pi)=>{
+        const ps=skills.filter(s=>s.level===pi+1), pd=ps.filter(s=>done.has(s.id)).length;
+        const pct=ps.length?Math.round(pd/ps.length*100):0;
+        totalS+=ps.length; totalD+=pd;
+        const color=ph.color||'var(--teal)';
+        const chips=(ph.skills||[]).slice(0,4).map(s=>`<span class="phase-chip">${s}</span>`).join('');
+        return `<div class="phase-item"><div class="phase-header-row"><div class="phase-dot" style="background:${color}"></div><div class="phase-name-txt">${ph.name}</div><div class="phase-pct-txt" style="color:${color}">${pct}%</div></div><div class="progress-bar"><div class="progress-fill" style="background:${color};width:${pct}%"></div></div><div class="phase-desc-txt">${ph.description}</div>${chips?`<div class="phase-chips">${chips}</div>`:''}</div>`;
+      }).join('');
+      document.getElementById('roadmap-phases').innerHTML=html;
+      const op=totalS?Math.round(totalD/totalS*100):0;
+      document.getElementById('total-pct').textContent=`${op}%`;
+      document.getElementById('total-fill').style.width=`${op}%`;
+    }
+
+    // ── Resources ─────────────────────────────────────────────────────────
     function renderResources() {
-      const res = progress.resources || [];
-      if (!res.length) { document.getElementById('resources-grid').innerHTML = '<div style="grid-column:1/-1;text-align:center;color:var(--text-3);padding:16px;font-size:0.875rem">Complete onboarding to unlock resources.</div>'; return; }
-      const TICONS = { course:'📺', video:'▶️', article:'📖', book:'📚', tool:'🔧' };
-      document.getElementById('resources-grid').innerHTML = res.map(r =>
-        `<div class="resource-card">
-          <div class="resource-icon">${TICONS[r.type]||'📌'}</div>
-          <div class="resource-title">${r.title}</div>
-          <div class="resource-provider">${r.provider}</div>
-          <div class="resource-desc">${r.description||''}</div>
-          <div style="margin-top:8px"><span class="badge badge-teal">${r.difficulty||'beginner'}</span></div>
-        </div>`).join('');
+      const res=progress.resources||[];
+      if(!res.length){ document.getElementById('resources-grid').innerHTML='<div style="grid-column:1/-1;text-align:center;color:var(--text-3);padding:16px;font-size:0.875rem">Complete onboarding to unlock resources.</div>'; return; }
+      const TICONS={course:'📺',video:'▶️',article:'📖',book:'📚',tool:'🔧'};
+      document.getElementById('resources-grid').innerHTML=res.map(r=>`<div class="resource-card"><div class="resource-icon">${TICONS[r.type]||'📌'}</div><div class="resource-title">${r.title}</div><div class="resource-provider">${r.provider}</div><div class="resource-desc">${r.description||''}</div><div style="margin-top:8px"><span class="badge badge-teal">${r.difficulty||'beginner'}</span></div></div>`).join('');
     }
 
     init();

@@ -262,6 +262,59 @@ Make it sound ambitious, professional, and forward-looking. Specific to their go
   }
 });
 
+app.post('/api/verify-proof', async (req, res) => {
+  const { questTitle, questDescription, proof, questXP } = req.body;
+
+  if (!genAI) {
+    return res.json({
+      success: true,
+      data: {
+        approved: true,
+        feedback: `Solid proof for "${questTitle}"! Your work demonstrates real engagement with the material. This is exactly the kind of hands-on practice that builds lasting skills.`,
+        xpBonus: 10
+      },
+      mock: true
+    });
+  }
+
+  try {
+    const prompt = `You are an AI quest verifier for Career Copilot, a gamified career learning platform.
+
+Quest title: "${questTitle}"
+Quest description: "${questDescription}"
+
+The learner submitted this proof of completion:
+"""
+${proof}
+"""
+
+Your job: decide if this proof genuinely shows they completed or made real progress on this quest.
+Be encouraging and give benefit of the doubt. Approve if they show any meaningful effort or learning.
+Only reject if the proof is completely off-topic, empty, or clearly fabricated (e.g. just "I did it" with zero detail).
+
+Return ONLY valid JSON (no markdown):
+{
+  "approved": boolean,
+  "feedback": "1-2 sentences. If approved: celebrate a specific thing they mentioned. If rejected: tell them exactly one concrete thing to add to get approved.",
+  "xpBonus": number (0 if not approved; 5-20 if approved, higher for richer proof with links or specific details)
+}`;
+
+    const data = await callGemini(prompt);
+    res.json({ success: true, data });
+  } catch (err) {
+    console.error('Gemini verify error:', err.message);
+    res.json({
+      success: true,
+      data: {
+        approved: true,
+        feedback: `Great effort on "${questTitle}"! Your commitment to proving your work shows real dedication to growth.`,
+        xpBonus: 5
+      },
+      mock: true
+    });
+  }
+});
+
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
