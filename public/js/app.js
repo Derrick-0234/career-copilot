@@ -144,32 +144,11 @@ const CC = (() => {
     return { progress, leveledUp: after.level > before.level, newLevel: after.level };
   }
 
-  // ─── Skill icon mapping ───────────────────────────────────────────────────
-  const ICON_MAP = {
-    python: '🐍', javascript: '🟨', typescript: '🟦', react: '⚛️',
-    vue: '💚', angular: '🔴', node: '🟢', express: '🚂',
-    django: '🎸', flask: '🧪', ruby: '💎', rails: '🛤️',
-    java: '☕', kotlin: '🟣', swift: '🦅', 'c#': '💙',
-    go: '🐹', rust: '🦀', cpp: '⚡', c: '🔧',
-    html: '🌐', css: '🎨', sql: '🗃️', mongo: '🍃',
-    postgres: '🐘', mysql: '🐬', redis: '🔴', git: '🌿',
-    docker: '🐳', kubernetes: '⎈', aws: '☁️', gcp: '🌤️',
-    azure: '💠', linux: '🐧', bash: '💻', 'machine learning': '🤖',
-    ml: '🤖', ai: '🧠', tensorflow: '🔶', pytorch: '🔥',
-    keras: '🧬', pandas: '🐼', numpy: '📊', 'data science': '📈',
-    excel: '📊', tableau: '📉', figma: '🎨', sketch: '💎',
-    photoshop: '🖼️', illustrator: '✏️', devops: '🔄', ci: '⚙️',
-    testing: '🧪', agile: '🏃', scrum: '📋', api: '🔌',
-    rest: '🔌', graphql: '◉', auth: '🔐', security: '🛡️',
-    deployment: '🚀', cloud: '☁️', database: '🗄️', network: '🌐',
-  };
-
+  // ─── Skill abbreviation ──────────────────────────────────────────────────
   function getSkillIcon(name) {
-    const l = (name || '').toLowerCase();
-    for (const [key, icon] of Object.entries(ICON_MAP)) {
-      if (l.includes(key)) return icon;
-    }
-    return '⚡';
+    const words = (name || '').trim().split(/[\s\/&+.#]+/).filter(Boolean);
+    if (words.length >= 2) return (words[0][0] + words[1][0]).toUpperCase();
+    return (name || '').slice(0, 2).toUpperCase();
   }
 
   // ─── UI helpers ───────────────────────────────────────────────────────────
@@ -203,11 +182,11 @@ const CC = (() => {
     overlay.innerHTML = `
       <div class="modal">
         <button class="modal-close" onclick="this.closest('.modal-overlay').remove()">✕</button>
-        <span class="modal-icon">🎉</span>
+        <div style="width:56px;height:56px;background:var(--teal);border-radius:8px;display:flex;align-items:center;justify-content:center;font-family:var(--font-head);font-size:1.25rem;font-weight:700;color:#fff;margin:0 auto 16px;letter-spacing:-0.02em">LV</div>
         <h2 class="modal-title gradient-text">LEVEL UP!</h2>
-        <p class="modal-body">You've reached <strong>Level ${level}</strong>! New skills are unlocking in your skill tree. Keep crushing those quests!</p>
+        <p class="modal-body">You've reached <strong>Level ${level}</strong>. New skills are unlocking in your skill tree. Keep going.</p>
         <button class="btn btn-primary" style="width:100%" onclick="this.closest('.modal-overlay').remove()">
-          Let's Go! 🚀
+          Continue →
         </button>
       </div>`;
     document.body.appendChild(overlay);
@@ -215,13 +194,13 @@ const CC = (() => {
   }
 
   function confetti() {
-    const colors = ['#4F8EF7', '#8B5CF6', '#10B981', '#F59E0B', '#fff'];
-    for (let i = 0; i < 40; i++) {
+    const colors = ['#1a7a6e', '#2d9b8a', '#145f55', '#ffffff', '#d4d4d4'];
+    for (let i = 0; i < 36; i++) {
       const el = document.createElement('div');
       el.style.cssText = `
         position: fixed;
-        width: ${Math.random() * 8 + 4}px;
-        height: ${Math.random() * 8 + 4}px;
+        width: ${Math.random() * 7 + 3}px;
+        height: ${Math.random() * 7 + 3}px;
         background: ${colors[Math.floor(Math.random() * colors.length)]};
         border-radius: ${Math.random() > 0.5 ? '50%' : '2px'};
         top: ${Math.random() * 60 + 20}%;

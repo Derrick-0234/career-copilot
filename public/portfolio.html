@@ -39,7 +39,6 @@
     .skill-badge  { background: var(--bg-2); border: 1px solid var(--border); border-radius: var(--radius); padding: 14px; display: flex; flex-direction: column; align-items: center; gap: 8px; text-align: center; transition: var(--t); position: relative; }
     .skill-badge:hover  { transform: translateY(-2px); box-shadow: 0 4px 16px rgba(26,122,110,0.1); }
     .skill-badge.earned { border-color: rgba(26,122,110,0.3); background: rgba(26,122,110,0.05); }
-    .badge-icon-lg { font-size: 1.5rem; }
     .badge-name-sm { font-size: 0.75rem; font-weight: 600; line-height: 1.3; color: var(--text); }
     .badge-check   { position: absolute; top: 6px; right: 6px; width: 18px; height: 18px; background: var(--teal); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 700; color: #fff; }
     .no-skills     { text-align: center; padding: 32px; color: var(--text-3); font-size: 0.875rem; }
@@ -61,7 +60,11 @@
     .verified-meta { display: flex; align-items: center; gap: 8px; margin-top: 6px; }
     .verified-xp-tag { font-family: var(--font-head); font-size: 0.75rem; font-weight: 700; color: #92720a; background: var(--yellow-bg); padding: 2px 8px; border-radius: 4px; }
     .verified-date { font-size: 0.75rem; color: var(--text-3); }
-    .ai-shield { display: inline-flex; align-items: center; gap: 4px; font-size: 0.6875rem; font-weight: 700; padding: 2px 8px; background: rgba(26,122,110,0.1); border: 1px solid rgba(26,122,110,0.2); border-radius: 99px; color: var(--teal); font-family: var(--font-head); letter-spacing: 0.04em; }
+    .ai-shield { display: inline-flex; align-items: center; gap: 4px; font-size: 0.6875rem; font-weight: 700; padding: 2px 8px; background: rgba(26,122,110,0.08); border: 1px solid rgba(26,122,110,0.2); border-radius: 4px; color: var(--teal); font-family: var(--font-head); letter-spacing: 0.06em; }
+    .badge-icon-lg { width: 44px; height: 44px; border-radius: 8px; background: var(--bg-3); border: 1px solid var(--border-md); display: flex; align-items: center; justify-content: center; font-family: var(--font-head); font-size: 0.75rem; font-weight: 700; color: var(--text-3); letter-spacing: -0.01em; }
+    .skill-badge.earned .badge-icon-lg { background: rgba(26,122,110,0.1); border-color: rgba(26,122,110,0.25); color: var(--teal); }
+    .q-hist-xp { font-family: var(--font-head); font-size: 0.75rem; font-weight: 700; color: var(--teal-dark); background: rgba(26,122,110,0.08); padding: 2px 8px; border-radius: 4px; border: 1px solid rgba(26,122,110,0.14); }
+    .verified-xp-tag { font-family: var(--font-head); font-size: 0.75rem; font-weight: 700; color: var(--teal-dark); background: rgba(26,122,110,0.08); padding: 2px 8px; border-radius: 4px; border: 1px solid rgba(26,122,110,0.14); }
     .skill-badge-verified-tag { position: absolute; bottom: 4px; left: 50%; transform: translateX(-50%); font-size: 0.6rem; font-weight: 700; padding: 1px 6px; background: var(--teal); color: #fff; border-radius: 99px; white-space: nowrap; font-family: var(--font-head); letter-spacing: 0.04em; }
 
     /* Share */
@@ -82,14 +85,14 @@
 
   <nav class="navbar">
     <div class="navbar-inner">
-      <a href="/" class="nav-logo"><div class="nav-logo-icon">🎯</div>Career Copilot</a>
+      <a href="/" class="nav-logo"><div class="nav-logo-icon" style="font-family:var(--font-head);font-size:0.625rem;font-weight:700;letter-spacing:-0.02em">CC</div>Career Copilot</a>
       <div class="nav-links">
         <a href="/dashboard.html" class="nav-link">For You</a>
         <a href="/leaderboard.html" class="nav-link">Leaderboard</a>
         <a href="/portfolio.html" class="nav-link active">Portfolio</a>
       </div>
       <div class="nav-actions">
-        <div class="streak-badge">🔥 <span id="streak-count">0</span></div>
+        <div class="streak-badge"><span id="streak-count">0</span> day streak</div>
         <div class="nav-user"><div class="nav-avatar" data-nav-avatar>U</div><span data-nav-user>User</span></div>
         <button class="btn btn-ghost btn-sm" onclick="CC.logout()">Sign out</button>
       </div>
@@ -111,7 +114,7 @@
           </div>
         </div>
       </div>
-      <div class="profile-goal">🎯 <span id="profile-goal">—</span></div>
+      <div class="profile-goal"><span id="profile-goal">—</span></div>
       <div id="bio-section"><div class="bio-loading"><div class="spinner" style="width:20px;height:20px;border-width:2px"></div>Generating AI bio...</div></div>
       <div class="profile-actions">
         <a href="/dashboard.html" class="btn btn-primary" style="font-family:var(--font-head)">Go to Dashboard →</a>
@@ -124,7 +127,7 @@
       <div class="stat-card"><div class="stat-val" id="stat-xp">0</div><div class="stat-lbl">Total XP</div></div>
       <div class="stat-card"><div class="stat-val" id="stat-lv">1</div><div class="stat-lbl">Current Level</div></div>
       <div class="stat-card"><div class="stat-val" id="stat-sk">0</div><div class="stat-lbl">Skills Earned</div></div>
-      <div class="stat-card"><div class="stat-val" id="stat-st">0</div><div class="stat-lbl">Day Streak 🔥</div></div>
+      <div class="stat-card"><div class="stat-val" id="stat-st">0</div><div class="stat-lbl">Day Streak</div></div>
     </div>
 
     <!-- Skill badges -->
@@ -134,7 +137,7 @@
         <span class="badge badge-green" id="skills-earned-badge">0 earned</span>
       </div>
       <div class="badges-grid" id="badges-grid">
-        <div class="no-skills"><div style="font-size:2rem">🏅</div><p style="margin-top:8px">Complete quests and unlock skills to earn badges.</p></div>
+        <div class="no-skills"><div style="font-size:2rem;font-family:var(--font-head);color:var(--text-3)">—</div><p style="margin-top:8px">Complete quests and unlock skills to earn badges.</p></div>
       </div>
     </div>
 
@@ -145,7 +148,7 @@
           <div class="panel-title">Verified Achievements</div>
           <div style="font-size:0.8125rem;color:var(--text-3);margin-top:2px">AI-verified quest completions — proof on record</div>
         </div>
-        <span class="ai-shield">🤖 AI Verified</span>
+        <span class="ai-shield">AI VERIFIED</span>
       </div>
       <div id="verified-list"></div>
     </div>
@@ -230,7 +233,7 @@
         const isU = ul.has(skill.id);
         const isV = isE && (progress.verifiedProofs||[]).length > 0;
         return `<div class="skill-badge ${isE?'earned':''}" title="${skill.description||skill.name}">
-          <div class="badge-icon-lg">${isU ? CC.getSkillIcon(skill.name) : '🔒'}</div>
+          <div class="badge-icon-lg">${isU ? CC.getSkillIcon(skill.name) : '—'}</div>
           <div class="badge-name-sm">${skill.name}</div>
           ${isE ? '<div class="badge-check">✓</div>' : ''}
           ${isV ? '<div class="skill-badge-verified-tag">AI VERIFIED</div>' : ''}
@@ -243,16 +246,16 @@
       const section = document.getElementById('verified-section');
       if (!proofs.length) { section.style.display = 'none'; return; }
       section.style.display = 'block';
-      const ICONS = {learn:'📚',practice:'💪',build:'🔨',review:'🔍'};
+      const ABBR = {learn:'LR',practice:'PR',build:'BD',review:'RV'};
       document.getElementById('verified-list').innerHTML = [...proofs].reverse().map(p => `
         <div class="verified-card">
-          <div class="verified-icon">${ICONS[p.questType] || '⚡'}</div>
+          <div class="verified-icon" style="font-family:var(--font-head);font-size:0.5625rem;font-weight:700;letter-spacing:0.02em;color:var(--teal)">${ABBR[p.questType] || 'QT'}</div>
           <div style="flex:1;min-width:0">
             <div class="verified-title">${p.questTitle}</div>
             <div class="verified-feedback">"${p.feedback}"</div>
             <div class="verified-meta">
               <span class="verified-xp-tag">+${p.xp} XP</span>
-              <span class="ai-shield">🤖 AI Verified</span>
+              <span class="ai-shield">AI VERIFIED</span>
               <span class="verified-date">${p.date}</span>
             </div>
           </div>
@@ -265,7 +268,7 @@
       if (!history.length) {
         canvas.parentElement.innerHTML += '';
         canvas.parentElement.insertAdjacentHTML('beforeend','');
-        canvas.outerHTML = '<div class="chart-empty">📈 Complete quests to see your XP growth chart.</div>';
+        canvas.outerHTML = '<div class="chart-empty">Complete quests to see your XP growth chart.</div>';
         return;
       }
       const data = history.length === 1 ? [{date:'Start',total:0}, history[0]] : history;
@@ -328,13 +331,13 @@
       }
       document.getElementById('quests-badge').textContent = `${all.length} done`;
       if (!all.length) return;
-      const ICONS = {learn:'📚',practice:'💪',build:'🔨',review:'🔍'};
+      const ABBR2 = {learn:'LR',practice:'PR',build:'BD',review:'RV'};
       document.getElementById('quest-history').innerHTML = all.map(q=> {
         const isV = verifiedIds.has(q.id);
         return `<div class="q-hist-item">
-          <div class="q-hist-icon">${ICONS[q.type]||'⚡'}</div>
+          <div class="q-hist-icon" style="font-family:var(--font-head);font-size:0.5625rem;font-weight:700;letter-spacing:0.02em;color:var(--teal)">${ABBR2[q.type]||'QT'}</div>
           <div class="q-hist-title">${q.title}</div>
-          ${isV ? '<span class="ai-shield">🤖 AI Verified</span>' : ''}
+          ${isV ? '<span class="ai-shield">AI VERIFIED</span>' : ''}
           <div class="q-hist-xp">+${q.xp} XP</div>
         </div>`;
       }).join('');

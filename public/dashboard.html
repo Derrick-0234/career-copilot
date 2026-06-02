@@ -29,7 +29,9 @@
     .skill-level-header::after { content: ''; flex: 1; height: 1px; background: var(--border); }
     .skill-nodes-list { display: flex; flex-direction: column; gap: 6px; }
     .skill-node-wrap { display: flex; align-items: center; gap: 8px; }
-    .skill-node-icon { font-size: 14px; flex-shrink: 0; }
+    .skill-node-abbr { width: 24px; height: 24px; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-family: var(--font-head); font-size: 0.5625rem; font-weight: 700; flex-shrink: 0; letter-spacing: -0.01em; }
+    .skill-node-abbr.abbr-open { background: rgba(26,122,110,0.12); color: var(--teal); }
+    .skill-node-abbr.abbr-lock { background: var(--bg-3); color: var(--text-3); }
     .skill-node-name { font-size: 0.8125rem; font-weight: 500; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; flex: 1; }
     .skill-node-check { margin-left: auto; font-size: 11px; color: var(--teal); flex-shrink: 0; }
     .skill-divider { height: 14px; display: flex; align-items: center; justify-content: center; }
@@ -146,14 +148,14 @@
 
   <nav class="navbar">
     <div class="navbar-inner">
-      <a href="/" class="nav-logo"><div class="nav-logo-icon">🎯</div>Career Copilot</a>
+      <a href="/" class="nav-logo"><div class="nav-logo-icon" style="font-family:var(--font-head);font-size:0.625rem;font-weight:700;letter-spacing:-0.02em">CC</div>Career Copilot</a>
       <div class="nav-links">
         <a href="/dashboard.html" class="nav-link active">For You</a>
         <a href="/leaderboard.html" class="nav-link">Leaderboard</a>
         <a href="/portfolio.html" class="nav-link">Portfolio</a>
       </div>
       <div class="nav-actions">
-        <div class="streak-badge">🔥 <span id="streak-count">0</span></div>
+        <div class="streak-badge"><span id="streak-count">0</span> day streak</div>
         <div class="nav-user"><div class="nav-avatar" data-nav-avatar>U</div><span data-nav-user>User</span></div>
         <button class="btn btn-ghost btn-sm" onclick="CC.logout()">Sign out</button>
       </div>
@@ -177,7 +179,7 @@
         <div class="xp-bar-track"><div class="xp-bar-fill" id="xp-fill" style="width:0%"></div></div>
       </div>
       <div style="margin-left:auto;display:flex;align-items:center;gap:12px;flex-wrap:wrap">
-        <div class="goal-pill"><span>🎯</span><span class="goal-pill-text" id="goal-display">Loading...</span></div>
+        <div class="goal-pill"><span class="goal-pill-text" id="goal-display">Loading...</span></div>
         <div style="font-family:var(--font-head);font-size:0.8125rem;color:var(--text-3)">Total: <strong id="total-xp-display" style="color:var(--teal)">0 XP</strong></div>
       </div>
     </div>
@@ -205,7 +207,7 @@
               <div class="date-label" id="quest-date-label">—</div>
             </div>
             <button class="btn btn-secondary btn-sm" id="refresh-btn" onclick="refreshQuests()" style="font-family:var(--font-head)">
-              <span id="refresh-icon">↻</span> New Quests
+              <span id="refresh-icon" style="display:inline-block">↻</span> New Quests
             </button>
           </div>
           <div class="quest-prog">
@@ -250,7 +252,7 @@
 
       <!-- STATE 1: Form -->
       <div id="proof-form">
-        <div class="proof-kicker">🤖 Prove It to the AI</div>
+        <div class="proof-kicker">AI Verification</div>
         <div class="proof-modal-title">Submit Your Proof</div>
 
         <div class="proof-quest-ref" id="proof-quest-ref">Quest details will appear here.</div>
@@ -261,9 +263,9 @@
             <textarea id="proof-text" class="proof-textarea"
               placeholder="Describe specifically what you built, learned, or practiced. Include what you struggled with, what you understood, or what you created. The more detail, the higher your XP bonus..."></textarea>
             <div class="proof-tips">
-              <span class="proof-tip">💡 Mention specific tools or concepts</span>
-              <span class="proof-tip">💡 Describe what you learned</span>
-              <span class="proof-tip">💡 Share what was hard</span>
+              <span class="proof-tip">Mention specific tools or concepts</span>
+              <span class="proof-tip">Describe what you learned</span>
+              <span class="proof-tip">Share what was hard</span>
             </div>
             <div class="form-error" id="proof-text-error" style="margin-top:6px"></div>
           </div>
@@ -284,7 +286,7 @@
 
       <!-- STATE 2: Verifying -->
       <div id="proof-loading" style="display:none;text-align:center;padding:16px 0">
-        <div class="verify-bot">🤖</div>
+        <div class="verify-bot" style="font-family:var(--font-head);font-size:1.25rem;font-weight:700;letter-spacing:-0.02em">AI</div>
         <h3 style="font-family:var(--font-head);font-size:1rem;font-weight:700;margin-bottom:8px;color:var(--text)">AI is reviewing your proof...</h3>
         <p style="font-size:0.875rem;color:var(--text-2);margin-bottom:20px">Gemini is reading your submission and verifying your work.</p>
         <div class="progress-bar" style="height:6px">
@@ -301,8 +303,8 @@
       <div id="proof-result" style="display:none;text-align:center">
         <!-- Approved -->
         <div id="result-approved-view" style="display:none">
-          <div class="check-pop" style="font-size:3.5rem;margin-bottom:12px">✅</div>
-          <h2 style="font-family:var(--font-head);font-size:1.5rem;font-weight:700;color:var(--teal);margin-bottom:4px">Proof Verified!</h2>
+          <div class="check-pop" style="width:64px;height:64px;background:var(--teal);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.75rem;font-weight:700;color:#fff;margin:0 auto 12px">✓</div>
+          <h2 style="font-family:var(--font-head);font-size:1.5rem;font-weight:700;color:var(--teal);margin-bottom:4px">Proof Verified</h2>
           <p style="font-size:0.875rem;color:var(--text-3);margin-bottom:16px;font-family:var(--font-head)">Gemini reviewed your submission</p>
           <div class="result-approved">
             <p id="result-feedback-text" style="font-size:0.9375rem;color:var(--text);line-height:1.65;font-style:italic">"..."</p>
@@ -316,8 +318,8 @@
 
         <!-- Rejected -->
         <div id="result-rejected-view" style="display:none">
-          <div style="font-size:3rem;margin-bottom:12px">⚠️</div>
-          <h2 style="font-family:var(--font-head);font-size:1.375rem;font-weight:700;color:var(--text);margin-bottom:4px">Almost There!</h2>
+          <div style="width:56px;height:56px;background:var(--bg-3);border:2px solid var(--border-md);border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--font-head);font-size:1.5rem;font-weight:700;color:var(--text-2);margin:0 auto 12px">!</div>
+          <h2 style="font-family:var(--font-head);font-size:1.375rem;font-weight:700;color:var(--text);margin-bottom:4px">More Detail Needed</h2>
           <p style="font-size:0.875rem;color:var(--text-3);margin-bottom:16px;font-family:var(--font-head)">The AI needs a bit more detail</p>
           <div class="result-rejected">
             <p id="result-reject-text" style="font-size:0.9375rem;color:var(--text);line-height:1.65">"..."</p>
@@ -396,7 +398,7 @@
           const isC=done.has(skill.id), isU=ul.has(skill.id);
           const cls='skill-node '+(isC?'completed':isU?'unlocked':'locked');
           const click=isU&&!isC?`onclick="completeSkill('${skill.id}')" style="cursor:pointer"`:'';
-          html+=`<div class="${cls}" data-id="${skill.id}" ${click} ${skill.description?`title="${skill.description}"`:''}><div class="skill-node-wrap"><span class="skill-node-icon">${isU?CC.getSkillIcon(skill.name):'🔒'}</span><span class="skill-node-name">${skill.name}</span>${isC?'<span class="skill-node-check">✓</span>':''}</div></div>`;
+          html+=`<div class="${cls}" data-id="${skill.id}" ${click} ${skill.description?`title="${skill.description}"`:''}><div class="skill-node-wrap"><span class="skill-node-abbr ${isU?'abbr-open':'abbr-lock'}">${isU?CC.getSkillIcon(skill.name):'—'}</span><span class="skill-node-name">${skill.name}</span>${isC?'<span class="skill-node-check">✓</span>':''}</div></div>`;
         });
         html+='</div></div>';
       });
@@ -431,13 +433,12 @@
       document.getElementById('qpf').style.width=`${(done.size/total)*100}%`;
       document.getElementById('qpt').textContent=`${done.size} / ${total}`;
 
-      const ICONS={learn:'📚',practice:'💪',build:'🔨',review:'🔍'};
       document.getElementById('quest-list').innerHTML=tq.items.map(q=>{
         const isDone=done.has(q.id);
         return `<div class="quest-card ${isDone?'completed':''}" data-type="${q.type}">
           <div style="flex:1;min-width:0">
             <div class="quest-meta" style="margin-bottom:6px">
-              <span class="badge badge-teal">${ICONS[q.type]||'⚡'} ${q.type}</span>
+              <span class="badge badge-teal">${q.type.toUpperCase()}</span>
               <span class="quest-xp">+${q.xp} XP</span>
             </div>
             <div class="quest-title">${q.title}</div>
@@ -602,7 +603,7 @@
         const info=CC.levelInfo(progress.xp);
         const res=await fetch('/api/generate-quests',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({goal:progress.goal,completedSkills:progress.completedSkills||[],currentPhase:progress.roadmap?.phases?.[0]?.name||'Foundation',level:info.level})});
         const json=await res.json();
-        if(json.success&&json.data?.quests){ progress.todayQuests={date:CC.today(),items:json.data.quests,completed:[]}; CC.saveProgress(progress); renderQuests(); CC.toast('Fresh quests generated! 🗡️','success'); }
+        if(json.success&&json.data?.quests){ progress.todayQuests={date:CC.today(),items:json.data.quests,completed:[]}; CC.saveProgress(progress); renderQuests(); CC.toast('Fresh quests generated.','success'); }
       } catch(e){ CC.toast('Failed to generate quests.','error'); }
       document.getElementById('refresh-icon').style.animation='';
       document.getElementById('refresh-btn').disabled=false;
@@ -634,8 +635,8 @@
     function renderResources() {
       const res=progress.resources||[];
       if(!res.length){ document.getElementById('resources-grid').innerHTML='<div style="grid-column:1/-1;text-align:center;color:var(--text-3);padding:16px;font-size:0.875rem">Complete onboarding to unlock resources.</div>'; return; }
-      const TICONS={course:'📺',video:'▶️',article:'📖',book:'📚',tool:'🔧'};
-      document.getElementById('resources-grid').innerHTML=res.map(r=>`<div class="resource-card"><div class="resource-icon">${TICONS[r.type]||'📌'}</div><div class="resource-title">${r.title}</div><div class="resource-provider">${r.provider}</div><div class="resource-desc">${r.description||''}</div><div style="margin-top:8px"><span class="badge badge-teal">${r.difficulty||'beginner'}</span></div></div>`).join('');
+      const TABBR={course:'CR',video:'VD',article:'AR',book:'BK',tool:'TL'};
+      document.getElementById('resources-grid').innerHTML=res.map(r=>`<div class="resource-card"><div style="width:34px;height:34px;background:rgba(26,122,110,0.1);border-radius:6px;display:flex;align-items:center;justify-content:center;font-family:var(--font-head);font-size:0.625rem;font-weight:700;color:var(--teal);margin-bottom:10px;letter-spacing:0.02em">${TABBR[r.type]||'LN'}</div><div class="resource-title">${r.title}</div><div class="resource-provider">${r.provider}</div><div class="resource-desc">${r.description||''}</div><div style="margin-top:8px"><span class="badge badge-teal">${r.difficulty||'beginner'}</span></div></div>`).join('');
     }
 
     init();

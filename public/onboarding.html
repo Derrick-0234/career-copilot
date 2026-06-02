@@ -116,7 +116,7 @@
 <body>
   <div class="ob-wrap">
     <a href="/" class="ob-logo">
-      <div class="ob-logo-icon">🎯</div>
+      <div class="ob-logo-icon" style="font-family:var(--font-head);font-size:0.625rem;font-weight:700;letter-spacing:-0.02em">CC</div>
       Career Copilot
     </a>
 
@@ -180,28 +180,28 @@
           <div class="radio-option" data-val="Full-time student" onclick="selectOption(this,'situation-options')">
             <div class="radio-dot"></div>
             <div>
-              <div class="radio-label">Student 🎓</div>
+              <div class="radio-label">Student</div>
               <div class="radio-desc">In school, university, or bootcamp full-time.</div>
             </div>
           </div>
           <div class="radio-option" data-val="Employed full-time, learning on the side" onclick="selectOption(this,'situation-options')">
             <div class="radio-dot"></div>
             <div>
-              <div class="radio-label">Employed 💼</div>
+              <div class="radio-label">Employed</div>
               <div class="radio-desc">Working a job and learning during spare time.</div>
             </div>
           </div>
           <div class="radio-option" data-val="Career changer with more free time" onclick="selectOption(this,'situation-options')">
             <div class="radio-dot"></div>
             <div>
-              <div class="radio-label">Career changer 🔄</div>
+              <div class="radio-label">Career Changer</div>
               <div class="radio-desc">Actively switching, more free time to dedicate.</div>
             </div>
           </div>
           <div class="radio-option" data-val="Self-employed or freelancer" onclick="selectOption(this,'situation-options')">
             <div class="radio-dot"></div>
             <div>
-              <div class="radio-label">Self-employed 🚀</div>
+              <div class="radio-label">Self-Employed</div>
               <div class="radio-desc">Running my own thing, flexible schedule.</div>
             </div>
           </div>
@@ -219,42 +219,34 @@
         <p class="ob-step-sub">Pick everything that resonates — this shapes your quests and learning style.</p>
         <div class="enjoy-grid" id="enjoy-options">
           <div class="enjoy-chip" data-val="Building projects and making things" onclick="toggleEnjoy(this)">
-            <span class="enjoy-chip-icon">🔨</span>
             <span>Building things</span>
             <div class="enjoy-check">✓</div>
           </div>
           <div class="enjoy-chip" data-val="Solving hard problems and debugging" onclick="toggleEnjoy(this)">
-            <span class="enjoy-chip-icon">🧩</span>
             <span>Problem solving</span>
             <div class="enjoy-check">✓</div>
           </div>
           <div class="enjoy-chip" data-val="Design, visuals, and creativity" onclick="toggleEnjoy(this)">
-            <span class="enjoy-chip-icon">🎨</span>
             <span>Design & creativity</span>
             <div class="enjoy-check">✓</div>
           </div>
           <div class="enjoy-chip" data-val="Working with data and finding patterns" onclick="toggleEnjoy(this)">
-            <span class="enjoy-chip-icon">📊</span>
             <span>Data & analysis</span>
             <div class="enjoy-check">✓</div>
           </div>
           <div class="enjoy-chip" data-val="Writing, teaching, and explaining things" onclick="toggleEnjoy(this)">
-            <span class="enjoy-chip-icon">✍️</span>
             <span>Writing & teaching</span>
             <div class="enjoy-check">✓</div>
           </div>
           <div class="enjoy-chip" data-val="Automation and making systems more efficient" onclick="toggleEnjoy(this)">
-            <span class="enjoy-chip-icon">⚙️</span>
             <span>Automation & systems</span>
             <div class="enjoy-check">✓</div>
           </div>
           <div class="enjoy-chip" data-val="Leading teams and strategy" onclick="toggleEnjoy(this)">
-            <span class="enjoy-chip-icon">🎯</span>
             <span>Strategy & leadership</span>
             <div class="enjoy-check">✓</div>
           </div>
           <div class="enjoy-chip" data-val="Learning new technologies and staying current" onclick="toggleEnjoy(this)">
-            <span class="enjoy-chip-icon">🧠</span>
             <span>Exploring new tech</span>
             <div class="enjoy-check">✓</div>
           </div>
@@ -306,35 +298,35 @@
         <div class="radio-group" id="level-options">
           <div class="radio-option" data-val="Complete beginner" onclick="selectOption(this,'level-options')">
             <div class="radio-dot"></div>
-            <div><div class="radio-label">Complete beginner 🌱</div><div class="radio-desc">Starting from scratch. No relevant experience yet.</div></div>
+            <div><div class="radio-label">Complete Beginner</div><div class="radio-desc">Starting from scratch. No relevant experience yet.</div></div>
           </div>
           <div class="radio-option" data-val="Some experience" onclick="selectOption(this,'level-options')">
             <div class="radio-dot"></div>
-            <div><div class="radio-label">Some experience 🌿</div><div class="radio-desc">Dabbled a bit. Know the basics but haven't gone deep.</div></div>
+            <div><div class="radio-label">Some Experience</div><div class="radio-desc">Dabbled a bit. Know the basics but haven't gone deep.</div></div>
           </div>
           <div class="radio-option" data-val="Intermediate" onclick="selectOption(this,'level-options')">
             <div class="radio-dot"></div>
-            <div><div class="radio-label">Intermediate 🌳</div><div class="radio-desc">Can build things but missing key advanced skills.</div></div>
+            <div><div class="radio-label">Intermediate</div><div class="radio-desc">Can build things but missing key advanced skills.</div></div>
           </div>
         </div>
         <div id="level-error" class="form-error" style="margin-top:10px"></div>
         <div class="ob-nav">
           <button class="btn btn-secondary" onclick="prevStep(5)">← Back</button>
-          <button class="btn btn-primary" style="font-family:var(--font-head)" id="generate-btn" onclick="generate()">Build My Roadmap 🚀</button>
+          <button class="btn btn-primary" style="font-family:var(--font-head)" id="generate-btn" onclick="generate()">Build My Roadmap →</button>
         </div>
       </div>
 
       <!-- Loading -->
       <div class="ob-loading" id="loading-screen">
-        <div class="loading-orb">🤖</div>
+        <div class="loading-orb" style="font-family:var(--font-head);font-size:1.25rem;font-weight:700;letter-spacing:-0.02em">AI</div>
         <h2 class="loading-title">AI is crafting your roadmap</h2>
         <p class="loading-sub">Gemini is analyzing your goal and building something personalized just for you...</p>
         <div class="loading-steps">
-          <div class="loading-step" id="ls-1"><div class="ls-icon">⏳</div>Analyzing your career goal...</div>
-          <div class="loading-step" id="ls-2"><div class="ls-icon">⏳</div>Detecting skill gaps...</div>
-          <div class="loading-step" id="ls-3"><div class="ls-icon">⏳</div>Building your skill tree...</div>
-          <div class="loading-step" id="ls-4"><div class="ls-icon">⏳</div>Generating your personalized roadmap...</div>
-          <div class="loading-step" id="ls-5"><div class="ls-icon">⏳</div>Creating your first daily quests...</div>
+          <div class="loading-step" id="ls-1"><div class="ls-icon">—</div>Analyzing your career goal...</div>
+          <div class="loading-step" id="ls-2"><div class="ls-icon">—</div>Detecting skill gaps...</div>
+          <div class="loading-step" id="ls-3"><div class="ls-icon">—</div>Building your skill tree...</div>
+          <div class="loading-step" id="ls-4"><div class="ls-icon">—</div>Generating your personalized roadmap...</div>
+          <div class="loading-step" id="ls-5"><div class="ls-icon">—</div>Creating your first daily quests...</div>
         </div>
       </div>
 
@@ -433,7 +425,7 @@
         setTimeout(() => {
           const el = document.getElementById(id);
           el.classList.add('active');
-          el.querySelector('.ls-icon').textContent = '⏺';
+          el.querySelector('.ls-icon').textContent = '›';
           if (i > 0) {
             const prev = document.getElementById(steps[i-1]);
             prev.classList.remove('active'); prev.classList.add('done');
