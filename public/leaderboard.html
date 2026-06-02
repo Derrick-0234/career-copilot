@@ -7,85 +7,172 @@
   <link rel="stylesheet" href="/css/styles.css">
   <style>
     body { background: var(--bg); padding-top: 60px; min-height: 100vh; }
-    .lb-layout { max-width: 860px; margin: 0 auto; padding: 32px 20px; }
+    .lb-layout { max-width: 780px; margin: 0 auto; padding: 40px 20px 60px; }
 
-    /* Header */
-    .lb-header { margin-bottom: 28px; }
-    .lb-title { font-family: var(--font-head); font-size: 1.75rem; font-weight: 700; letter-spacing: -0.03em; color: var(--text); margin-bottom: 6px; }
+    /* Page header */
+    .lb-header { margin-bottom: 32px; }
+    .lb-eyebrow { font-family: var(--font-head); font-size: 0.6875rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--teal); margin-bottom: 8px; }
+    .lb-title { font-family: var(--font-head); font-size: 2rem; font-weight: 700; letter-spacing: -0.03em; color: var(--text); margin-bottom: 6px; }
     .lb-sub { font-size: 0.9375rem; color: var(--text-2); }
 
-    /* Tabs */
-    .lb-tabs { display: flex; gap: 6px; margin-bottom: 20px; background: var(--bg-1); border: 1px solid var(--border); border-radius: var(--radius); padding: 4px; width: fit-content; }
-    .lb-tab { padding: 7px 20px; border-radius: 6px; font-size: 0.875rem; font-weight: 600; color: var(--text-2); cursor: pointer; transition: var(--t); }
-    .lb-tab.active { background: var(--teal); color: #fff; }
-    .lb-tab:not(.active):hover { background: var(--bg-2); color: var(--text); }
-
-    /* Champion banner */
-    .champion-banner {
-      background: linear-gradient(135deg, rgba(26,122,110,0.08), rgba(26,122,110,0.04));
-      border: 1px solid rgba(26,122,110,0.25);
-      border-radius: var(--radius-lg);
-      padding: 20px 24px;
-      display: flex; align-items: center; gap: 18px;
-      margin-bottom: 20px;
+    /* Prize card */
+    .prize-card {
+      background: #0f1a17;
+      border-radius: 16px;
+      padding: 32px 36px;
+      margin-bottom: 32px;
+      position: relative;
+      overflow: hidden;
     }
-    .champion-crown { font-size: 2rem; flex-shrink: 0; }
-    .champion-info { flex: 1; min-width: 0; }
-    .champion-label { font-family: var(--font-head); font-size: 0.6875rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--teal); margin-bottom: 4px; }
-    .champion-name { font-family: var(--font-head); font-size: 1.25rem; font-weight: 700; color: var(--text); }
-    .champion-stats { font-size: 0.875rem; color: var(--text-2); margin-top: 2px; }
-    .champion-xp { font-family: var(--font-head); font-size: 1.5rem; font-weight: 700; color: var(--teal); }
+    .prize-card::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0; height: 2px;
+      background: linear-gradient(90deg, #c9a947, #e8cc7a, #c9a947);
+    }
+    .prize-glow {
+      position: absolute; top: -60px; right: -60px;
+      width: 200px; height: 200px;
+      background: radial-gradient(circle, rgba(201,169,71,0.12) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .prize-eyebrow {
+      font-family: var(--font-head); font-size: 0.625rem; font-weight: 700;
+      letter-spacing: 0.18em; text-transform: uppercase;
+      color: #c9a947; margin-bottom: 10px;
+    }
+    .prize-main { display: flex; align-items: flex-start; justify-content: space-between; gap: 24px; flex-wrap: wrap; }
+    .prize-headline { font-family: var(--font-head); font-size: 1.625rem; font-weight: 700; color: #ffffff; letter-spacing: -0.02em; margin-bottom: 8px; line-height: 1.2; }
+    .prize-headline span { color: #c9a947; }
+    .prize-desc { font-size: 0.875rem; color: rgba(255,255,255,0.55); line-height: 1.6; max-width: 380px; margin-bottom: 16px; }
+    .prize-pills { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+    .prize-pill {
+      padding: 4px 12px; border-radius: 4px;
+      font-family: var(--font-head); font-size: 0.6875rem; font-weight: 700;
+      letter-spacing: 0.04em; text-transform: uppercase;
+    }
+    .prize-pill-gold  { background: rgba(201,169,71,0.15); color: #c9a947; border: 1px solid rgba(201,169,71,0.25); }
+    .prize-pill-white { background: rgba(255,255,255,0.07); color: rgba(255,255,255,0.5); border: 1px solid rgba(255,255,255,0.1); }
 
-    /* Rank list */
-    .rank-list { display: flex; flex-direction: column; gap: 8px; }
-    .rank-row {
-      background: var(--bg-1); border: 1px solid var(--border);
-      border-radius: var(--radius-lg); padding: 16px 20px;
+    .prize-timer { text-align: right; flex-shrink: 0; }
+    .prize-timer-label { font-family: var(--font-head); font-size: 0.625rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(255,255,255,0.35); margin-bottom: 4px; }
+    .prize-timer-days { font-family: var(--font-head); font-size: 2.5rem; font-weight: 700; color: #ffffff; letter-spacing: -0.04em; line-height: 1; }
+    .prize-timer-unit { font-family: var(--font-head); font-size: 0.6875rem; color: rgba(255,255,255,0.35); letter-spacing: 0.06em; }
+
+    .prize-divider { height: 1px; background: rgba(255,255,255,0.07); margin: 20px 0; }
+
+    .prize-leader-row { display: flex; align-items: center; gap: 14px; }
+    .prize-leader-label { font-family: var(--font-head); font-size: 0.625rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(255,255,255,0.35); white-space: nowrap; }
+    .prize-leader-avatar { width: 32px; height: 32px; border-radius: 50%; background: #c9a947; display: flex; align-items: center; justify-content: center; font-family: var(--font-head); font-size: 0.8125rem; font-weight: 700; color: #0f1a17; flex-shrink: 0; }
+    .prize-leader-name { font-family: var(--font-head); font-size: 0.875rem; font-weight: 700; color: #ffffff; }
+    .prize-leader-xp { font-family: var(--font-head); font-size: 0.8125rem; font-weight: 700; color: #c9a947; margin-left: auto; white-space: nowrap; }
+    .prize-you-msg { font-family: var(--font-head); font-size: 0.75rem; font-weight: 700; color: rgba(255,255,255,0.5); }
+
+    /* Your rank callout (when not in top 5) */
+    .your-rank-bar {
+      background: var(--bg-1); border: 1px solid var(--border-md);
+      border-radius: 10px; padding: 14px 20px;
       display: flex; align-items: center; gap: 16px;
-      transition: var(--t);
+      margin-bottom: 24px;
     }
-    .rank-row:hover { border-color: var(--border-md); transform: translateX(2px); }
-    .rank-row.is-you { border-color: rgba(26,122,110,0.35); background: rgba(26,122,110,0.03); }
-    .rank-num { font-family: var(--font-head); font-size: 1.125rem; font-weight: 700; color: var(--text-3); width: 36px; text-align: center; flex-shrink: 0; }
-    .rank-num.gold   { color: #d4960a; }
-    .rank-num.silver { color: #7a8fa8; }
-    .rank-num.bronze { color: #b07340; }
-    .rank-avatar { width: 42px; height: 42px; border-radius: 50%; background: var(--teal); display: flex; align-items: center; justify-content: center; font-family: var(--font-head); font-size: 1rem; font-weight: 700; color: #fff; flex-shrink: 0; }
-    .rank-avatar.you-av { background: linear-gradient(135deg, var(--teal), var(--teal-mid)); box-shadow: 0 0 0 2px #fff, 0 0 0 4px var(--teal); }
+    .your-rank-bar-num { font-family: var(--font-head); font-size: 1.5rem; font-weight: 700; color: var(--teal); min-width: 48px; }
+    .your-rank-bar-info { flex: 1; }
+    .your-rank-bar-label { font-family: var(--font-head); font-size: 0.625rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-3); margin-bottom: 2px; }
+    .your-rank-bar-detail { font-size: 0.875rem; color: var(--text-2); }
+    .your-rank-bar-gap { font-family: var(--font-head); font-size: 0.8125rem; font-weight: 700; color: var(--text-3); text-align: right; }
+
+    /* Tabs */
+    .lb-tabs { display: flex; gap: 0; margin-bottom: 20px; border-bottom: 2px solid var(--border); }
+    .lb-tab {
+      padding: 10px 20px; font-size: 0.875rem; font-weight: 600;
+      color: var(--text-3); cursor: pointer; transition: var(--t);
+      border-bottom: 2px solid transparent; margin-bottom: -2px;
+    }
+    .lb-tab.active { color: var(--text); border-bottom-color: var(--teal); }
+    .lb-tab:hover:not(.active) { color: var(--text-2); }
+
+    /* Section label */
+    .section-label {
+      font-family: var(--font-head); font-size: 0.625rem; font-weight: 700;
+      letter-spacing: 0.14em; text-transform: uppercase; color: var(--text-3);
+      margin-bottom: 12px;
+    }
+
+    /* Rank rows */
+    .rank-list { display: flex; flex-direction: column; gap: 2px; }
+    .rank-row {
+      background: var(--bg-1);
+      border: 1px solid var(--border);
+      border-radius: 10px; padding: 18px 22px;
+      display: flex; align-items: center; gap: 18px;
+      transition: var(--t); position: relative; overflow: hidden;
+    }
+    .rank-row::before {
+      content: ''; position: absolute; left: 0; top: 0; bottom: 0;
+      width: 3px; border-radius: 2px 0 0 2px;
+      background: var(--border);
+    }
+    .rank-row.rank-1::before { background: #c9a947; }
+    .rank-row.rank-2::before { background: #7a8fa8; }
+    .rank-row.rank-3::before { background: #8c6239; }
+    .rank-row.is-you { border-color: rgba(26,122,110,0.3); background: rgba(26,122,110,0.02); }
+    .rank-row:hover { border-color: var(--border-md); transform: translateX(2px); box-shadow: 0 2px 12px rgba(0,0,0,0.04); }
+
+    .rank-num {
+      font-family: var(--font-head); font-size: 1.5rem; font-weight: 700;
+      letter-spacing: -0.03em; width: 44px; text-align: right;
+      flex-shrink: 0; line-height: 1;
+    }
+    .rank-num.r1 { color: #c9a947; }
+    .rank-num.r2 { color: #7a8fa8; }
+    .rank-num.r3 { color: #8c6239; }
+    .rank-num.r4, .rank-num.r5 { color: var(--text-3); }
+
+    .rank-avatar {
+      width: 40px; height: 40px; border-radius: 50%;
+      background: var(--teal); display: flex; align-items: center; justify-content: center;
+      font-family: var(--font-head); font-size: 0.9375rem; font-weight: 700;
+      color: #fff; flex-shrink: 0;
+    }
+    .rank-avatar.you-av {
+      background: var(--teal-dark);
+      box-shadow: 0 0 0 2px var(--bg-1), 0 0 0 4px var(--teal);
+    }
+    .rank-avatar.av-1 { background: #c9a947; color: #0f1a17; }
+
     .rank-info { flex: 1; min-width: 0; }
-    .rank-name { font-weight: 700; font-size: 0.9375rem; color: var(--text); display: flex; align-items: center; gap: 8px; }
-    .you-badge { font-size: 0.6875rem; font-weight: 700; padding: 2px 8px; background: var(--teal); color: #fff; border-radius: 99px; font-family: var(--font-head); letter-spacing: 0.04em; }
-    .rank-sub { font-size: 0.8125rem; color: var(--text-2); margin-top: 2px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
-    .rank-school-tag { font-size: 0.75rem; padding: 2px 8px; background: var(--bg-2); border: 1px solid var(--border-md); border-radius: 4px; color: var(--text-3); }
-    .rank-right { display: flex; flex-direction: column; align-items: flex-end; gap: 4px; flex-shrink: 0; }
-    .rank-xp { font-family: var(--font-head); font-size: 1.125rem; font-weight: 700; color: var(--teal); }
-    .rank-meta { font-size: 0.75rem; color: var(--text-3); }
-    .rank-streak { font-size: 0.75rem; color: var(--text-3); }
+    .rank-name { font-weight: 700; font-size: 0.9375rem; color: var(--text); display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 3px; }
+    .you-tag { font-size: 0.625rem; font-weight: 700; padding: 2px 7px; background: var(--teal); color: #fff; border-radius: 3px; font-family: var(--font-head); letter-spacing: 0.06em; text-transform: uppercase; }
+    .rank-sub { font-size: 0.8125rem; color: var(--text-3); display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+    .rank-sub-dot { width: 3px; height: 3px; border-radius: 50%; background: var(--border-hi); flex-shrink: 0; }
 
-    /* Level badge inline */
-    .rank-level-badge { display: inline-flex; align-items: center; justify-content: center; width: 22px; height: 22px; background: var(--teal); border-radius: 4px; font-family: var(--font-head); font-size: 0.6875rem; font-weight: 700; color: #fff; }
+    .rank-right { display: flex; flex-direction: column; align-items: flex-end; gap: 5px; flex-shrink: 0; }
+    .rank-xp { font-family: var(--font-head); font-size: 1rem; font-weight: 700; color: var(--text); white-space: nowrap; }
+    .rank-xp-bar-wrap { width: 80px; height: 3px; background: var(--bg-3); border-radius: 99px; overflow: hidden; }
+    .rank-xp-bar { height: 100%; border-radius: 99px; background: var(--teal); transition: width 0.8s ease; }
+    .rank-row.rank-1 .rank-xp-bar { background: #c9a947; }
+    .rank-row.rank-2 .rank-xp-bar { background: #7a8fa8; }
+    .rank-row.rank-3 .rank-xp-bar { background: #8c6239; }
+    .rank-streak { font-size: 0.75rem; color: var(--text-3); white-space: nowrap; font-family: var(--font-head); }
 
-    /* Medal icons for top 3 */
-    .medal { font-size: 1.25rem; }
+    .rank-level { display: inline-flex; align-items: center; justify-content: center; width: 20px; height: 20px; background: var(--bg-3); border-radius: 3px; font-family: var(--font-head); font-size: 0.5625rem; font-weight: 700; color: var(--text-2); flex-shrink: 0; }
 
     /* School leagues */
-    .league-section { margin-bottom: 24px; }
-    .league-header { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
-    .league-school-name { font-family: var(--font-head); font-size: 1rem; font-weight: 700; color: var(--text); }
+    .league-block { margin-bottom: 28px; }
+    .league-name-row { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; padding-bottom: 10px; border-bottom: 1px solid var(--border); }
+    .league-name { font-family: var(--font-head); font-size: 0.875rem; font-weight: 700; color: var(--text); }
     .league-count { font-size: 0.8125rem; color: var(--text-3); }
-    .your-league-tag { font-size: 0.6875rem; padding: 2px 8px; background: rgba(26,122,110,0.1); border: 1px solid rgba(26,122,110,0.2); border-radius: 4px; color: var(--teal); font-weight: 700; font-family: var(--font-head); }
+    .your-league-pill { font-size: 0.625rem; font-weight: 700; padding: 2px 8px; background: rgba(26,122,110,0.08); border: 1px solid rgba(26,122,110,0.2); border-radius: 3px; color: var(--teal); font-family: var(--font-head); letter-spacing: 0.06em; text-transform: uppercase; }
 
-    /* Empty state */
+    /* Empty / out-of-range */
     .lb-empty { text-align: center; padding: 48px 24px; color: var(--text-3); }
-    .lb-empty-icon { font-size: 2.5rem; margin-bottom: 12px; }
-    .lb-empty-title { font-family: var(--font-head); font-size: 1rem; font-weight: 700; color: var(--text-2); margin-bottom: 6px; }
+    .lb-empty-title { font-family: var(--font-head); font-size: 0.9375rem; font-weight: 700; color: var(--text-2); margin-bottom: 6px; }
 
-    /* User rank callout */
-    .your-rank-callout { background: rgba(26,122,110,0.06); border: 1px solid rgba(26,122,110,0.2); border-radius: var(--radius-lg); padding: 16px 20px; display: flex; align-items: center; gap: 14px; margin-bottom: 24px; }
-    .your-rank-num { font-family: var(--font-head); font-size: 2rem; font-weight: 700; color: var(--teal); min-width: 52px; text-align: center; }
-    .your-rank-info {}
-    .your-rank-label { font-family: var(--font-head); font-size: 0.6875rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--teal); margin-bottom: 2px; }
-    .your-rank-detail { font-size: 0.875rem; color: var(--text-2); }
+    @media (max-width: 600px) {
+      .prize-card { padding: 24px 20px; }
+      .prize-timer { display: none; }
+      .prize-headline { font-size: 1.25rem; }
+      .rank-xp-bar-wrap { width: 50px; }
+    }
   </style>
 </head>
 <body>
@@ -107,27 +194,59 @@
   </nav>
 
   <div class="lb-layout">
+
+    <!-- Header -->
     <div class="lb-header">
-      <h1 class="lb-title">Global Leaderboard</h1>
-      <p class="lb-sub">See how you rank against learners worldwide. Updated in real time.</p>
+      <div class="lb-eyebrow">Career Copilot</div>
+      <h1 class="lb-title">Leaderboard</h1>
+      <p class="lb-sub">Top 5 learners this month. First place wins the prize.</p>
     </div>
 
+    <!-- Prize card -->
+    <div class="prize-card">
+      <div class="prize-glow"></div>
+      <div class="prize-eyebrow">Monthly Prize</div>
+      <div class="prize-main">
+        <div>
+          <div class="prize-headline">1 Month of <span>Claude Pro</span> — Free</div>
+          <div class="prize-desc">The learner ranked #1 in XP at the end of the month wins free access to Claude Pro — Anthropic's most capable AI model.</div>
+          <div class="prize-pills">
+            <span class="prize-pill prize-pill-gold">$20 Value</span>
+            <span class="prize-pill prize-pill-white">Unlimited AI Access</span>
+            <span class="prize-pill prize-pill-white">Priority Speed</span>
+          </div>
+        </div>
+        <div class="prize-timer">
+          <div class="prize-timer-label">Resets in</div>
+          <div class="prize-timer-days" id="days-left">—</div>
+          <div class="prize-timer-unit">days</div>
+        </div>
+      </div>
+      <div class="prize-divider"></div>
+      <div class="prize-leader-row" id="prize-leader-row">
+        <div class="prize-leader-label">Current Leader</div>
+        <div id="prize-leader-content"></div>
+      </div>
+    </div>
+
+    <!-- Tabs -->
     <div class="lb-tabs">
-      <div class="lb-tab active" id="tab-global" onclick="showTab('global')">Global</div>
-      <div class="lb-tab" id="tab-schools" onclick="showTab('schools')">Schools</div>
+      <div class="lb-tab active" id="tab-global" onclick="showTab('global')">Global Top 5</div>
+      <div class="lb-tab" id="tab-schools" onclick="showTab('schools')">School Leagues</div>
     </div>
 
-    <!-- Global tab -->
+    <!-- Global view -->
     <div id="view-global">
-      <div id="your-rank-callout" class="your-rank-callout" style="display:none"></div>
-      <div id="champion-banner" class="champion-banner" style="display:none"></div>
+      <div id="your-rank-bar" style="display:none"></div>
+      <div class="section-label">Rankings — This Month</div>
       <div class="rank-list" id="global-list"></div>
     </div>
 
-    <!-- Schools tab -->
+    <!-- Schools view -->
     <div id="view-schools" style="display:none">
       <div id="schools-list"></div>
     </div>
+
   </div>
 
   <script src="/js/app.js"></script>
@@ -139,167 +258,165 @@
     const progress    = CC.getProgress() || CC.defaultProgress();
     document.getElementById('streak-count').textContent = progress.streak || 0;
 
+    // Days until end of month
+    (function() {
+      const now  = new Date();
+      const last = new Date(now.getFullYear(), now.getMonth() + 1, 0);
+      const diff = Math.ceil((last - now) / 86400000);
+      document.getElementById('days-left').textContent = diff;
+    })();
+
     // ── Demo users ──────────────────────────────────────────────────────────
     const DEMO_USERS = [
-      { id: 'demo-1', name: 'Priya Sharma',    school: 'UC Berkeley',   xp: 4820, streak: 42, goal: 'ML Engineer',       avatar: 'P' },
-      { id: 'demo-2', name: 'Marcus Williams', school: 'UT Austin',     xp: 3650, streak: 28, goal: 'Full-Stack Dev',    avatar: 'M' },
-      { id: 'demo-3', name: 'Sarah Chen',      school: 'Stanford',      xp: 2940, streak: 31, goal: 'Data Scientist',    avatar: 'S' },
-      { id: 'demo-4', name: 'Jordan Lee',      school: 'Self-Taught',   xp: 2380, streak: 14, goal: 'DevOps Engineer',   avatar: 'J' },
-      { id: 'demo-5', name: 'Amara Osei',      school: 'MIT',           xp: 1920, streak: 22, goal: 'Product Manager',  avatar: 'A' },
-      { id: 'demo-6', name: 'Tyler Brooks',    school: 'Georgia Tech',  xp: 1540, streak: 8,  goal: 'Cybersecurity',    avatar: 'T' },
-      { id: 'demo-7', name: 'Mei Zhang',       school: 'CMU',           xp: 980,  streak: 11, goal: 'UX Designer',      avatar: 'Z' },
-      { id: 'demo-8', name: 'Lucas Rivera',    school: 'Self-Taught',   xp: 620,  streak: 6,  goal: 'Mobile Dev',       avatar: 'L' },
-      { id: 'demo-9', name: 'Nina Patel',      school: 'UC Berkeley',   xp: 430,  streak: 4,  goal: 'ML Engineer',      avatar: 'N' },
-      { id: 'demo-10',name: 'Chris Adeyemi',   school: 'UT Austin',     xp: 180,  streak: 2,  goal: 'Full-Stack Dev',   avatar: 'C' },
+      { id: 'demo-1', name: 'Priya Sharma',    school: 'UC Berkeley',  xp: 4820, streak: 42, goal: 'ML Engineer',      avatar: 'P' },
+      { id: 'demo-2', name: 'Marcus Williams', school: 'UT Austin',    xp: 3650, streak: 28, goal: 'Full-Stack Dev',   avatar: 'M' },
+      { id: 'demo-3', name: 'Sarah Chen',      school: 'Stanford',     xp: 2940, streak: 31, goal: 'Data Scientist',   avatar: 'S' },
+      { id: 'demo-4', name: 'Jordan Lee',      school: 'Self-Taught',  xp: 2380, streak: 14, goal: 'DevOps Engineer',  avatar: 'J' },
+      { id: 'demo-5', name: 'Amara Osei',      school: 'MIT',          xp: 1920, streak: 22, goal: 'Product Manager', avatar: 'A' },
+      { id: 'demo-6', name: 'Tyler Brooks',    school: 'Georgia Tech', xp: 1540, streak: 8,  goal: 'Cybersecurity',   avatar: 'T' },
+      { id: 'demo-7', name: 'Mei Zhang',       school: 'CMU',          xp: 980,  streak: 11, goal: 'UX Designer',     avatar: 'Z' },
+      { id: 'demo-8', name: 'Lucas Rivera',    school: 'Self-Taught',  xp: 620,  streak: 6,  goal: 'Mobile Dev',      avatar: 'L' },
     ];
 
-    // ── Build full entry list ───────────────────────────────────────────────
     function buildEntries() {
       const entries = [];
-
-      // Real users from localStorage (all accounts created on this browser)
       CC.getUsers().forEach(u => {
         const p = CC.getProgress(u.id) || CC.defaultProgress();
         entries.push({
-          id: u.id,
-          name: u.name,
-          school: u.school || 'Independent',
-          xp: p.xp || 0,
-          streak: p.streak || 0,
+          id: u.id, name: u.name, school: u.school || 'Independent',
+          xp: p.xp || 0, streak: p.streak || 0,
           goal: p.goal || 'Career Learner',
           avatar: u.name.charAt(0).toUpperCase(),
           isYou: u.id === currentUser.id,
         });
       });
-
-      // Demo users
-      DEMO_USERS.forEach(d => {
-        entries.push({ ...d, isYou: false });
-      });
-
-      // Sort by XP descending, then by streak for tiebreak
+      DEMO_USERS.forEach(d => entries.push({ ...d, isYou: false }));
       entries.sort((a, b) => b.xp - a.xp || b.streak - a.streak);
-
-      // Assign ranks
       entries.forEach((e, i) => { e.rank = i + 1; });
       return entries;
     }
 
-    const entries = buildEntries();
-    const myEntry = entries.find(e => e.isYou);
+    const allEntries = buildEntries();
+    const top5       = allEntries.slice(0, 5);
+    const myEntry    = allEntries.find(e => e.isYou);
+    const maxXP      = allEntries[0]?.xp || 1;
 
-    // ── Render ──────────────────────────────────────────────────────────────
-    function medalIcon(rank) {
-      const c = ['#b8860b','#7a8fa8','#8c6239'];
-      if (rank <= 3) return `<span style="font-family:var(--font-head);font-weight:700;color:${c[rank-1]}">#${rank}</span>`;
-      return `<span class="rank-num">#${rank}</span>`;
-    }
+    // ── Prize leader section ────────────────────────────────────────────────
+    (function() {
+      const leader = allEntries[0];
+      if (!leader) return;
+      const isYouLeader = leader.isYou;
+      document.getElementById('prize-leader-content').innerHTML = isYouLeader
+        ? `<div style="display:flex;align-items:center;gap:10px;flex:1">
+            <div class="prize-leader-avatar" style="background:#c9a947;color:#0f1a17">${leader.avatar}</div>
+            <div class="prize-leader-name">${leader.name}</div>
+            <div style="font-family:var(--font-head);font-size:0.625rem;font-weight:700;padding:2px 8px;background:rgba(201,169,71,0.2);color:#c9a947;border-radius:3px;letter-spacing:0.06em">YOU</div>
+            <div class="prize-leader-xp">${leader.xp.toLocaleString()} XP</div>
+          </div>
+          <div style="margin-top:8px;font-family:var(--font-head);font-size:0.75rem;color:#c9a947;letter-spacing:0.02em">You are currently #1 — hold your rank to claim the prize.</div>`
+        : `<div style="display:flex;align-items:center;gap:10px;flex:1">
+            <div class="prize-leader-avatar">${leader.avatar}</div>
+            <div>
+              <div class="prize-leader-name">${leader.name}</div>
+              <div style="font-size:0.8125rem;color:rgba(255,255,255,0.4);margin-top:1px">${leader.school}</div>
+            </div>
+            <div class="prize-leader-xp">${leader.xp.toLocaleString()} XP</div>
+          </div>
+          ${myEntry ? `<div style="margin-top:8px;font-family:var(--font-head);font-size:0.75rem;color:rgba(255,255,255,0.35)">You need ${(leader.xp - myEntry.xp).toLocaleString()} more XP to take the lead.</div>` : ''}`;
+    })();
 
-    function levelFrom(xp) {
-      return CC.levelInfo(xp).level;
-    }
+    // ── Rank row HTML ───────────────────────────────────────────────────────
+    function rowHTML(e) {
+      const rankClass = e.rank <= 3 ? `rank-${e.rank}` : '';
+      const rankNumClass = ['r1','r2','r3','r4','r5'][e.rank - 1] || 'r5';
+      const avClass = e.isYou ? 'rank-avatar you-av' : e.rank === 1 ? 'rank-avatar av-1' : 'rank-avatar';
+      const youTag  = e.isYou ? '<span class="you-tag">You</span>' : '';
+      const barPct  = Math.round((e.xp / maxXP) * 100);
+      const lvl     = CC.levelInfo(e.xp).level;
+      const rankNum = String(e.rank).padStart(2, '0');
 
-    function rowHTML(e, showMedal = true) {
-      const medalColors = ['#b8860b','#7a8fa8','#8c6239'];
-      const rankCell = e.rank <= 3
-        ? `<div style="width:36px;text-align:center;flex-shrink:0;font-family:var(--font-head);font-size:0.9375rem;font-weight:700;color:${medalColors[e.rank-1]}">#${e.rank}</div>`
-        : `<div class="rank-num">#${e.rank}</div>`;
-      const avCls = e.isYou ? 'rank-avatar you-av' : 'rank-avatar';
-      const youBadge = e.isYou ? '<span class="you-badge">YOU</span>' : '';
-      const lvl = levelFrom(e.xp);
-      return `<div class="rank-row ${e.isYou ? 'is-you' : ''}">
-        ${rankCell}
-        <div class="${avCls}">${e.avatar}</div>
+      return `<div class="rank-row ${rankClass} ${e.isYou ? 'is-you' : ''}">
+        <div class="rank-num ${rankNumClass}">${rankNum}</div>
+        <div class="${avClass}">${e.avatar}</div>
         <div class="rank-info">
-          <div class="rank-name">${e.name} ${youBadge}</div>
+          <div class="rank-name">
+            ${e.name} ${youTag}
+          </div>
           <div class="rank-sub">
-            <span class="rank-level-badge">${lvl}</span>
+            <span class="rank-level">${lvl}</span>
             <span>${e.goal}</span>
-            <span class="rank-school-tag">${e.school}</span>
+            <span class="rank-sub-dot"></span>
+            <span>${e.school}</span>
           </div>
         </div>
         <div class="rank-right">
           <div class="rank-xp">${e.xp.toLocaleString()} XP</div>
+          <div class="rank-xp-bar-wrap"><div class="rank-xp-bar" style="width:${barPct}%"></div></div>
           <div class="rank-streak">${e.streak}d streak</div>
         </div>
       </div>`;
     }
 
+    // ── Global top 5 ────────────────────────────────────────────────────────
     function renderGlobal() {
-      // Your rank callout
-      if (myEntry) {
-        const callout = document.getElementById('your-rank-callout');
-        callout.style.display = 'flex';
-        callout.innerHTML = `
-          <div class="your-rank-num">#${myEntry.rank}</div>
-          <div class="your-rank-info">
-            <div class="your-rank-label">Your Global Rank</div>
-            <div class="your-rank-detail">${myEntry.xp.toLocaleString()} XP · Level ${levelFrom(myEntry.xp)} · ${myEntry.streak}d streak</div>
-          </div>`;
-      }
-
-      // Champion banner (rank #1)
-      const champ = entries[0];
-      if (champ) {
-        const banner = document.getElementById('champion-banner');
-        banner.style.display = 'flex';
-        banner.innerHTML = `
-          <div style="width:44px;height:44px;background:var(--teal);border-radius:6px;display:flex;align-items:center;justify-content:center;font-family:var(--font-head);font-size:0.625rem;font-weight:700;color:#fff;letter-spacing:0.04em;flex-shrink:0">TOP</div>
-          <div class="champion-info">
-            <div class="champion-label">Monthly Top Learner</div>
-            <div class="champion-name">${champ.name} ${champ.isYou ? '<span class="you-badge">YOU</span>' : ''}</div>
-            <div class="champion-stats">${champ.school} · ${champ.goal}</div>
+      // Your rank bar (only if you're outside top 5)
+      const myInTop5 = top5.some(e => e.isYou);
+      const barEl = document.getElementById('your-rank-bar');
+      if (myEntry && !myInTop5) {
+        const gap = allEntries[4]?.xp - myEntry.xp;
+        barEl.style.display = 'flex';
+        barEl.innerHTML = `
+          <div class="your-rank-bar-num">#${myEntry.rank}</div>
+          <div class="your-rank-bar-info">
+            <div class="your-rank-bar-label">Your Current Rank</div>
+            <div class="your-rank-bar-detail">${myEntry.xp.toLocaleString()} XP · Level ${CC.levelInfo(myEntry.xp).level} · ${myEntry.streak}d streak</div>
           </div>
-          <div class="champion-xp">${champ.xp.toLocaleString()}<br><span style="font-size:0.8125rem;color:var(--text-2);font-family:var(--font-body)">total XP</span></div>`;
+          <div class="your-rank-bar-gap">+${Math.max(0,gap+1).toLocaleString()} XP<br><span style="font-size:0.75rem;font-weight:400">to enter top 5</span></div>`;
       }
 
-      // List
-      document.getElementById('global-list').innerHTML = entries.map(e => rowHTML(e)).join('');
+      document.getElementById('global-list').innerHTML = top5.map(e => rowHTML(e)).join('');
     }
 
+    // ── School leagues ───────────────────────────────────────────────────────
     function renderSchools() {
-      // Group by school
       const groups = {};
-      entries.forEach(e => {
+      allEntries.forEach(e => {
         const s = e.school || 'Independent';
         if (!groups[s]) groups[s] = [];
         groups[s].push(e);
       });
 
-      const mySchool = myEntry?.school;
-
-      // Sort groups: user's school first, then by top XP
-      const sorted = Object.entries(groups).sort(([a, aEntries], [b, bEntries]) => {
+      const mySchool = myEntry?.school || 'Independent';
+      const sorted = Object.entries(groups).sort(([a], [b]) => {
         if (a === mySchool) return -1;
         if (b === mySchool) return 1;
-        return bEntries[0].xp - aEntries[0].xp;
+        return groups[b][0].xp - groups[a][0].xp;
       });
 
       let html = '';
       sorted.forEach(([school, members]) => {
         const isMySchool = school === mySchool;
-        // Re-rank within school
-        members.forEach((m, i) => { m.leagueRank = i + 1; });
-        const myTagHTML = isMySchool ? '<span class="your-league-tag">YOUR LEAGUE</span>' : '';
-        html += `<div class="league-section">
-          <div class="league-header">
-            <div class="league-school-name">${school}</div>
+        const leagueMax  = members[0]?.xp || 1;
+        const top5League = members.slice(0, 5).map((m, i) => {
+          const saved = m.rank;
+          m.rank = i + 1;
+          const h = rowHTML(m);
+          m.rank = saved;
+          return h;
+        }).join('');
+
+        html += `<div class="league-block">
+          <div class="league-name-row">
+            <div class="league-name">${school}</div>
             <div class="league-count">${members.length} learner${members.length !== 1 ? 's' : ''}</div>
-            ${myTagHTML}
+            ${isMySchool ? '<span class="your-league-pill">Your League</span>' : ''}
           </div>
-          <div class="rank-list">
-            ${members.map(m => {
-              const saved = m.rank;
-              m.rank = m.leagueRank;
-              const h = rowHTML(m);
-              m.rank = saved;
-              return h;
-            }).join('')}
-          </div>
+          <div class="rank-list">${top5League}</div>
         </div>`;
       });
 
-      document.getElementById('schools-list').innerHTML = html || '<div class="lb-empty"><div class="lb-empty-title">No schools found</div><p style="font-size:0.875rem">Add your school or university during sign-up to join a league!</p></div>';
+      document.getElementById('schools-list').innerHTML = html ||
+        `<div class="lb-empty"><div class="lb-empty-title">No school leagues yet</div><p style="font-size:0.875rem">Add your school during sign-up to compete in a league.</p></div>`;
     }
 
     function showTab(tab) {
